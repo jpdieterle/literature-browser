@@ -49,10 +49,10 @@ const styles = {
     margin: 10,
   },
   wideInput: {
-    /*margin: 10,*/
+    //margin: 10,
   },
-  closeButton: {
-
+  narrowInput: {
+    //
   }
 };
 export default withStyles(styles)(SearchCard);
