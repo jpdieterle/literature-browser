@@ -38,7 +38,7 @@ class GenreSelection extends React.Component {
   render() {
     const { classes } = this.props;
     return(
-      <div>
+      <div className={classes.container}>
         <FormControl className={classes.formControl}>
           <InputLabel htmlFor="selectGenre">Genre(s)</InputLabel>
           <Select
@@ -72,10 +72,13 @@ const styles = theme => ({
     flexWrap: 'wrap',
   },
   formControl: {
-    //margin: theme.spacing.unit,
-    minWidth: 100,
-    maxWidth: 300,
+    minWidth: 200,
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
   },
+  container: {
+
+  }
 });
 
 export default withStyles(styles)(GenreSelection);

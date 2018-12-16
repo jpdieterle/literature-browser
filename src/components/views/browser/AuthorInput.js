@@ -16,6 +16,9 @@ const authorSuggestions = [
   {label: 'Goethe, Johann Wolfgang'},
   {label: 'Schiller, Friedrich'},
   {label: 'Rilke, Rainer Maria'},
+  {label: 'Spitteler, Carl'},
+  {label: 'Dauthendey, Max'},
+  {label: 'Grün, Anastasius'},
   {label: 'Lessing, Gotthold Ephraim'},
 ];
 
@@ -58,7 +61,6 @@ function getSuggestions(value) {
     });
 }
 
-// render suggestion
 function renderSuggestion({ suggestion, index, itemProps, highlightedIndex, selectedItem }) {
   const isHighlighted = highlightedIndex === index;
   const isSelected = (selectedItem || '').indexOf(suggestion.label) > -1;
@@ -94,6 +96,7 @@ class AuthorInput extends React.Component {
 
   handleKeyDown = event => {
     const { inputValue, selectedItem } = this.state;
+
     if (selectedItem.length && !inputValue.length && keycode(event) === 'backspace') {
       this.setState({
         selectedItem: selectedItem.slice(0, selectedItem.length - 1),
@@ -127,7 +130,6 @@ class AuthorInput extends React.Component {
   };
 
   render() {
-    // Why does this have to be inside render?
     const { classes } = this.props;
     const { inputValue, selectedItem } = this.state;
 
@@ -189,8 +191,10 @@ const styles = theme => ({
       height: 250,
   },
   container: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
     flexGrow: 1,
-      position: 'relative',
+    position: 'relative',
   },
   paper: {
     position: 'absolute',

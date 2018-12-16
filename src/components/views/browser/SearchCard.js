@@ -5,10 +5,13 @@ import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Button from '@material-ui/core/Button';
+import FormControl from '@material-ui/core/FormControl';
 import AuthorInput from "./AuthorInput";
 import GenreSelection from "./GenreSelection";
 import ContainsInput from "./ContainsInput";
 import TimeInput from "./TimeInput";
+
+
 
 
 function SearchCard(props) {
@@ -21,8 +24,8 @@ function SearchCard(props) {
           <CloseIcon/>
         </IconButton>*/}
         <form>
-          <AuthorInput className={classes.wideInput}/>
-          <GenreSelection className={classes.wideInput}/>
+          <AuthorInput/>
+          <GenreSelection/>
           <ContainsInput/>
           <TimeInput/>
           <Button size="small" color="primary">
