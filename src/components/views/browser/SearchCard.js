@@ -11,18 +11,16 @@ import GenreSelection from "./GenreSelection";
 import ContainsInput from "./ContainsInput";
 import TimeInput from "./TimeInput";
 
-
-
-
 function SearchCard(props) {
   const { classes } = props;
   return(
     <div>
       <Paper className={classes.backdrop}>
-        <h4 color="primary">Ich bin eine SearchCard!</h4>
+        <div color="primary">Ich bin eine SearchCard!</div>
         {/*<IconButton className={classes.closeButton}>
           <CloseIcon/>
         </IconButton>*/}
+        <br/>
         <form>
           <AuthorInput/>
           <GenreSelection/>

@@ -28,6 +28,7 @@ function renderInput(inputProps) {
 
   return (
     <TextField
+      variant={'outlined'}
       InputProps={{
         inputRef: ref,
         classes: {

@@ -24,5 +24,5 @@ class App extends Component {
 
 const styles = {
 
-}
+};
 export default withStyles(styles)(App);
