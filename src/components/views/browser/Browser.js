@@ -4,23 +4,29 @@ import { withStyles } from '@material-ui/core/styles';
 import SearchCard from "./SearchCard";
 import AddSearchCardButton from "./AddSearchCardButton";
 
-const styles = {
+class Browser extends React.Component {
+  state = {
 
-};
+  };
 
-function Browser(props) {
-  const { classes } = props;
-  return(
-    <div>
-      <div>Ich bin der Browser!</div>
-      <SearchCard/>
-      <AddSearchCardButton/>
-    </div>
-  )
+  render() {
+    const { classes } = this.props;
+    return(
+      <div>
+        <div></div>
+        <SearchCard/>
+        <AddSearchCardButton/>
+      </div>
+    );
+  }
 }
 
 Browser.propTypes = {
   classes: PropTypes.object.isRequired,
+};
+
+const styles = {
+
 };
 
 export default withStyles(styles)(Browser);

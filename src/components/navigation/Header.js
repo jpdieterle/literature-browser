@@ -3,22 +3,27 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Navbar from './Navbar';
 
-const styles = {
+class Header extends React.Component {
+  state = {
 
-};
+  };
 
-function Header(props) {
-  const { classes } = props;
-  return(
-    <div>
-      <div>Ich bin der Header!</div>
-      <Navbar/>
-    </div>
-  )
+  render() {
+    const { classes } = this.props;
+    return(
+      <div>
+        <Navbar/>
+      </div>
+    );
+  }
 }
 
 Header.propTypes = {
   classes: PropTypes.object.isRequired,
+};
+
+const styles = {
+
 };
 
 export default withStyles(styles)(Header);

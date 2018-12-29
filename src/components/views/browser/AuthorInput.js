@@ -176,7 +176,7 @@ class AuthorInput extends React.Component {
           )}
         </Downshift>
       </div>
-    )
+    );
 
   }
 }
@@ -189,7 +189,8 @@ AuthorInput.propTypes = {
 const styles = theme => ({
   root: {
     flexGrow: 1,
-      height: 250,
+    paddingTop: 5,
+    // height: 250,
   },
   container: {
     marginLeft: theme.spacing.unit,
