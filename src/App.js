@@ -1,28 +1,28 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { withStyles } from '@material-ui/core/styles';
+import Header from "./components/navigation/Header";
+// Views
+import Browser from './components/views/browser/Browser';
+import Wiki from './components/views/Wiki';
+import About from './components/views/About';
+
+// import './App.css';
 
 class App extends Component {
+    div;
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+      <div>
+        <Header/>
+        <Browser/>
+        <Wiki/>
+        <About/>
       </div>
     );
   }
 }
 
-export default App;
+const styles = {
+
+};
+export default withStyles(styles)(App);
