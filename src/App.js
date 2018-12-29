@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Header from "./components/navigation/Header";
 // Views
@@ -8,7 +8,7 @@ import About from './components/views/About';
 
 // import './App.css';
 
-class App extends Component {
+class App extends React.Component {
     div;
   render() {
     return (

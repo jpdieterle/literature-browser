@@ -11,38 +11,43 @@ import GenreSelection from "./GenreSelection";
 import ContainsInput from "./ContainsInput";
 import TimeInput from "./TimeInput";
 
-function SearchCard(props) {
-  const { classes } = props;
-  return(
-    <div>
-      <Paper className={classes.backdrop}>
-        <div color="primary">Ich bin eine SearchCard!</div>
-        {/*<IconButton className={classes.closeButton}>
+class SearchCard extends React.Component {
+  state = {
+
+  };
+
+  render() {
+    const { classes } = this.props;
+    return(
+      <div>
+        <Paper className={classes.backdrop}>
+          {/*<IconButton className={classes.closeButton}>
           <CloseIcon/>
         </IconButton>*/}
-        <br/>
-        <form>
-          <AuthorInput/>
-          <GenreSelection/>
-          <ContainsInput/>
-          <TimeInput/>
-          <Button size="small" color="primary">
-            duplizieren
-          </Button>
-          <Button size="small" color="primary">
-            löschen
-          </Button>
-        </form>
-      </Paper>
-    </div>
-  )
+          <br/>
+          <form>
+            <AuthorInput/>
+            <GenreSelection/>
+            <ContainsInput/>
+            <TimeInput/>
+            <Button size="small" color="primary">
+              duplizieren
+            </Button>
+            <Button size="small" color="secondary">
+              löschen
+            </Button>
+          </form>
+        </Paper>
+      </div>
+    );
+  }
+
 }
 
 SearchCard.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-// CSS
 const styles = {
   backdrop: {
     width: 400,

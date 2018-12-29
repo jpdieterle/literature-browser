@@ -58,7 +58,7 @@ class GenreSelection extends React.Component {
           </Select>
         </FormControl>
       </div>
-    )
+    );
   }
 }
 
