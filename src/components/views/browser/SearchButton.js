@@ -1,16 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-
-const styles = {
-
-};
+import Button from '@material-ui/core/Button';
 
 function SearchButton(props) {
   const { classes } = props;
   return(
-    <div>
-      <div>Ich bin ein SearchButton!</div>
+    <div className={classes.root}>
+      <Button color={'primary'} variant={'contained'}>
+        Suchen
+      </Button>
     </div>
   )
 }
@@ -18,5 +17,12 @@ function SearchButton(props) {
 SearchButton.propTypes = {
   classes: PropTypes.object.isRequired,
 };
+
+const styles = theme => ({
+  root:{
+    margin: theme.spacing.unit,
+    marginLeft: theme.spacing.unit * 3,
+  }
+});
 
 export default withStyles(styles)(SearchButton);

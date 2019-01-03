@@ -1,6 +1,6 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import Header from "./components/navigation/Header";
+import Header from "./components/views/navigation/Header";
 // Views
 import Browser from './components/views/browser/Browser';
 import Wiki from './components/views/Wiki';

@@ -64,7 +64,8 @@ class GenreSelection extends React.Component {
 
 GenreSelection.propTypes = {
   classes: PropTypes.object.isRequired,
-  variant: PropTypes.string,
+  variant: PropTypes.string.isRequired,
+  initialInputValue: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 const styles = theme => ({

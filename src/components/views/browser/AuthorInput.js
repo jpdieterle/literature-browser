@@ -186,9 +186,9 @@ class AuthorInput extends React.Component {
 AuthorInput.propTypes = {
   classes: PropTypes.object.isRequired,
   variant: PropTypes.string,
+  initialInputValue: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
-// CSS
 const styles = theme => ({
   root: {
     flexGrow: 1,

@@ -6,7 +6,7 @@ import Button from '@material-ui/core/Button';
 function AddSearchCardButton(props) {
   const { classes } = props;
   return(
-    <div className={classes.wrapper}>
+    <div className={classes.root}>
       <Button color="primary" >leere Karte hinzufügen</Button>
     </div>
   )
@@ -16,9 +16,9 @@ AddSearchCardButton.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-const styles = {
-  wrapper: {
-    padding: 20,
+const styles = theme => ({
+  root: {
+    margin: theme.spacing.unit
   },
-};
+});
 export default withStyles(styles)(AddSearchCardButton);
