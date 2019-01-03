@@ -38,8 +38,8 @@ class GenreSelection extends React.Component {
   render() {
     const { classes } = this.props;
     return(
-      <div className={classes.container}>
-        <FormControl className={classes.formControl}>
+      <div className={classes.root}>
+        <FormControl variant={this.props.variant} fullWidth={true}>
           <InputLabel htmlFor="selectGenre">Genre(s)</InputLabel>
           <Select
             multiple
@@ -64,21 +64,17 @@ class GenreSelection extends React.Component {
 
 GenreSelection.propTypes = {
   classes: PropTypes.object.isRequired,
+  variant: PropTypes.string,
 };
 
 const styles = theme => ({
   root: {
-    display: 'flex',
-    flexWrap: 'wrap',
-  },
-  formControl: {
-    minWidth: 200,
+    flexGrow: 1,
+    paddingTop: 5,
     marginLeft: theme.spacing.unit,
     marginRight: theme.spacing.unit,
+    position: 'relative',
   },
-  container: {
-
-  }
 });
 
 export default withStyles(styles)(GenreSelection);

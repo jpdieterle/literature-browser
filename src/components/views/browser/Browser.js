@@ -6,14 +6,20 @@ import AddSearchCardButton from "./AddSearchCardButton";
 
 class Browser extends React.Component {
   state = {
-
+    cardList: [],
   };
+  searchCardCounter=1;
+
+  deleteSearchCard() {
+    // move to searchcard component?! (button in searchcard)
+  }
 
   render() {
     const { classes } = this.props;
     return(
       <div>
         <div></div>
+        {}
         <SearchCard/>
         <AddSearchCardButton/>
       </div>

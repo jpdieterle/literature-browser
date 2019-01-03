@@ -18,7 +18,7 @@ class TimeInput extends React.Component {
   render() {
     const { classes } = this.props;
     return(
-      <div>
+      <div className={classes.root}>
         <TextField
           id="fromYear"
           label="von (Jahr)"
@@ -29,7 +29,6 @@ class TimeInput extends React.Component {
           InputLabelProps={{
             shrink: true,
           }}
-          margin="normal"
         />
         <TextField
           id="toYear"
@@ -41,7 +40,6 @@ class TimeInput extends React.Component {
           InputLabelProps={{
             shrink: true,
           }}
-          margin="normal"
         />
       </div>
     )
@@ -54,11 +52,19 @@ TimeInput.propTypes = {
 };
 
 const styles = theme => ({
-  textField: {
+  root:{
+    display: 'flex',
+    flexWrap: 'wrap',
+    flexGrow: 1,
+    paddingTop: 5,
     marginLeft: theme.spacing.unit,
     marginRight: theme.spacing.unit,
-    minWidth: 100,
-    maxWidth: 350,
+    marginTop: theme.spacing.unit,
+    position: 'relative',
+  },
+  textField: {
+    maxWidth: 75,
+    marginRight: theme.spacing.unit * 2
   },
 });
 
