@@ -28,7 +28,8 @@ function renderInput(inputProps) {
 
   return (
     <TextField
-      variant={'outlined'}
+      variant={inputProps.variant}
+      InputLabelProps={{disableAnimation: false,}}
       InputProps={{
         inputRef: ref,
         classes: {
@@ -158,6 +159,7 @@ class AuthorInput extends React.Component {
                   placeholder: 'Bsp.: Rilke, Rainer Maria',
                 }),
                 label: 'Autor*in',
+                variant: this.props.variant,
               })}
               {isOpen ? (
                 <Paper className={classes.paper} square>
@@ -183,6 +185,7 @@ class AuthorInput extends React.Component {
 
 AuthorInput.propTypes = {
   classes: PropTypes.object.isRequired,
+  variant: PropTypes.string,
 };
 
 // CSS
@@ -190,7 +193,6 @@ const styles = theme => ({
   root: {
     flexGrow: 1,
     paddingTop: 5,
-    // height: 250,
   },
   container: {
     marginLeft: theme.spacing.unit,
@@ -213,7 +215,7 @@ const styles = theme => ({
   },
   inputInput: {
     width: 'auto',
-      flexGrow: 1,
+    flexGrow: 1,
   },
 });
 export default withStyles(styles)(AuthorInput);

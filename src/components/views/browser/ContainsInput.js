@@ -20,18 +20,19 @@ class ContainsInput extends React.Component {
     const { classes } = this.props;
 
     return(
-      <form className={classes.container} noValidate autoComplete="off">
+      <div className={classes.root}>
         <Tooltip title="Tipps zur Stichworteingabe" placement="right-start">
           <TextField
-            id="standard-textarea"
+            id="textContains"
             label="Text enthält"
             placeholder="Geben Sie Stichwörter ein"
             multiline
+            fullWidth={true}
             className={classes.textField}
-            margin="normal"
+            variant={this.props.variant}
           />
         </Tooltip>
-      </form>
+      </div>
     );
   }
 
@@ -39,14 +40,20 @@ class ContainsInput extends React.Component {
 
 ContainsInput.propTypes = {
   classes: PropTypes.object.isRequired,
+  variant: PropTypes.string,
 };
 
 const styles = theme => ({
-  textField: {
+  root:{
+    flexGrow: 1,
+    paddingTop: 5,
     marginLeft: theme.spacing.unit,
     marginRight: theme.spacing.unit,
-    minWidth: 200,
+    position: 'relative',
   },
+  textField:{
+    //marginTop: theme.spacing.unit,
+  }
 });
 
 export default withStyles(styles)(ContainsInput);
