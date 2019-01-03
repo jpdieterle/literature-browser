@@ -26,6 +26,7 @@ class TimeInput extends React.Component {
           onChange={this.handleChange('fromYear')}
           type="number"
           className={classes.textField}
+          variant={this.props.variant}
           InputLabelProps={{
             shrink: true,
           }}
@@ -37,6 +38,7 @@ class TimeInput extends React.Component {
           onChange={this.handleChange('toYear')}
           type="number"
           className={classes.textField}
+          variant={this.props.variant}
           InputLabelProps={{
             shrink: true,
           }}
