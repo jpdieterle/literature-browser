@@ -16,10 +16,6 @@ import TimeInput from "./TimeInput";
 
 const inputVariant = 'standard';
 
-// Zeitspanne, für die Texte vorhanden sind:
-const minYear = 1700;
-const maxYear = 1950;
-
 class SearchCard extends React.Component {
   state = {
     index: this.props.index,
@@ -73,7 +69,7 @@ class SearchCard extends React.Component {
               onInputChange={this.handleChange.bind(this)}
             />
           </form>
-          <Button size="small" color="primary" className={classes.button} onClick={onDuplicate()}>
+          <Button size="small" color="primary" className={classes.button} onClick={onDuplicate}>
             duplizieren
           </Button>
           <Button size="small" color="secondary" className={classes.button}>

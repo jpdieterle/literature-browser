@@ -9,7 +9,8 @@ import SelectFormat from "./SelectFormat";
 const minYear = 1700;
 const maxYear = 1950;
 
-const emptySearchCardObject = {
+const initialSearchCardObject = {
+  key: 'sc-1',
   authors: [],
   genres: [],
   keywords: '',
@@ -19,12 +20,12 @@ const emptySearchCardObject = {
 
 class Browser extends React.Component {
   state = {
-    cardList: [emptySearchCardObject],
+    cardList: [initialSearchCardObject],
+    selectedFormats: [],
   };
 
-
-
   handleChange = name => event => {
+    // TODO: update cardList in state when input changes (in SearchCard)
     this.setState({
       [name]: event.target.value,
     });
@@ -35,25 +36,24 @@ class Browser extends React.Component {
   }
 
   // fügt eine leere Karte oder ein Duplikat einer Karte hinzu
-  onAddSearchCard(authors, genres, keywords, timeFrom, timeTo) {
-    if(this.state && this.state.cardList.length > 8 ) {
+  onAddSearchCard(inputValues) {
+
+    if(this.state && this.state.cardList.length > 7 ) {
       // TODO: Hinweis anzeigen, dass nicht mehr als 8 Karten hinzugefügt werden können.
       return;
     }
-    // initialisiere leere Karte, falls keine Werte übergeben werden
-    let newCardObject = emptySearchCardObject;
 
-    // setze Karte auf übergebene Werte
-    if(authors) {
-      newCardObject.key = 'sc-' + (this.state.cardList.length + 2).toString();
-      newCardObject.authors = authors;
-      newCardObject.genres = genres;
-      newCardObject.keywords = keywords;
-      newCardObject.timeFrom = timeFrom;
-      newCardObject.timeTo = timeTo;
-    }
-    // füge neue Karte hinzu
-    this.state.cardList.concat(newCardObject);
+    let paramsPassed = (inputValues instanceof Object && 'authors' in inputValues);
+    inputValues = paramsPassed? inputValues : initialSearchCardObject;
+    console.log(inputValues);
+
+    // setze key von neuer Karte
+    inputValues.key = inputValues.key.substr(0,3) + (this.state.cardList.length + 1).toString();
+
+    this.setState(state => ({
+      // füge neue Karte zu cardList hinzu
+      cardList: [...state.cardList, inputValues]
+    }));
   }
 
   render() {
@@ -65,7 +65,7 @@ class Browser extends React.Component {
         <div className={classes.flexContainerCards}>
           {cardList.map((card, index) => (
             <SearchCard
-              key={'sc-' + index.toString()}
+              key={index}
               inputValues={card}
               index={index}
               onDuplicate={this.onAddSearchCard.bind(this)}
@@ -74,7 +74,7 @@ class Browser extends React.Component {
             />
           ))}
         </div>
-        <AddSearchCardButton action={this.onAddSearchCard()}/>
+        <AddSearchCardButton action={this.onAddSearchCard.bind(this)}/>
         <div className={classes.flexContainerFormat}>
           <SelectFormat/>
         </div>
@@ -96,6 +96,8 @@ const styles = {
   flexContainerCards:{
     display: 'flex',
     flexFlow: 'row wrap',
+    flexDirection: 'row-reverse',
+    justifyContent: 'flex-end',
   },
   flexContainer2:{
 
