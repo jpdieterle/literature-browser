@@ -5,12 +5,13 @@ import SearchCard from "./SearchCard";
 import AddSearchCardButton from "./AddSearchCardButton";
 import SearchButton from "./SearchButton";
 import SelectFormat from "./SelectFormat";
+import shortid from 'shortid';
 
 const minYear = 1700;
 const maxYear = 1950;
 
 const initialSearchCardObject = {
-  key: 'sc-1',
+  id: shortid.generate(),
   authors: [],
   genres: [],
   keywords: '',
@@ -20,8 +21,12 @@ const initialSearchCardObject = {
 
 class Browser extends React.Component {
   state = {
-    cardList: [initialSearchCardObject],
+    cardList: [JSON.parse(JSON.stringify(initialSearchCardObject))],
     selectedFormats: [],
+  };
+
+  getCardIndex = id => {
+    return this.state.cardList.findIndex(card => card.id === id);
   };
 
   handleChange = name => event => {
@@ -30,10 +35,6 @@ class Browser extends React.Component {
       [name]: event.target.value,
     });
   };
-
-  deleteSearchCard() {
-    // TODO: remove card object from state
-  }
 
   // fügt eine leere Karte oder ein Duplikat einer Karte hinzu
   onAddSearchCard(inputValues) {
@@ -44,15 +45,26 @@ class Browser extends React.Component {
     }
 
     let paramsPassed = (inputValues instanceof Object && 'authors' in inputValues);
-    inputValues = paramsPassed? inputValues : initialSearchCardObject;
-    console.log(inputValues);
+    inputValues = paramsPassed? inputValues : JSON.parse(JSON.stringify(initialSearchCardObject));
 
-    // setze key von neuer Karte
-    inputValues.key = inputValues.key.substr(0,3) + (this.state.cardList.length + 1).toString();
+    inputValues.id = shortid.generate();
 
     this.setState(state => ({
-      // füge neue Karte zu cardList hinzu
       cardList: [...state.cardList, inputValues]
+    }));
+  }
+
+  updateSearchCardContent(index, inputValues) {
+    // TODO: insert new search card input into browser state
+  }
+
+  deleteSearchCard(id) {
+    if(this.state.cardList.length === 1) {
+      // TODO: update index of remaining card to 0
+      return; // letzte verbleibende Karte soll nicht gelöscht werden
+    }
+    this.setState(state => ({
+      cardList: state.cardList.filter( card => (card.id !== id))
     }));
   }
 
@@ -65,12 +77,20 @@ class Browser extends React.Component {
         <div className={classes.flexContainerCards}>
           {cardList.map((card, index) => (
             <SearchCard
-              key={index}
-              inputValues={card}
+              key={card.id} // not passed to component by react! => use id instead
+              id={card.id}
               index={index}
+              initialValues={{
+                authors: card.authors,
+                genres: card.genres,
+                keywords: card.keywords,
+                timeFrom: card.timeFrom,
+                timeTo: card.timeTo,
+              }}
+              getIndex={this.getCardIndex.bind(this)}
               onDuplicate={this.onAddSearchCard.bind(this)}
               onDelete={this.deleteSearchCard.bind(this)}
-              onChange={this.handleChange.bind(this)}
+              onContentChange={this.updateSearchCardContent.bind(this)}
             />
           ))}
         </div>
