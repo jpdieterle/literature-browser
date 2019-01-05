@@ -21,7 +21,6 @@ SearchButton.propTypes = {
 const styles = theme => ({
   root:{
     margin: theme.spacing.unit,
-    marginLeft: theme.spacing.unit * 3,
   }
 });
 

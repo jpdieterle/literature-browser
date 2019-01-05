@@ -14,6 +14,7 @@ class TimeInput extends React.Component {
     this.setState({
       [name]: event.target.value,
     });
+    this.props.onInputChange(name, event.target.value);
   };
 
   render() {
@@ -54,6 +55,8 @@ class TimeInput extends React.Component {
 
 TimeInput.propTypes = {
   classes: PropTypes.object.isRequired,
+  variant: PropTypes.string.isRequired,
+  onInputChange: PropTypes.func.isRequired,
 };
 
 const styles = theme => ({

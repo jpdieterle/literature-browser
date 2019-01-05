@@ -13,39 +13,47 @@ import GenreSelection from "./GenreSelection";
 import ContainsInput from "./ContainsInput";
 import TimeInput from "./TimeInput";
 
-
 const inputVariant = 'standard';
 
 class SearchCard extends React.Component {
   state = {
-    index: this.props.index,
     inputValues: this.props.initialValues, //  {authors: [], genres: [], keywords: '', timeFrom: 1700, timeTo: 1950}
   };
 
-  handleChange = name => event => {
+  inputVariant = this.props.inputVariant;
+
+  /*handleChange = name => event => {
     this.setState({
       [name]: event.target.value,
     });
+  };*/
+
+  updateInputValue = (prop, value) => {
+    console.log(this.state);
+    console.log(this.state.inputValues);
+    // let {newInputValues} = this.state.inputValues;
+    let newInputValues = JSON.parse(JSON.stringify(this.state.inputValues));
+    console.log(newInputValues);
+    newInputValues[prop] = value;
+    this.setState({inputValues: newInputValues});
+    this.onContentChange(prop, newInputValues); // update Browser state
   };
 
-  onDeleteCard = () => {
-    console.log('lösche karte mit key '+this.props.id+' und index '+this.state.index);
-    this.props.onDelete(this.props.id)
-  };
+  onDeleteCard = () => {this.props.onDelete(this.props.id)};
 
   onDuplicateCard = () => {this.props.onDuplicate(this.state.inputValues)};
 
-  onContentChange = (field) => {this.props.onContentChange(this.props.key)};
+  onContentChange = (prop, value) => {this.props.onContentChange(this.props.key, prop, value)};
 
   render() {
-    const { classes, initialValues, id, getIndex } = this.props;
-    const { index, inputValues } = this.state;
+    const { classes, id, getIndex } = this.props;
+    const { inputValues } = this.state;
     return(
       <div className={classes.root}>
         <Paper className={classes.backdrop}>
           <div className={classes.topContainer}>
             <Typography variant={'h6'} color={'primary'} className={classes.title}>
-              Suche Teil { getIndex(id) + 1}
+              Suche Teil {getIndex(id) + 1} (key: {id})
             </Typography>
             <IconButton className={classes.closeButton} onClick={this.onDeleteCard} >
               <CloseButton color={'secondary'}/>
@@ -55,30 +63,27 @@ class SearchCard extends React.Component {
             <AuthorInput
               variant={inputVariant}
               initialValues={inputValues.authors}
-              onInputChange={this.handleChange.bind(this)}
+              onInputChange={this.updateInputValue.bind(this)}
             />
             <GenreSelection
               variant={inputVariant}
               initialValues={inputValues.genres}
-              onInputChange={this.handleChange.bind(this)}
+              onInputChange={this.updateInputValue.bind(this)}
             />
             <ContainsInput
               variant={inputVariant}
               initialValues={inputValues.keywords}
-              onInputChange={this.handleChange.bind(this)}
+              onInputChange={this.updateInputValue.bind(this)}
             />
             <TimeInput
               variant={inputVariant}
               initialTimeFrom={inputValues.timeFrom}
               initialTimeTo={inputValues.timeTo}
-              onInputChange={this.handleChange.bind(this)}
+              onInputChange={this.updateInputValue.bind(this)}
             />
           </form>
           <Button size="small" color="primary" className={classes.button} onClick={this.onDuplicateCard}>
             duplizieren
-          </Button>
-          <Button size="small" color="secondary" className={classes.button}>
-            löschen
           </Button>
         </Paper>
       </div>
@@ -92,6 +97,7 @@ SearchCard.propTypes = {
   index: PropTypes.number.isRequired,
   initialValues: PropTypes.object.isRequired,
   getIndex: PropTypes.func.isRequired,
+  inputVariant: PropTypes.string.isRequired,
   onDuplicate: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
   onContentChange: PropTypes.func.isRequired,

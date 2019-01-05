@@ -51,7 +51,7 @@ SelectFormat.propTypes = {
 
 const styles = theme => ({
   root:{
-    marginLeft: theme.spacing.unit * 3,
+    marginLeft: theme.spacing.unit,
   }
 });
 

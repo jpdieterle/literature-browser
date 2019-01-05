@@ -7,13 +7,12 @@ import Tooltip from '@material-ui/core/Tooltip';
 //TODO: regex (oÄ) unterstützen
 class ContainsInput extends React.Component {
   state = {
-    phrases: [],
+    keywords: [],
   };
 
-  handleChange = name => event => {
-    this.setState({
-      [name]: event.target.value,
-    });
+  onInputChange = (event) => {
+    this.setState({keywords: event.target.value,});
+    this.props.onInputChange('keywords', event.target.value); // update SearchCard
   };
 
   render() {
@@ -30,17 +29,18 @@ class ContainsInput extends React.Component {
             fullWidth={true}
             className={classes.textField}
             variant={this.props.variant}
+            onChange={this.onInputChange}
           />
         </Tooltip>
       </div>
     );
   }
-
 }
 
 ContainsInput.propTypes = {
   classes: PropTypes.object.isRequired,
-  variant: PropTypes.string,
+  variant: PropTypes.string.isRequired,
+  onInputChange: PropTypes.func.isRequired,
 };
 
 const styles = theme => ({

@@ -33,6 +33,7 @@ class GenreSelection extends React.Component {
 
   handleChange = event => {
     this.setState({ genre: event.target.value });
+    this.props.onInputChange('genres', event.target.value); // update SearchCard state
   };
 
   render() {
@@ -66,6 +67,7 @@ GenreSelection.propTypes = {
   classes: PropTypes.object.isRequired,
   variant: PropTypes.string.isRequired,
   initialValues: PropTypes.arrayOf(PropTypes.string).isRequired,
+  onInputChange: PropTypes.func.isRequired,
 };
 
 const styles = theme => ({

@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import SearchCard from "./SearchCard";
-import AddSearchCardButton from "./AddSearchCardButton";
-import SearchButton from "./SearchButton";
-import SelectFormat from "./SelectFormat";
+import SearchCard from './searchcard/SearchCard';
+import AddSearchCardButton from './buttons/AddSearchCardButton';
+import SelectFormat from './SelectFormat';
+import SearchButton from './buttons/SearchButton';
+import FullSearchButton from './buttons/FullSearchButton';
 import shortid from 'shortid';
 
 const minYear = 1700;
@@ -18,6 +19,8 @@ const initialSearchCardObject = {
   timeFrom: minYear,
   timeTo: maxYear,
 };
+
+const inputVariant = 'standard';
 
 class Browser extends React.Component {
   state = {
@@ -54,8 +57,9 @@ class Browser extends React.Component {
     }));
   }
 
-  updateSearchCardContent(index, inputValues) {
+  updateSearchCardContent(id, prop, value) {
     // TODO: insert new search card input into browser state
+
   }
 
   deleteSearchCard(id) {
@@ -87,6 +91,7 @@ class Browser extends React.Component {
                 timeFrom: card.timeFrom,
                 timeTo: card.timeTo,
               }}
+              inputVariant={inputVariant}
               getIndex={this.getCardIndex.bind(this)}
               onDuplicate={this.onAddSearchCard.bind(this)}
               onDelete={this.deleteSearchCard.bind(this)}
@@ -95,11 +100,13 @@ class Browser extends React.Component {
           ))}
         </div>
         <AddSearchCardButton action={this.onAddSearchCard.bind(this)}/>
-        <div className={classes.flexContainerFormat}>
+        <div className={classes.flexContainer}>
           <SelectFormat/>
         </div>
-
-        <SearchButton/>
+        <div className={classes.flexContainer}>
+          <SearchButton/>
+          <FullSearchButton/>
+        </div>
       </div>
     );
   }
@@ -109,9 +116,9 @@ Browser.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-const styles = {
+const styles = theme => ({
   root:{
-
+    padding: theme.spacing.unit * 3,
   },
   flexContainerCards:{
     display: 'flex',
@@ -119,15 +126,10 @@ const styles = {
     flexDirection: 'row-reverse',
     justifyContent: 'flex-end',
   },
-  flexContainer2:{
-
-  },
-  flexContainer3:{
-
-  },
-  flexContainerFormat:{
+  flexContainer:{
     display: 'flex',
+    marginTop: theme.spacing.unit * 2,
   },
-};
+});
 
 export default withStyles(styles)(Browser);
