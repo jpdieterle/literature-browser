@@ -7,7 +7,6 @@ import SelectFormat from './SelectFormat';
 import SearchButton from './buttons/SearchButton';
 import FullSearchButton from './buttons/FullSearchButton';
 import shortid from 'shortid';
-import { inspect } from 'util' // or directly
 
 const minYear = 1700;
 const maxYear = 1950;
