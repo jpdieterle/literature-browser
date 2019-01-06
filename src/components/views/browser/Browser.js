@@ -64,8 +64,11 @@ class Browser extends React.Component {
   }
 
   updateSearchCardContent(id, prop, value) {
-    // TODO: insert new search card input into browser state
-
+    if(this.state && this.state.cardList) {
+      let newCardList = JSON.parse(JSON.stringify(this.state.cardList));
+      newCardList.find(card => card.id === id)[prop] = JSON.parse(JSON.stringify(value));
+      this.setState({cardList: newCardList }, () => console.log('new card list: ' + JSON.stringify(this.state.cardList)));
+    }
   }
 
   deleteSearchCard(id) {
