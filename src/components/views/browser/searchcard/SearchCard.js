@@ -29,21 +29,22 @@ class SearchCard extends React.Component {
   };*/
 
   updateInputValue = (prop, value) => {
-    console.log(this.state);
-    console.log(this.state.inputValues);
+    console.log('card state before update: ' + this.state);
+    console.log('card inputValues before update: ' + this.state.inputValues);
     // let {newInputValues} = this.state.inputValues;
     let newInputValues = JSON.parse(JSON.stringify(this.state.inputValues));
     console.log(newInputValues);
-    newInputValues[prop] = value;
-    this.setState({inputValues: newInputValues});
-    this.onContentChange(prop, newInputValues); // update Browser state
+    newInputValues[prop] = JSON.parse(JSON.stringify(value));
+    this.setState({inputValues: newInputValues}, () => {
+      this.props.onContentChange(this.props.key, prop, this.state.inputValues); // update Browser state
+    });
+    setTimeout(() => {console.log('card state after update: ' + JSON.stringify(this.state));}, 3000);
+
   };
 
   onDeleteCard = () => {this.props.onDelete(this.props.id)};
 
   onDuplicateCard = () => {this.props.onDuplicate(this.state.inputValues)};
-
-  onContentChange = (prop, value) => {this.props.onContentChange(this.props.key, prop, value)};
 
   render() {
     const { classes, id, getIndex } = this.props;
@@ -53,7 +54,7 @@ class SearchCard extends React.Component {
         <Paper className={classes.backdrop}>
           <div className={classes.topContainer}>
             <Typography variant={'h6'} color={'primary'} className={classes.title}>
-              Suche Teil {getIndex(id) + 1} (key: {id})
+              Suche Teil {getIndex(id) + 1} (id: {id})
             </Typography>
             <IconButton className={classes.closeButton} onClick={this.onDeleteCard} >
               <CloseButton color={'secondary'}/>
@@ -72,7 +73,7 @@ class SearchCard extends React.Component {
             />
             <ContainsInput
               variant={inputVariant}
-              initialValues={inputValues.keywords}
+              initialValue={inputValues.keywords}
               onInputChange={this.updateInputValue.bind(this)}
             />
             <TimeInput

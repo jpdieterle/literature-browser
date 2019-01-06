@@ -93,7 +93,7 @@ renderSuggestion.propTypes = {
 class AuthorInput extends React.Component {
   state = {
     inputValue: '',
-    selectedItems: [],
+    selectedItems: this.props.initialValues,
   };
 
   handleKeyDown = event => {
@@ -120,9 +120,9 @@ class AuthorInput extends React.Component {
     this.setState({
       inputValue: '',
       selectedItem: selectedItems,
+    }, () => {
+      this.props.onInputChange('authors', this.state.selectedItem); // update SearchCard state
     });
-    // update SearchCard state
-    this.props.onInputChange('authors', selectedItems);
   };
 
   handleDelete = item => () => {

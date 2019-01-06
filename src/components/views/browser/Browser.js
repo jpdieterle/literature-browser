@@ -7,6 +7,7 @@ import SelectFormat from './SelectFormat';
 import SearchButton from './buttons/SearchButton';
 import FullSearchButton from './buttons/FullSearchButton';
 import shortid from 'shortid';
+import { inspect } from 'util' // or directly
 
 const minYear = 1700;
 const maxYear = 1950;
@@ -47,14 +48,19 @@ class Browser extends React.Component {
       return;
     }
 
+    console.log(inputValues);
+
     let paramsPassed = (inputValues instanceof Object && 'authors' in inputValues);
-    inputValues = paramsPassed? inputValues : JSON.parse(JSON.stringify(initialSearchCardObject));
+    inputValues = paramsPassed?
+      JSON.parse(JSON.stringify(inputValues)) : JSON.parse(JSON.stringify(initialSearchCardObject));
 
     inputValues.id = shortid.generate();
 
     this.setState(state => ({
       cardList: [...state.cardList, inputValues]
-    }));
+    }), () => {
+      console.log('new cardList after add:' + JSON.stringify(this.state.cardList));
+    });
   }
 
   updateSearchCardContent(id, prop, value) {

@@ -6,15 +6,17 @@ import FormGroup from '@material-ui/core/FormGroup';
 
 class TimeInput extends React.Component {
   state = {
-    fromYear: 1700,
-    toYear: 1950,
+    timeFrom: this.props.initialTimeFrom,
+    timeTo: this.props.initialTimeTo,
   };
 
   handleChange = name => event => {
     this.setState({
       [name]: event.target.value,
+    }, () => {
+      this.props.onInputChange(name, this.state[name]);
     });
-    this.props.onInputChange(name, event.target.value);
+
   };
 
   render() {
@@ -25,8 +27,8 @@ class TimeInput extends React.Component {
           <TextField
             id="fromYear"
             label="von (Jahr)"
-            value={this.state.fromYear}
-            onChange={this.handleChange('fromYear')}
+            value={this.state.timeFrom}
+            onChange={this.handleChange('timeFrom')}
             type="number"
             className={classes.textField}
             variant={this.props.variant}
@@ -37,8 +39,8 @@ class TimeInput extends React.Component {
           <TextField
             id="toYear"
             label="bis (Jahr)"
-            value={this.state.toYear}
-            onChange={this.handleChange('toYear')}
+            value={this.state.timeTo}
+            onChange={this.handleChange('timeTo')}
             type="number"
             className={classes.textField}
             variant={this.props.variant}
@@ -56,6 +58,8 @@ class TimeInput extends React.Component {
 TimeInput.propTypes = {
   classes: PropTypes.object.isRequired,
   variant: PropTypes.string.isRequired,
+  initialTimeFrom: PropTypes.any.isRequired,
+  initialTimeTo: PropTypes.any.isRequired,
   onInputChange: PropTypes.func.isRequired,
 };
 
