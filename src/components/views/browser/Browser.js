@@ -63,7 +63,7 @@ class Browser extends React.Component {
     if(this.state && this.state.cardList) {
       let newCardList = JSON.parse(JSON.stringify(this.state.cardList));
       newCardList.find(card => card.id === id)[prop] = JSON.parse(JSON.stringify(value));
-      this.setState({cardList: newCardList }, () => console.log('new card list: ' + JSON.stringify(this.state.cardList)));
+      this.setState({cardList: newCardList });
     }
   }
 
@@ -79,7 +79,7 @@ class Browser extends React.Component {
   updateFormat = (formatProp, newValue) => {
     let newSelectedFormats = JSON.parse(JSON.stringify(this.state.selectedFormats));
     newSelectedFormats[formatProp] = JSON.parse(JSON.stringify(newValue));
-    this.setState({selectedFormats: newSelectedFormats}, () => {console.log('new selectedFormats: '+JSON.stringify(this.state.selectedFormats))});
+    this.setState({selectedFormats: newSelectedFormats});
   };
 
   render() {
