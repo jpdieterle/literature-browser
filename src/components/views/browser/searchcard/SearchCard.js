@@ -51,7 +51,7 @@ class SearchCard extends React.Component {
         <Paper className={classes.backdrop}>
           <div className={classes.topContainer}>
             <Typography variant={'h6'} color={'primary'} className={classes.title}>
-              Suche Teil {getIndex(id) + 1} (id: {id})
+              Suche Teil {getIndex(id) + 1}
             </Typography>
             <IconButton className={classes.closeButton} onClick={this.onDeleteCard} >
               <CloseButton color={'secondary'}/>
