@@ -26,7 +26,7 @@ const inputVariant = 'standard';
 class Browser extends React.Component {
   state = {
     cardList: [JSON.parse(JSON.stringify(initialSearchCardObject))],
-    selectedFormats: [],
+    selectedFormats: {checkedTXT: false, checkedJSON: false, checkedXML: false},
   };
 
   getCardIndex = id => {
@@ -81,6 +81,12 @@ class Browser extends React.Component {
     }));
   }
 
+  updateFormat = (formatProp, newValue) => {
+    let newSelectedFormats = JSON.parse(JSON.stringify(this.state.selectedFormats));
+    newSelectedFormats[formatProp] = JSON.parse(JSON.stringify(newValue));
+    this.setState({selectedFormats: newSelectedFormats}, () => {console.log('new selectedFormats: '+JSON.stringify(this.state.selectedFormats))});
+  };
+
   render() {
     const { classes } = this.props;
     const { cardList } = this.state;
@@ -110,7 +116,7 @@ class Browser extends React.Component {
         </div>
         <AddSearchCardButton action={this.onAddSearchCard.bind(this)}/>
         <div className={classes.flexContainer}>
-          <SelectFormat/>
+          <SelectFormat initialValues={this.state.selectedFormats} onChange={this.updateFormat.bind(this)}/>
         </div>
         <div className={classes.flexContainer}>
           <SearchButton/>

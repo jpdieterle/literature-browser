@@ -7,20 +7,23 @@ import FormGroup from '@material-ui/core/FormGroup';
 
 class SelectFormat extends React.Component {
   state = {
-    checkedTXT: true,
-    checkedJSON: false,
-    checkedXML: false,
+    checkedTXT: this.props.initialValues.checkedTXT,
+    checkedJSON: this.props.initialValues.checkedJSON,
+    checkedXML: this.props.initialValues.checkedXML,
   };
 
   handleChange = name => event => {
-    this.setState({ [name]: event.target.checked });
+    let propName = "checked" + name.toUpperCase();
+    this.setState({ [propName]: event.target.checked }, () => {
+      this.props.onChange(propName, this.state[propName]);
+    });
   };
 
   checkboxes = ['txt', 'json', 'xml'];
 
   render() {
     const { classes } = this.props;
-    const { selectedFormat } = this.state;
+    const { checke } = this.state;
     return(
       <div className={classes.root}>
         <FormGroup row>
@@ -47,6 +50,8 @@ class SelectFormat extends React.Component {
 
 SelectFormat.propTypes = {
   classes: PropTypes.object.isRequired,
+  initialValues: PropTypes.object.isRequired,
+  onChange: PropTypes.func.isRequired,
 };
 
 const styles = theme => ({
