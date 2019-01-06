@@ -112,6 +112,7 @@ class AuthorInput extends React.Component {
 
   handleChange = item => {
     let { selectedItems } = this.state;
+    console.log('selectedItems: ' + selectedItems);
 
     if (selectedItems.indexOf(item) === -1) {
       selectedItems = [...selectedItems, item];
@@ -158,6 +159,7 @@ class AuthorInput extends React.Component {
                   )),
                   onChange: this.handleInputChange,
                   onKeyDown: this.handleKeyDown,
+                  value: this.state.inputValue,
                   placeholder: 'Bsp.: Rilke, Rainer Maria',
                 }),
                 label: 'Autor*in',

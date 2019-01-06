@@ -13,6 +13,7 @@ class ContainsInput extends React.Component {
   onInputChange = (event) => {
     this.setState({keywords: event.target.value,}, () => {
       this.props.onInputChange('keywords', this.state.keywords); // update SearchCard
+      console.log('keyword state: ' + this.state.keywords);
     });
   };
 
@@ -30,6 +31,7 @@ class ContainsInput extends React.Component {
             fullWidth={true}
             className={classes.textField}
             variant={this.props.variant}
+            value={this.state.keywords}
             onChange={this.onInputChange}
           />
         </Tooltip>
