@@ -29,17 +29,14 @@ class SearchCard extends React.Component {
   };*/
 
   updateInputValue = (prop, value) => {
-    console.log('card state before update: ' + this.state);
-    console.log('card inputValues before update: ' + this.state.inputValues);
+
     // let {newInputValues} = this.state.inputValues;
     let newInputValues = JSON.parse(JSON.stringify(this.state.inputValues));
-    console.log(newInputValues);
+
     newInputValues[prop] = JSON.parse(JSON.stringify(value));
     this.setState({inputValues: newInputValues}, () => {
       this.props.onContentChange(this.props.id, prop, value); // update Browser state
     });
-    setTimeout(() => {console.log('card state after update: ' + JSON.stringify(this.state));}, 3000);
-
   };
 
   onDeleteCard = () => {this.props.onDelete(this.props.id)};

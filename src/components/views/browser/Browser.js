@@ -48,8 +48,6 @@ class Browser extends React.Component {
       return;
     }
 
-    console.log(inputValues);
-
     let paramsPassed = (inputValues instanceof Object && 'authors' in inputValues);
     inputValues = paramsPassed?
       JSON.parse(JSON.stringify(inputValues)) : JSON.parse(JSON.stringify(initialSearchCardObject));
@@ -58,9 +56,7 @@ class Browser extends React.Component {
 
     this.setState(state => ({
       cardList: [...state.cardList, inputValues]
-    }), () => {
-      console.log('new cardList after add:' + JSON.stringify(this.state.cardList));
-    });
+    }));
   }
 
   updateSearchCardContent(id, prop, value) {
@@ -73,7 +69,6 @@ class Browser extends React.Component {
 
   deleteSearchCard(id) {
     if(this.state.cardList.length === 1) {
-      // TODO: update index of remaining card to 0
       return; // letzte verbleibende Karte soll nicht gelöscht werden
     }
     this.setState(state => ({

@@ -23,7 +23,7 @@ class SelectFormat extends React.Component {
 
   render() {
     const { classes } = this.props;
-    const { checke } = this.state;
+    const {  } = this.state;
     return(
       <div className={classes.root}>
         <FormGroup row>

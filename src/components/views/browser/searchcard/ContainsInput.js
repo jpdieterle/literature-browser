@@ -13,7 +13,6 @@ class ContainsInput extends React.Component {
   onInputChange = (event) => {
     this.setState({keywords: event.target.value,}, () => {
       this.props.onInputChange('keywords', this.state.keywords); // update SearchCard
-      console.log('keyword state: ' + this.state.keywords);
     });
   };
 

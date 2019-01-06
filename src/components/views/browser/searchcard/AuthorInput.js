@@ -112,7 +112,6 @@ class AuthorInput extends React.Component {
 
   handleChange = item => {
     let { selectedItems } = this.state;
-    console.log('new chosen author: ' + item);
 
     if (selectedItems.indexOf(item) === -1) {
       selectedItems = [...selectedItems, item];
@@ -123,7 +122,6 @@ class AuthorInput extends React.Component {
       selectedItems: selectedItems,
     }, () => {
       this.props.onInputChange('authors', this.state.selectedItems); // update SearchCard state
-      console.log('new selected authors: ' + this.state.selectedItems);
     });
   };
 
