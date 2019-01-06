@@ -28,11 +28,14 @@ const genres = [
 
 class GenreSelection extends React.Component {
   state = {
-    genre: [],
+    genre: this.props.initialValues,
   };
 
   handleChange = event => {
-    this.setState({ genre: event.target.value });
+    this.setState({ genre: event.target.value }, () => {
+      this.props.onInputChange('genres', this.state.genre); // update SearchCard state
+    });
+
   };
 
   render() {
@@ -64,7 +67,9 @@ class GenreSelection extends React.Component {
 
 GenreSelection.propTypes = {
   classes: PropTypes.object.isRequired,
-  variant: PropTypes.string,
+  variant: PropTypes.string.isRequired,
+  initialValues: PropTypes.array.isRequired,
+  onInputChange: PropTypes.func.isRequired,
 };
 
 const styles = theme => ({

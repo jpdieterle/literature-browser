@@ -85,7 +85,7 @@ renderSuggestion.propTypes = {
   highlightedIndex: PropTypes.number,
   index: PropTypes.number,
   itemProps: PropTypes.object,
-  selectedItem: PropTypes.string,
+  selectedItems: PropTypes.string,
   suggestion: PropTypes.shape({ label: PropTypes.string }).isRequired,
 };
 
@@ -93,15 +93,15 @@ renderSuggestion.propTypes = {
 class AuthorInput extends React.Component {
   state = {
     inputValue: '',
-    selectedItem: [],
+    selectedItems: this.props.initialValues,
   };
 
   handleKeyDown = event => {
-    const { inputValue, selectedItem } = this.state;
+    const { inputValue, selectedItems } = this.state;
 
-    if (selectedItem.length && !inputValue.length && keycode(event) === 'backspace') {
+    if (selectedItems.length && !inputValue.length && keycode(event) === 'backspace') {
       this.setState({
-        selectedItem: selectedItem.slice(0, selectedItem.length - 1),
+        selectedItems: selectedItems.slice(0, selectedItems.length - 1),
       });
     }
   };
@@ -111,33 +111,35 @@ class AuthorInput extends React.Component {
   };
 
   handleChange = item => {
-    let { selectedItem } = this.state;
+    let { selectedItems } = this.state;
 
-    if (selectedItem.indexOf(item) === -1) {
-      selectedItem = [...selectedItem, item];
+    if (selectedItems.indexOf(item) === -1) {
+      selectedItems = [...selectedItems, item];
     }
 
     this.setState({
       inputValue: '',
-      selectedItem,
+      selectedItems: selectedItems,
+    }, () => {
+      this.props.onInputChange('authors', this.state.selectedItems); // update SearchCard state
     });
   };
 
   handleDelete = item => () => {
     this.setState(state => {
-      const selectedItem = [...state.selectedItem];
+      const selectedItem = [...state.selectedItems];
       selectedItem.splice(selectedItem.indexOf(item), 1);
-      return { selectedItem };
+      return { selectedItems: selectedItem };
     });
   };
 
   render() {
     const { classes } = this.props;
-    const { inputValue, selectedItem } = this.state;
+    const { inputValue, selectedItems } = this.state;
 
     return(
       <div className={classes.root}>
-        <Downshift inputValue={inputValue} onChange={this.handleChange} selectedItem={selectedItem}>
+        <Downshift inputValue={inputValue} onChange={this.handleChange} selectedItem={selectedItems}>
           {({getInputProps, getItemProps, isOpen, inputValue: inputValue2, selectedItem: selectedItem2,
               highlightedIndex,}) => (
             <div className={classes.container}>
@@ -145,7 +147,7 @@ class AuthorInput extends React.Component {
                 fullWidth: true,
                 classes,
                 InputProps: getInputProps({
-                  startAdornment: selectedItem.map(item => (
+                  startAdornment: selectedItems.map(item => (
                     <Chip
                       key={item}
                       tabIndex={-1}
@@ -156,6 +158,7 @@ class AuthorInput extends React.Component {
                   )),
                   onChange: this.handleInputChange,
                   onKeyDown: this.handleKeyDown,
+                  value: this.state.inputValue,
                   placeholder: 'Bsp.: Rilke, Rainer Maria',
                 }),
                 label: 'Autor*in',
@@ -186,9 +189,10 @@ class AuthorInput extends React.Component {
 AuthorInput.propTypes = {
   classes: PropTypes.object.isRequired,
   variant: PropTypes.string,
+  initialValues: PropTypes.arrayOf(PropTypes.string).isRequired,
+  onInputChange: PropTypes.func.isRequired,
 };
 
-// CSS
 const styles = theme => ({
   root: {
     flexGrow: 1,
