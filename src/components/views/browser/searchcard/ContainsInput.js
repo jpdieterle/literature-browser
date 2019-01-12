@@ -17,7 +17,8 @@ class ContainsInput extends React.Component {
   };
 
   render() {
-    const { classes } = this.props;
+    const { classes, variant, getDisabled } = this.props;
+    const { keywords } = this.state;
 
     return(
       <div className={classes.root}>
@@ -29,8 +30,9 @@ class ContainsInput extends React.Component {
             multiline
             fullWidth={true}
             className={classes.textField}
-            variant={this.props.variant}
-            value={this.state.keywords}
+            variant={variant}
+            disabled={getDisabled()}
+            value={keywords}
             onChange={this.onInputChange}
           />
         </Tooltip>
@@ -43,6 +45,7 @@ ContainsInput.propTypes = {
   classes: PropTypes.object.isRequired,
   variant: PropTypes.string.isRequired,
   initialValue: PropTypes.string.isRequired,
+  getDisabled: PropTypes.func.isRequired,
   onInputChange: PropTypes.func.isRequired,
 };
 

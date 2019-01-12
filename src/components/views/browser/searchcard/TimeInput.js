@@ -8,6 +8,8 @@ class TimeInput extends React.Component {
   state = {
     timeFrom: this.props.initialTimeFrom,
     timeTo: this.props.initialTimeTo,
+    lengthToInput: 4,
+    lengthFromInput: 4,
   };
 
   handleChange = name => event => {
@@ -16,22 +18,24 @@ class TimeInput extends React.Component {
     }, () => {
       this.props.onInputChange(name, this.state[name]);
     });
-
   };
 
   render() {
-    const { classes } = this.props;
+    const { classes, variant, initialTimeTo, initialTimeFrom, getDisabled } = this.props;
+    const { timeFrom, timeTo } = this.state;
+
     return(
       <div className={classes.root}>
         <FormGroup row={true}>
           <TextField
             id="fromYear"
             label="von (Jahr)"
-            value={this.state.timeFrom}
-            onChange={this.handleChange('timeFrom')}
+            inputProps={{min: initialTimeFrom.toString() , max: initialTimeTo.toString(), step: '1'}}
+            value={timeFrom}
             type="number"
             className={classes.textField}
-            variant={this.props.variant}
+            variant={variant}
+            disabled={getDisabled()}
             InputLabelProps={{
               shrink: true,
             }}
@@ -39,11 +43,13 @@ class TimeInput extends React.Component {
           <TextField
             id="toYear"
             label="bis (Jahr)"
-            value={this.state.timeTo}
+            inputProps={{min: initialTimeFrom.toString() , max: initialTimeTo.toString(), step: '1'}}
+            value={timeTo}
             onChange={this.handleChange('timeTo')}
             type="number"
             className={classes.textField}
-            variant={this.props.variant}
+            variant={variant}
+            disabled={getDisabled()}
             InputLabelProps={{
               shrink: true,
             }}
@@ -60,6 +66,7 @@ TimeInput.propTypes = {
   variant: PropTypes.string.isRequired,
   initialTimeFrom: PropTypes.any.isRequired,
   initialTimeTo: PropTypes.any.isRequired,
+  getDisabled: PropTypes.func.isRequired,
   onInputChange: PropTypes.func.isRequired,
 };
 

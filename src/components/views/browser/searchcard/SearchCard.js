@@ -44,7 +44,7 @@ class SearchCard extends React.Component {
   onDuplicateCard = () => {this.props.onDuplicate(this.state.inputValues)};
 
   render() {
-    const { classes, id, getIndex } = this.props;
+    const { classes, id, getIndex, getDisabled } = this.props;
     const { inputValues } = this.state;
     return(
       <div className={classes.root}>
@@ -53,7 +53,7 @@ class SearchCard extends React.Component {
             <Typography variant={'h6'} color={'primary'} className={classes.title}>
               Suche Teil {getIndex(id) + 1}
             </Typography>
-            <IconButton className={classes.closeButton} onClick={this.onDeleteCard} >
+            <IconButton className={classes.closeButton} onClick={this.onDeleteCard} disabled={getDisabled()}>
               <CloseButton color={'secondary'}/>
             </IconButton>
           </div>
@@ -61,26 +61,36 @@ class SearchCard extends React.Component {
             <AuthorInput
               variant={inputVariant}
               initialValues={inputValues.authors}
+              getDisabled={getDisabled}
               onInputChange={this.updateInputValue.bind(this)}
             />
             <GenreSelection
               variant={inputVariant}
               initialValues={inputValues.genres}
+              getDisabled={this.props.getDisabled}
               onInputChange={this.updateInputValue.bind(this)}
             />
             <ContainsInput
               variant={inputVariant}
               initialValue={inputValues.keywords}
+              getDisabled={getDisabled}
               onInputChange={this.updateInputValue.bind(this)}
             />
             <TimeInput
               variant={inputVariant}
               initialTimeFrom={inputValues.timeFrom}
               initialTimeTo={inputValues.timeTo}
+              getDisabled={getDisabled}
               onInputChange={this.updateInputValue.bind(this)}
             />
           </form>
-          <Button size="small" color="primary" className={classes.button} onClick={this.onDuplicateCard}>
+          <Button
+            size="small"
+            color="primary"
+            className={classes.button}
+            disabled={getDisabled()}
+            onClick={this.onDuplicateCard}
+          >
             duplizieren
           </Button>
         </Paper>
@@ -95,6 +105,7 @@ SearchCard.propTypes = {
   index: PropTypes.number.isRequired,
   initialValues: PropTypes.object.isRequired,
   getIndex: PropTypes.func.isRequired,
+  getDisabled:PropTypes.func.isRequired,
   inputVariant: PropTypes.string.isRequired,
   onDuplicate: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,

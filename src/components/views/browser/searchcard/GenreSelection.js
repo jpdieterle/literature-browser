@@ -39,10 +39,10 @@ class GenreSelection extends React.Component {
   };
 
   render() {
-    const { classes } = this.props;
+    const { classes, variant, getDisabled } = this.props;
     return(
       <div className={classes.root}>
-        <FormControl variant={this.props.variant} fullWidth={true}>
+        <FormControl variant={variant} fullWidth={true} disabled={getDisabled()}>
           <InputLabel htmlFor="selectGenre">Genre(s)</InputLabel>
           <Select
             multiple
@@ -69,6 +69,7 @@ GenreSelection.propTypes = {
   classes: PropTypes.object.isRequired,
   variant: PropTypes.string.isRequired,
   initialValues: PropTypes.array.isRequired,
+  getDisabled: PropTypes.func.isRequired,
   onInputChange: PropTypes.func.isRequired,
 };
 

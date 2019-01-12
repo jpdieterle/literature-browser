@@ -5,8 +5,9 @@ import SearchCard from './searchcard/SearchCard';
 import AddSearchCardButton from './buttons/AddSearchCardButton';
 import SelectFormat from './SelectFormat';
 import SearchButton from './buttons/SearchButton';
-import FullSearchButton from './buttons/FullSearchButton';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import shortid from 'shortid';
+import axios from 'axios';
 
 const minYear = 1700;
 const maxYear = 1950;
@@ -26,14 +27,23 @@ class Browser extends React.Component {
   state = {
     cardList: [JSON.parse(JSON.stringify(initialSearchCardObject))],
     selectedFormats: {checkedTXT: false, checkedJSON: false, checkedXML: false},
+    loading: false,
+    error: false,
+    resultsIn: false,
   };
+
+  // TODO: set request URL
+  requestUrl = '';
 
   getCardIndex = id => {
     return this.state.cardList.findIndex(card => card.id === id);
   };
 
+  getLoadingStatus = () => {
+    return this.state.loading;
+  };
+
   handleChange = name => event => {
-    // TODO: update cardList in state when input changes (in SearchCard)
     this.setState({
       [name]: event.target.value,
     });
@@ -81,40 +91,81 @@ class Browser extends React.Component {
     this.setState({selectedFormats: newSelectedFormats});
   };
 
+  handleSubmit = () => {
+    this.setState({loading: true});
+    // TODO: HTTP request => get texts according to criteria
+    let payload = JSON.parse(JSON.stringify(this.state.cardList)); // => save state
+    let formats = this.state.selectedFormats;
+    axios.post(this.requestUrl, payload);
+    axios.get('https://jsonplaceholder.typicode.com/todos',); // add criteria as payload!
+    this.setState({loading: false});
+    this.renderResponseData();
+  };
+
+  handleGetAll = () => {
+    this.setState({loading: true});
+    // TODO: HTTP request => whole corpus
+    this.setState({loading: false});
+    this.renderResponseData();
+  };
+
+  renderResponseData = (data) => {
+    // TODO: hide waiting animation
+    // TODO: render download link/icon/button after response from server has arrived (after animation stopped)
+  };
+
   render() {
     const { classes } = this.props;
     const { cardList } = this.state;
 
     return(
       <div className={classes.root}>
-        <div className={classes.flexContainerCards}>
-          {cardList.map((card, index) => (
-            <SearchCard
-              key={card.id} // not passed to component by react! => use id instead
-              id={card.id}
-              index={index}
-              initialValues={{
-                authors: card.authors,
-                genres: card.genres,
-                keywords: card.keywords,
-                timeFrom: card.timeFrom,
-                timeTo: card.timeTo,
-              }}
-              inputVariant={inputVariant}
-              getIndex={this.getCardIndex.bind(this)}
-              onDuplicate={this.onAddSearchCard.bind(this)}
-              onDelete={this.deleteSearchCard.bind(this)}
-              onContentChange={this.updateSearchCardContent.bind(this)}
+        <form onSubmit={this.handleSubmit.bind(this)}>
+          <div className={classes.flexContainerCards}>
+            {cardList.map((card, index) => (
+              <SearchCard
+                key={card.id} // not passed to component by react! => use id instead
+                id={card.id}
+                index={index}
+                initialValues={{
+                  authors: card.authors,
+                  genres: card.genres,
+                  keywords: card.keywords,
+                  timeFrom: card.timeFrom,
+                  timeTo: card.timeTo,
+                }}
+                inputVariant={inputVariant}
+                getIndex={this.getCardIndex.bind(this)}
+                getDisabled={this.getLoadingStatus.bind(this)}
+                onDuplicate={this.onAddSearchCard.bind(this)}
+                onDelete={this.deleteSearchCard.bind(this)}
+                onContentChange={this.updateSearchCardContent.bind(this)}
+              />
+            ))}
+          </div>
+          <AddSearchCardButton action={this.onAddSearchCard.bind(this)} getDisabled={this.getLoadingStatus.bind(this)}/>
+          <div className={classes.flexContainer}>
+            <SelectFormat
+              initialValues={this.state.selectedFormats}
+              getDisabled={this.getLoadingStatus.bind(this)}
+              onChange={this.updateFormat.bind(this)}
             />
-          ))}
-        </div>
-        <AddSearchCardButton action={this.onAddSearchCard.bind(this)}/>
+          </div>
+          <div className={classes.flexContainer}>
+            <SearchButton
+              type={'submit'} // form gets submitted when clicking on this button
+              variant={'search'}
+              getDisabled={this.getLoadingStatus.bind(this)}
+            />
+            <SearchButton
+              getDisabled={this.getLoadingStatus.bind(this)}
+              onClick={this.handleGetAll.bind(this)}
+            />
+          </div>
+        </form>
         <div className={classes.flexContainer}>
-          <SelectFormat initialValues={this.state.selectedFormats} onChange={this.updateFormat.bind(this)}/>
-        </div>
-        <div className={classes.flexContainer}>
-          <SearchButton/>
-          <FullSearchButton/>
+          {this.state.loading && <CircularProgress className={classes.loadingAnimation} />}
+          {!this.state.loading && this.state.resultsIn}
         </div>
       </div>
     );
@@ -138,6 +189,9 @@ const styles = theme => ({
   flexContainer:{
     display: 'flex',
     marginTop: theme.spacing.unit * 2,
+  },
+  loadingAnimation:{
+    marginLeft: theme.spacing.unit,
   },
 });
 

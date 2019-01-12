@@ -134,7 +134,7 @@ class AuthorInput extends React.Component {
   };
 
   render() {
-    const { classes } = this.props;
+    const { classes, variant, getDisabled } = this.props;
     const { inputValue, selectedItems } = this.state;
 
     return(
@@ -162,7 +162,8 @@ class AuthorInput extends React.Component {
                   placeholder: 'Bsp.: Rilke, Rainer Maria',
                 }),
                 label: 'Autor*in',
-                variant: this.props.variant,
+                variant: variant,
+                disabled: getDisabled(),
               })}
               {isOpen ? (
                 <Paper className={classes.paper} square>
@@ -190,6 +191,7 @@ AuthorInput.propTypes = {
   classes: PropTypes.object.isRequired,
   variant: PropTypes.string,
   initialValues: PropTypes.arrayOf(PropTypes.string).isRequired,
+  getDisabled: PropTypes.func.isRequired,
   onInputChange: PropTypes.func.isRequired,
 };
 
