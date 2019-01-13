@@ -8,6 +8,11 @@ import SearchButton from './buttons/SearchButton';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import shortid from 'shortid';
 import axios from 'axios';
+import AuthorInput from "./searchcard/AuthorInput";
+import GenreSelection from "./searchcard/GenreSelection";
+import ContainsInput from "./searchcard/ContainsInput";
+import TimeInput from "./searchcard/TimeInput";
+import Paper from "@material-ui/core/Paper/Paper";
 
 const minYear = '1700';
 const maxYear = '1950';
@@ -23,7 +28,7 @@ const initialSearchCardObject = {
 
 const inputVariant = 'standard';
 
-class Browser extends React.Component {
+class Browser extends React.PureComponent {
   state = {
     cardList: [JSON.parse(JSON.stringify(initialSearchCardObject))],
     selectedFormats: {checkedTXT: false, checkedJSON: false, checkedXML: false},
@@ -34,6 +39,7 @@ class Browser extends React.Component {
 
   // TODO: set request URL
   requestUrl = '';
+  testUrl='';
 
   getCardIndex = id => {
     return this.state.cardList.findIndex(card => card.id === id);
@@ -128,25 +134,50 @@ class Browser extends React.Component {
       <div className={classes.root}>
         <form onSubmit={this.handleSubmit.bind(this)}>
           <div className={classes.flexContainerCards}>
-            {cardList.map((card, index) => (
+            {cardList.map((card, index, cardList) => (
               <SearchCard
                 key={card.id} // not passed to component by react! => use id instead
                 id={card.id}
-                index={index}
-                initialValues={{
-                  authors: card.authors,
-                  genres: card.genres,
-                  keywords: card.keywords,
-                  timeFrom: card.timeFrom,
-                  timeTo: card.timeTo,
-                }}
-                inputVariant={inputVariant}
                 getIndex={this.getCardIndex}
                 getDisabled={this.getLoadingStatus}
                 onDuplicate={this.onDuplicateSearchCard}
                 onDelete={this.deleteSearchCard}
-                onContentChange={this.updateSearchCardContent}
-              />
+              >
+                <AuthorInput
+                  key={card.id + '-authors'}
+                  cardId={card.id}
+                  variant={inputVariant}
+                  initialValues={card.authors}
+                  autofocus={(index === cardList.length-1)}
+                  getDisabled={this.getLoadingStatus}
+                  onInputChange={this.updateSearchCardContent}
+                />
+                <GenreSelection
+                  key={card.id + '-genres'}
+                  cardId={card.id}
+                  variant={inputVariant}
+                  initialValues={card.genres}
+                  getDisabled={this.getLoadingStatus}
+                  onInputChange={this.updateSearchCardContent}
+                />
+                <ContainsInput
+                  key={card.id + '-keywords'}
+                  cardId={card.id}
+                  variant={inputVariant}
+                  initialValue={card.keywords}
+                  getDisabled={this.getLoadingStatus}
+                  onInputChange={this.updateSearchCardContent}
+                />
+                <TimeInput
+                  key={card.id + '-time'}
+                  cardId={card.id}
+                  variant={inputVariant}
+                  initialTimeFrom={card.timeFrom}
+                  initialTimeTo={card.timeTo}
+                  getDisabled={this.getLoadingStatus}
+                  onInputChange={this.updateSearchCardContent}
+                />
+              </SearchCard>
             ))}
           </div>
           <AddSearchCardButton action={this.onAddSearchCard} getDisabled={this.getLoadingStatus}/>

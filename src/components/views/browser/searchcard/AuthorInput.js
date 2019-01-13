@@ -90,7 +90,7 @@ renderSuggestion.propTypes = {
 };
 
 // use class component to get input state
-class AuthorInput extends React.Component {
+class AuthorInput extends React.PureComponent {
   state = {
     inputValue: '',
     selectedItems: this.props.initialValues,
@@ -134,7 +134,7 @@ class AuthorInput extends React.Component {
   };
 
   render() {
-    const { classes, variant, getDisabled } = this.props;
+    const { classes, variant, getDisabled, autofocus } = this.props;
     const { inputValue, selectedItems } = this.state;
 
     return(
@@ -145,6 +145,7 @@ class AuthorInput extends React.Component {
             <div className={classes.container}>
               {renderInput({
                 fullWidth: true,
+                autoFocus: autofocus,
                 classes,
                 InputProps: getInputProps({
                   startAdornment: selectedItems.map(item => (
@@ -192,6 +193,7 @@ AuthorInput.propTypes = {
   cardId: PropTypes.string.isRequired,
   variant: PropTypes.string,
   initialValues: PropTypes.arrayOf(PropTypes.string).isRequired,
+  autofocus: PropTypes.bool.isRequired,
   getDisabled: PropTypes.func.isRequired,
   onInputChange: PropTypes.func.isRequired,
 };

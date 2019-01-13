@@ -4,7 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import FormGroup from '@material-ui/core/FormGroup';
 
-class TimeInput extends React.Component {
+class TimeInput extends React.PureComponent {
   state = {
     timeFrom: this.props.initialTimeFrom,
     timeTo: this.props.initialTimeTo,
@@ -30,7 +30,7 @@ class TimeInput extends React.Component {
           <TextField
             id="fromYear"
             label="von (Jahr)"
-            inputProps={{min: initialTimeFrom.toString() , max: initialTimeTo.toString(), step: '1'}}
+            inputProps={{min: initialTimeFrom , max: initialTimeTo}}
             value={timeFrom}
             onChange={this.handleChange('timeFrom')}
             type="number"
@@ -44,7 +44,7 @@ class TimeInput extends React.Component {
           <TextField
             id="toYear"
             label="bis (Jahr)"
-            inputProps={{min: initialTimeFrom.toString() , max: initialTimeTo.toString(), step: '1'}}
+            inputProps={{min: initialTimeFrom , max: initialTimeTo}}
             value={timeTo}
             onChange={this.handleChange('timeTo')}
             type="number"

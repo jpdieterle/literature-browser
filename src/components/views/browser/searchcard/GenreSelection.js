@@ -26,7 +26,7 @@ const genres = [
   'Sonett',
 ];
 
-class GenreSelection extends React.Component {
+class GenreSelection extends React.PureComponent {
   state = {
     genre: this.props.initialValues,
   };

@@ -5,7 +5,7 @@ import TextField from '@material-ui/core/TextField';
 import Tooltip from '@material-ui/core/Tooltip';
 
 //TODO: regex (oÄ) unterstützen
-class ContainsInput extends React.Component {
+class ContainsInput extends React.PureComponent {
   state = {
     keywords: this.props.initialValue,
   };
