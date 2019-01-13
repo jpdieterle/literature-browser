@@ -35,7 +35,6 @@ class GenreSelection extends React.Component {
     this.setState({ genre: event.target.value }, () => {
       this.props.onInputChange('genres', this.state.genre); // update SearchCard state
     });
-
   };
 
   render() {

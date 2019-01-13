@@ -158,7 +158,7 @@ class AuthorInput extends React.Component {
                   )),
                   onChange: this.handleInputChange,
                   onKeyDown: this.handleKeyDown,
-                  value: this.state.inputValue,
+                  value: inputValue,
                   placeholder: 'Bsp.: Rilke, Rainer Maria',
                 }),
                 label: 'Autor*in',

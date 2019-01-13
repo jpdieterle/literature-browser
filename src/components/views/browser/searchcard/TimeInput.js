@@ -8,14 +8,14 @@ class TimeInput extends React.Component {
   state = {
     timeFrom: this.props.initialTimeFrom,
     timeTo: this.props.initialTimeTo,
-    lengthToInput: 4,
-    lengthFromInput: 4,
   };
 
   handleChange = name => event => {
+    console.log('name: ' +name);
     this.setState({
       [name]: event.target.value,
     }, () => {
+      console.log(this.state);
       this.props.onInputChange(name, this.state[name]);
     });
   };
@@ -32,6 +32,7 @@ class TimeInput extends React.Component {
             label="von (Jahr)"
             inputProps={{min: initialTimeFrom.toString() , max: initialTimeTo.toString(), step: '1'}}
             value={timeFrom}
+            onChange={this.handleChange('timeFrom')}
             type="number"
             className={classes.textField}
             variant={variant}
@@ -64,8 +65,8 @@ class TimeInput extends React.Component {
 TimeInput.propTypes = {
   classes: PropTypes.object.isRequired,
   variant: PropTypes.string.isRequired,
-  initialTimeFrom: PropTypes.any.isRequired,
-  initialTimeTo: PropTypes.any.isRequired,
+  initialTimeFrom: PropTypes.string.isRequired,
+  initialTimeTo: PropTypes.string.isRequired,
   getDisabled: PropTypes.func.isRequired,
   onInputChange: PropTypes.func.isRequired,
 };

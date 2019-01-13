@@ -9,8 +9,8 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import shortid from 'shortid';
 import axios from 'axios';
 
-const minYear = 1700;
-const maxYear = 1950;
+const minYear = '1700';
+const maxYear = '1950';
 
 const initialSearchCardObject = {
   id: shortid.generate(),
@@ -68,13 +68,15 @@ class Browser extends React.Component {
     }));
   }
 
-  updateSearchCardContent(id, prop, value) {
+  updateSearchCardContent = (id, prop, value) => {
     if(this.state && this.state.cardList) {
       let newCardList = JSON.parse(JSON.stringify(this.state.cardList));
+      console.log('render browser' , newCardList);
+
       newCardList.find(card => card.id === id)[prop] = JSON.parse(JSON.stringify(value));
       this.setState({cardList: newCardList });
     }
-  }
+  };
 
   deleteSearchCard(id) {
     if(this.state.cardList.length === 1) {
@@ -139,7 +141,7 @@ class Browser extends React.Component {
                 getDisabled={this.getLoadingStatus.bind(this)}
                 onDuplicate={this.onAddSearchCard.bind(this)}
                 onDelete={this.deleteSearchCard.bind(this)}
-                onContentChange={this.updateSearchCardContent.bind(this)}
+                onContentChange={this.updateSearchCardContent}
               />
             ))}
           </div>
@@ -183,8 +185,8 @@ const styles = theme => ({
   flexContainerCards:{
     display: 'flex',
     flexFlow: 'row wrap',
-    flexDirection: 'row-reverse',
-    justifyContent: 'flex-end',
+    //flexDirection: 'row-reverse',
+    //justifyContent: 'flex-end',
   },
   flexContainer:{
     display: 'flex',

@@ -17,7 +17,7 @@ const inputVariant = 'standard';
 
 class SearchCard extends React.Component {
   state = {
-    inputValues: this.props.initialValues, //  {authors: [], genres: [], keywords: '', timeFrom: 1700, timeTo: 1950}
+    inputValues: this.props.initialValues, //  {authors: [], genres: [], keywords: '', timeFrom: '1700', timeTo: '1950'}
   };
 
   inputVariant = this.props.inputVariant;
@@ -44,6 +44,7 @@ class SearchCard extends React.Component {
   onDuplicateCard = () => {this.props.onDuplicate(this.state.inputValues)};
 
   render() {
+    console.log('render sc');
     const { classes, id, getIndex, getDisabled } = this.props;
     const { inputValues } = this.state;
     return(
@@ -57,33 +58,31 @@ class SearchCard extends React.Component {
               <CloseButton color={'secondary'}/>
             </IconButton>
           </div>
-          <form>
-            <AuthorInput
-              variant={inputVariant}
-              initialValues={inputValues.authors}
-              getDisabled={getDisabled}
-              onInputChange={this.updateInputValue.bind(this)}
-            />
-            <GenreSelection
-              variant={inputVariant}
-              initialValues={inputValues.genres}
-              getDisabled={this.props.getDisabled}
-              onInputChange={this.updateInputValue.bind(this)}
-            />
-            <ContainsInput
-              variant={inputVariant}
-              initialValue={inputValues.keywords}
-              getDisabled={getDisabled}
-              onInputChange={this.updateInputValue.bind(this)}
-            />
-            <TimeInput
-              variant={inputVariant}
-              initialTimeFrom={inputValues.timeFrom}
-              initialTimeTo={inputValues.timeTo}
-              getDisabled={getDisabled}
-              onInputChange={this.updateInputValue.bind(this)}
-            />
-          </form>
+          <AuthorInput
+            variant={inputVariant}
+            initialValues={inputValues.authors}
+            getDisabled={getDisabled}
+            onInputChange={this.updateInputValue.bind(this)}
+          />
+          <GenreSelection
+            variant={inputVariant}
+            initialValues={inputValues.genres}
+            getDisabled={this.props.getDisabled}
+            onInputChange={this.updateInputValue.bind(this)}
+          />
+          <ContainsInput
+            variant={inputVariant}
+            initialValue={inputValues.keywords}
+            getDisabled={getDisabled}
+            onInputChange={this.updateInputValue.bind(this)}
+          />
+          <TimeInput
+            variant={inputVariant}
+            initialTimeFrom={inputValues.timeFrom}
+            initialTimeTo={inputValues.timeTo}
+            getDisabled={getDisabled}
+            onInputChange={this.updateInputValue.bind(this)}
+          />
           <Button
             size="small"
             color="primary"
