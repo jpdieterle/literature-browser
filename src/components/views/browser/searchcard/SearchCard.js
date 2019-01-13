@@ -16,11 +16,7 @@ import TimeInput from "./TimeInput";
 const inputVariant = 'standard';
 
 class SearchCard extends React.Component {
-  state = {
-    inputValues: this.props.initialValues, //  {authors: [], genres: [], keywords: '', timeFrom: '1700', timeTo: '1950'}
-  };
-
-  inputVariant = this.props.inputVariant;
+  state = {}; // stateless component (container for inputs)
 
   /*handleChange = name => event => {
     this.setState({
@@ -28,25 +24,10 @@ class SearchCard extends React.Component {
     });
   };*/
 
-  updateInputValue = (prop, value) => {
-
-    // let {newInputValues} = this.state.inputValues;
-    let newInputValues = JSON.parse(JSON.stringify(this.state.inputValues));
-
-    newInputValues[prop] = JSON.parse(JSON.stringify(value));
-    this.setState({inputValues: newInputValues}, () => {
-      this.props.onContentChange(this.props.id, prop, value); // update Browser state
-    });
-  };
-
-  onDeleteCard = () => {this.props.onDelete(this.props.id)};
-
-  onDuplicateCard = () => {this.props.onDuplicate(this.state.inputValues)};
-
   render() {
     console.log('render sc');
-    const { classes, id, getIndex, getDisabled } = this.props;
-    const { inputValues } = this.state;
+    const { classes, id, getIndex, getDisabled, inputVariant, initialValues, onDuplicate, onContentChange, onDelete } = this.props;
+
     return(
       <div className={classes.root}>
         <Paper className={classes.backdrop}>
@@ -54,41 +35,45 @@ class SearchCard extends React.Component {
             <Typography variant={'h6'} color={'primary'} className={classes.title}>
               Suche Teil {getIndex(id) + 1}
             </Typography>
-            <IconButton className={classes.closeButton} onClick={this.onDeleteCard} disabled={getDisabled()}>
+            <IconButton className={classes.closeButton} onClick={() => onDelete(id)} disabled={getDisabled()}>
               <CloseButton color={'secondary'}/>
             </IconButton>
           </div>
           <AuthorInput
+            cardId={id}
             variant={inputVariant}
-            initialValues={inputValues.authors}
+            initialValues={initialValues.authors}
             getDisabled={getDisabled}
-            onInputChange={this.updateInputValue.bind(this)}
+            onInputChange={onContentChange}
           />
           <GenreSelection
+            cardId={id}
             variant={inputVariant}
-            initialValues={inputValues.genres}
-            getDisabled={this.props.getDisabled}
-            onInputChange={this.updateInputValue.bind(this)}
+            initialValues={initialValues.genres}
+            getDisabled={getDisabled}
+            onInputChange={onContentChange}
           />
           <ContainsInput
+            cardId={id}
             variant={inputVariant}
-            initialValue={inputValues.keywords}
+            initialValue={initialValues.keywords}
             getDisabled={getDisabled}
-            onInputChange={this.updateInputValue.bind(this)}
+            onInputChange={onContentChange}
           />
           <TimeInput
+            cardId={id}
             variant={inputVariant}
-            initialTimeFrom={inputValues.timeFrom}
-            initialTimeTo={inputValues.timeTo}
+            initialTimeFrom={initialValues.timeFrom}
+            initialTimeTo={initialValues.timeTo}
             getDisabled={getDisabled}
-            onInputChange={this.updateInputValue.bind(this)}
+            onInputChange={onContentChange}
           />
           <Button
             size="small"
             color="primary"
             className={classes.button}
             disabled={getDisabled()}
-            onClick={this.onDuplicateCard}
+            onClick={() => onDuplicate(id)}
           >
             duplizieren
           </Button>

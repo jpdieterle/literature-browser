@@ -33,19 +33,20 @@ class GenreSelection extends React.Component {
 
   handleChange = event => {
     this.setState({ genre: event.target.value }, () => {
-      this.props.onInputChange('genres', this.state.genre); // update SearchCard state
+      this.props.onInputChange(this.props.cardId, 'genres', this.state.genre); // update SearchCard state
     });
   };
 
   render() {
     const { classes, variant, getDisabled } = this.props;
+    const { genre } = this.state;
     return(
       <div className={classes.root}>
         <FormControl variant={variant} fullWidth={true} disabled={getDisabled()}>
           <InputLabel htmlFor="selectGenre">Genre(s)</InputLabel>
           <Select
             multiple
-            value={this.state.genre}
+            value={genre}
             onChange={this.handleChange}
             input={<Input id="selectGenre" />}
             renderValue={selected => selected.join(', ')}
@@ -53,7 +54,7 @@ class GenreSelection extends React.Component {
           >
             {genres.map(name => (
               <MenuItem key={name} value={name}>
-                <Checkbox checked={this.state.genre.indexOf(name) > -1} />
+                <Checkbox checked={genre.indexOf(name) > -1} />
                 <ListItemText primary={name} />
               </MenuItem>
             ))}
@@ -66,6 +67,7 @@ class GenreSelection extends React.Component {
 
 GenreSelection.propTypes = {
   classes: PropTypes.object.isRequired,
+  cardId: PropTypes.string.isRequired,
   variant: PropTypes.string.isRequired,
   initialValues: PropTypes.array.isRequired,
   getDisabled: PropTypes.func.isRequired,

@@ -49,8 +49,8 @@ class Browser extends React.Component {
     });
   };
 
-  // fügt eine leere Karte oder ein Duplikat einer Karte hinzu
-  onAddSearchCard(inputValues) {
+  // fügt eine neue Teil-Suche hinzu
+  onAddSearchCard = inputValues => {
 
     if(this.state && this.state.cardList.length > 7 ) {
       // TODO: Hinweis anzeigen, dass nicht mehr als 8 Karten hinzugefügt werden können.
@@ -66,7 +66,11 @@ class Browser extends React.Component {
     this.setState(state => ({
       cardList: [...state.cardList, inputValues]
     }));
-  }
+  };
+
+  onDuplicateSearchCard = id => {
+    this.onAddSearchCard(this.state.cardList.find(card => card.id === id));
+  };
 
   updateSearchCardContent = (id, prop, value) => {
     if(this.state && this.state.cardList) {
@@ -78,14 +82,14 @@ class Browser extends React.Component {
     }
   };
 
-  deleteSearchCard(id) {
+  deleteSearchCard = id => {
     if(this.state.cardList.length === 1) {
       return; // letzte verbleibende Karte soll nicht gelöscht werden
     }
     this.setState(state => ({
       cardList: state.cardList.filter( card => (card.id !== id))
     }));
-  }
+  };
 
   updateFormat = (formatProp, newValue) => {
     let newSelectedFormats = JSON.parse(JSON.stringify(this.state.selectedFormats));
@@ -111,7 +115,7 @@ class Browser extends React.Component {
     this.renderResponseData();
   };
 
-  renderResponseData = (data) => {
+  renderResponseData = data => {
     // TODO: hide waiting animation
     // TODO: render download link/icon/button after response from server has arrived (after animation stopped)
   };
@@ -137,37 +141,37 @@ class Browser extends React.Component {
                   timeTo: card.timeTo,
                 }}
                 inputVariant={inputVariant}
-                getIndex={this.getCardIndex.bind(this)}
-                getDisabled={this.getLoadingStatus.bind(this)}
-                onDuplicate={this.onAddSearchCard.bind(this)}
-                onDelete={this.deleteSearchCard.bind(this)}
+                getIndex={this.getCardIndex}
+                getDisabled={this.getLoadingStatus}
+                onDuplicate={this.onDuplicateSearchCard}
+                onDelete={this.deleteSearchCard}
                 onContentChange={this.updateSearchCardContent}
               />
             ))}
           </div>
-          <AddSearchCardButton action={this.onAddSearchCard.bind(this)} getDisabled={this.getLoadingStatus.bind(this)}/>
+          <AddSearchCardButton action={this.onAddSearchCard} getDisabled={this.getLoadingStatus}/>
           <div className={classes.flexContainer}>
             <SelectFormat
               initialValues={this.state.selectedFormats}
-              getDisabled={this.getLoadingStatus.bind(this)}
-              onChange={this.updateFormat.bind(this)}
+              getDisabled={this.getLoadingStatus}
+              onChange={this.updateFormat}
             />
           </div>
           <div className={classes.flexContainer}>
             <SearchButton
               type={'submit'} // form gets submitted when clicking on this button
               variant={'search'}
-              getDisabled={this.getLoadingStatus.bind(this)}
+              getDisabled={this.getLoadingStatus}
             />
             <SearchButton
-              getDisabled={this.getLoadingStatus.bind(this)}
-              onClick={this.handleGetAll.bind(this)}
+              getDisabled={this.getLoadingStatus}
             />
           </div>
         </form>
         <div className={classes.flexContainer}>
           {this.state.loading && <CircularProgress className={classes.loadingAnimation} />}
           {!this.state.loading && this.state.resultsIn}
+          {!this.state.loading && this.state.error}
         </div>
       </div>
     );

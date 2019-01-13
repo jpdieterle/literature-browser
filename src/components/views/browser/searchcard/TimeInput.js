@@ -15,8 +15,8 @@ class TimeInput extends React.Component {
     this.setState({
       [name]: event.target.value,
     }, () => {
-      console.log(this.state);
-      this.props.onInputChange(name, this.state[name]);
+      // console.log(this.state);
+      this.props.onInputChange(this.props.cardId, name, this.state[name]);
     });
   };
 
@@ -64,6 +64,7 @@ class TimeInput extends React.Component {
 
 TimeInput.propTypes = {
   classes: PropTypes.object.isRequired,
+  cardId: PropTypes.string.isRequired,
   variant: PropTypes.string.isRequired,
   initialTimeFrom: PropTypes.string.isRequired,
   initialTimeTo: PropTypes.string.isRequired,

@@ -12,7 +12,7 @@ class ContainsInput extends React.Component {
 
   onInputChange = (event) => {
     this.setState({keywords: event.target.value,}, () => {
-      this.props.onInputChange('keywords', this.state.keywords); // update SearchCard
+      this.props.onInputChange(this.props.cardId, 'keywords', this.state.keywords); // update SearchCard
     });
   };
 
@@ -43,6 +43,7 @@ class ContainsInput extends React.Component {
 
 ContainsInput.propTypes = {
   classes: PropTypes.object.isRequired,
+  cardId: PropTypes.string.isRequired,
   variant: PropTypes.string.isRequired,
   initialValue: PropTypes.string.isRequired,
   getDisabled: PropTypes.func.isRequired,
