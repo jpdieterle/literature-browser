@@ -21,7 +21,7 @@ class TimeInput extends React.PureComponent {
   };
 
   render() {
-    const { classes, variant, initialTimeTo, initialTimeFrom, getDisabled } = this.props;
+    const { classes, variant, initialTimeTo, initialTimeFrom, disabled } = this.props;
     const { timeFrom, timeTo } = this.state;
 
     return(
@@ -36,7 +36,7 @@ class TimeInput extends React.PureComponent {
             type="number"
             className={classes.textField}
             variant={variant}
-            disabled={getDisabled()}
+            disabled={disabled}
             InputLabelProps={{
               shrink: true,
             }}
@@ -50,7 +50,7 @@ class TimeInput extends React.PureComponent {
             type="number"
             className={classes.textField}
             variant={variant}
-            disabled={getDisabled()}
+            disabled={disabled}
             InputLabelProps={{
               shrink: true,
             }}
@@ -68,7 +68,7 @@ TimeInput.propTypes = {
   variant: PropTypes.string.isRequired,
   initialTimeFrom: PropTypes.string.isRequired,
   initialTimeTo: PropTypes.string.isRequired,
-  getDisabled: PropTypes.func.isRequired,
+  disabled: PropTypes.bool.isRequired,
   onInputChange: PropTypes.func.isRequired,
 };
 

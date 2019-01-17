@@ -1,18 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import SearchCard from './searchcard/SearchCard';
-import AddSearchCardButton from './buttons/AddSearchCardButton';
-import SelectFormat from './SelectFormat';
-import SearchButton from './buttons/SearchButton';
+import Paper from "@material-ui/core/Paper/Paper";
+import InfoButton from '@material-ui/icons/Info';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import shortid from 'shortid';
-import axios from 'axios';
+import Typography from '@material-ui/core/Typography';
 import AuthorInput from "./searchcard/AuthorInput";
 import GenreSelection from "./searchcard/GenreSelection";
 import ContainsInput from "./searchcard/ContainsInput";
 import TimeInput from "./searchcard/TimeInput";
-import Paper from "@material-ui/core/Paper/Paper";
+import SearchCard from './searchcard/SearchCard';
+import AddSearchCardButton from './buttons/AddSearchCardButton';
+import SelectFormat from './SelectFormat';
+import SearchButton from './buttons/SearchButton';
+import shortid from 'shortid';
+import axios from 'axios';
+
 
 const minYear = '1700';
 const maxYear = '1950';
@@ -45,8 +48,12 @@ class Browser extends React.PureComponent {
     return this.state.cardList.findIndex(card => card.id === id);
   };
 
-  getLoadingStatus = () => {
+  getLoading = () => {
     return this.state.loading;
+  };
+
+  setLoading = (isLoading) => {
+    this.setState({loading: isLoading});
   };
 
   handleChange = name => event => {
@@ -109,7 +116,6 @@ class Browser extends React.PureComponent {
     let payload = JSON.parse(JSON.stringify(this.state.cardList)); // => save state
     let formats = this.state.selectedFormats;
     axios.post(this.requestUrl, payload);
-    axios.get('https://jsonplaceholder.typicode.com/todos',); // add criteria as payload!
     this.setState({loading: false});
     this.renderResponseData();
   };
@@ -117,13 +123,13 @@ class Browser extends React.PureComponent {
   handleGetAll = () => {
     this.setState({loading: true});
     // TODO: HTTP request => whole corpus
+    axios.get('https://jsonplaceholder.typicode.com/todos',); // add criteria as payload!
     this.setState({loading: false});
     this.renderResponseData();
   };
 
   renderResponseData = data => {
-    // TODO: hide waiting animation
-    // TODO: render download link/icon/button after response from server has arrived (after animation stopped)
+    // TODO: render download link/icon/button after response from server has arrived
   };
 
   render() {
@@ -132,14 +138,21 @@ class Browser extends React.PureComponent {
 
     return(
       <div className={classes.root}>
+        <Paper className={classes.infoBox}>
+          <InfoButton color={"primary"} className={classes.infoIcon}/>
+          <Typography color={"primary"}>
+            Schränken Sie die Suche ein, indem Sie eines oder mehrere Kriterien innerhalb einer Teil-Suche (=Kasten) eingeben.
+            Teil-Suchen werden zu einem Such-Ergebnis kombiniert, sodass Sie mehr Texte mit einer Such-Abfrage erhalten können.
+          </Typography>
+        </Paper>
         <form onSubmit={this.handleSubmit.bind(this)}>
-          <div className={classes.flexContainerCards}>
+          <div className={classes.cardContainer}>
             {cardList.map((card, index, cardList) => (
               <SearchCard
                 key={card.id} // not passed to component by react! => use id instead
                 id={card.id}
                 getIndex={this.getCardIndex}
-                getDisabled={this.getLoadingStatus}
+                getDisabled={this.getLoading}
                 onDuplicate={this.onDuplicateSearchCard}
                 onDelete={this.deleteSearchCard}
               >
@@ -149,7 +162,7 @@ class Browser extends React.PureComponent {
                   variant={inputVariant}
                   initialValues={card.authors}
                   autofocus={(index === cardList.length-1)}
-                  getDisabled={this.getLoadingStatus}
+                  disabled={this.getLoading()}
                   onInputChange={this.updateSearchCardContent}
                 />
                 <GenreSelection
@@ -157,7 +170,7 @@ class Browser extends React.PureComponent {
                   cardId={card.id}
                   variant={inputVariant}
                   initialValues={card.genres}
-                  getDisabled={this.getLoadingStatus}
+                  disabled={this.getLoading()}
                   onInputChange={this.updateSearchCardContent}
                 />
                 <ContainsInput
@@ -165,7 +178,7 @@ class Browser extends React.PureComponent {
                   cardId={card.id}
                   variant={inputVariant}
                   initialValue={card.keywords}
-                  getDisabled={this.getLoadingStatus}
+                  disabled={this.getLoading()}
                   onInputChange={this.updateSearchCardContent}
                 />
                 <TimeInput
@@ -174,17 +187,17 @@ class Browser extends React.PureComponent {
                   variant={inputVariant}
                   initialTimeFrom={card.timeFrom}
                   initialTimeTo={card.timeTo}
-                  getDisabled={this.getLoadingStatus}
+                  disabled={this.getLoading()}
                   onInputChange={this.updateSearchCardContent}
                 />
               </SearchCard>
             ))}
           </div>
-          <AddSearchCardButton action={this.onAddSearchCard} getDisabled={this.getLoadingStatus}/>
+          <AddSearchCardButton action={this.onAddSearchCard} getDisabled={this.getLoading}/>
           <div className={classes.flexContainer}>
             <SelectFormat
               initialValues={this.state.selectedFormats}
-              getDisabled={this.getLoadingStatus}
+              getDisabled={this.getLoading}
               onChange={this.updateFormat}
             />
           </div>
@@ -192,10 +205,12 @@ class Browser extends React.PureComponent {
             <SearchButton
               type={'submit'} // form gets submitted when clicking on this button
               variant={'search'}
-              getDisabled={this.getLoadingStatus}
+              getLoading={this.getLoading}
+              handleSubmit={this.handleSubmit}
             />
             <SearchButton
-              getDisabled={this.getLoadingStatus}
+              getLoading={this.getLoading}
+              handleSubmit={this.handleGetAll}
             />
           </div>
         </form>
@@ -217,7 +232,17 @@ const styles = theme => ({
   root:{
     padding: theme.spacing.unit * 3,
   },
-  flexContainerCards:{
+  infoBox:{
+    minWidth: 400,
+    maxWidth: 800 + theme.spacing.unit*2,
+    padding: 20,
+    display: 'flex',
+    margin: theme.spacing.unit,
+  },
+  infoIcon: {
+    marginRight: theme.spacing.unit,
+  },
+  cardContainer:{
     display: 'flex',
     flexFlow: 'row wrap',
     //flexDirection: 'row-reverse',

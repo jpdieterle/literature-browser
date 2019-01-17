@@ -20,7 +20,6 @@ class App extends React.Component {
             <Wiki/>
             <About/>
           </div>
-
         </div>
       </MuiThemeProvider>
     );

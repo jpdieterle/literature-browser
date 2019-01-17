@@ -134,7 +134,7 @@ class AuthorInput extends React.PureComponent {
   };
 
   render() {
-    const { classes, variant, getDisabled, autofocus } = this.props;
+    const { classes, variant, disabled, autofocus } = this.props;
     const { inputValue, selectedItems } = this.state;
 
     return(
@@ -164,7 +164,7 @@ class AuthorInput extends React.PureComponent {
                 }),
                 label: 'Autor*in',
                 variant: variant,
-                disabled: getDisabled(),
+                disabled: disabled,
               })}
               {isOpen ? (
                 <Paper className={classes.paper} square>
@@ -194,7 +194,7 @@ AuthorInput.propTypes = {
   variant: PropTypes.string,
   initialValues: PropTypes.arrayOf(PropTypes.string).isRequired,
   autofocus: PropTypes.bool.isRequired,
-  getDisabled: PropTypes.func.isRequired,
+  disabled: PropTypes.bool.isRequired,
   onInputChange: PropTypes.func.isRequired,
 };
 

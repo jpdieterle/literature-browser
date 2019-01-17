@@ -38,11 +38,11 @@ class GenreSelection extends React.PureComponent {
   };
 
   render() {
-    const { classes, variant, getDisabled } = this.props;
+    const { classes, variant, disabled } = this.props;
     const { genre } = this.state;
     return(
       <div className={classes.root}>
-        <FormControl variant={variant} fullWidth={true} disabled={getDisabled()}>
+        <FormControl variant={variant} fullWidth={true} disabled={disabled}>
           <InputLabel htmlFor="selectGenre">Genre(s)</InputLabel>
           <Select
             multiple
@@ -54,7 +54,7 @@ class GenreSelection extends React.PureComponent {
           >
             {genres.map(name => (
               <MenuItem key={name} value={name}>
-                <Checkbox checked={genre.indexOf(name) > -1} />
+                <Checkbox checked={genre.indexOf(name) > -1} disableRipple={true}/>
                 <ListItemText primary={name} />
               </MenuItem>
             ))}
@@ -70,7 +70,7 @@ GenreSelection.propTypes = {
   cardId: PropTypes.string.isRequired,
   variant: PropTypes.string.isRequired,
   initialValues: PropTypes.array.isRequired,
-  getDisabled: PropTypes.func.isRequired,
+  disabled: PropTypes.bool.isRequired,
   onInputChange: PropTypes.func.isRequired,
 };
 

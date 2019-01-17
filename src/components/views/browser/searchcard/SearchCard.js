@@ -64,7 +64,7 @@ const styles = theme => ({
   backdrop: {
     width: 400,
     padding: 20,
-    margin: 10,
+    margin: theme.spacing.unit,
   },
   topContainer:{
     display: 'flex',
@@ -79,7 +79,6 @@ const styles = theme => ({
   },
   title:{
     marginLeft: theme.spacing.unit,
-    //float: 'left',
   }
 });
 export default withStyles(styles)(SearchCard);

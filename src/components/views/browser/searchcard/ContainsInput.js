@@ -10,6 +10,9 @@ class ContainsInput extends React.PureComponent {
     keywords: this.props.initialValue,
   };
 
+  // Tipps zur Eingabe "Text enthält" in einer Teil-Suche
+  keywordTips = 'Tipps zur Stichworteingabe';
+
   onInputChange = (event) => {
     this.setState({keywords: event.target.value,}, () => {
       this.props.onInputChange(this.props.cardId, 'keywords', this.state.keywords); // update SearchCard
@@ -17,12 +20,12 @@ class ContainsInput extends React.PureComponent {
   };
 
   render() {
-    const { classes, variant, getDisabled } = this.props;
+    const { classes, variant, disabled } = this.props;
     const { keywords } = this.state;
 
     return(
       <div className={classes.root}>
-        <Tooltip title="Tipps zur Stichworteingabe" placement="right-start">
+        <Tooltip title={this.keywordTips} placement="right-start" disableHoverListener={disabled}>
           <TextField
             id="textContains"
             label="Text enthält"
@@ -31,7 +34,7 @@ class ContainsInput extends React.PureComponent {
             fullWidth={true}
             className={classes.textField}
             variant={variant}
-            disabled={getDisabled()}
+            disabled={disabled}
             value={keywords}
             onChange={this.onInputChange}
           />
@@ -46,7 +49,7 @@ ContainsInput.propTypes = {
   cardId: PropTypes.string.isRequired,
   variant: PropTypes.string.isRequired,
   initialValue: PropTypes.string.isRequired,
-  getDisabled: PropTypes.func.isRequired,
+  disabled: PropTypes.bool.isRequired,
   onInputChange: PropTypes.func.isRequired,
 };
 
