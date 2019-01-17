@@ -54,7 +54,7 @@ class GenreSelection extends React.PureComponent {
           >
             {genres.map(name => (
               <MenuItem key={name} value={name}>
-                <Checkbox checked={genre.indexOf(name) > -1} disableRipple={true}/>
+                <Checkbox checked={genre.indexOf(name) > -1} disableRipple={true} color={"primary"}/>
                 <ListItemText primary={name} />
               </MenuItem>
             ))}
