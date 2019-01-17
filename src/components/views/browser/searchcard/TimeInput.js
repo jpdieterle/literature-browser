@@ -4,34 +4,39 @@ import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import FormGroup from '@material-ui/core/FormGroup';
 
-class TimeInput extends React.Component {
+class TimeInput extends React.PureComponent {
   state = {
     timeFrom: this.props.initialTimeFrom,
     timeTo: this.props.initialTimeTo,
   };
 
   handleChange = name => event => {
+    console.log('name: ' +name);
     this.setState({
       [name]: event.target.value,
     }, () => {
-      this.props.onInputChange(name, this.state[name]);
+      // console.log(this.state);
+      this.props.onInputChange(this.props.cardId, name, this.state[name]);
     });
-
   };
 
   render() {
-    const { classes } = this.props;
+    const { classes, variant, initialTimeTo, initialTimeFrom, disabled } = this.props;
+    const { timeFrom, timeTo } = this.state;
+
     return(
       <div className={classes.root}>
         <FormGroup row={true}>
           <TextField
             id="fromYear"
             label="von (Jahr)"
-            value={this.state.timeFrom}
+            inputProps={{min: initialTimeFrom , max: initialTimeTo}}
+            value={timeFrom}
             onChange={this.handleChange('timeFrom')}
             type="number"
             className={classes.textField}
-            variant={this.props.variant}
+            variant={variant}
+            disabled={disabled}
             InputLabelProps={{
               shrink: true,
             }}
@@ -39,11 +44,13 @@ class TimeInput extends React.Component {
           <TextField
             id="toYear"
             label="bis (Jahr)"
-            value={this.state.timeTo}
+            inputProps={{min: initialTimeFrom , max: initialTimeTo}}
+            value={timeTo}
             onChange={this.handleChange('timeTo')}
             type="number"
             className={classes.textField}
-            variant={this.props.variant}
+            variant={variant}
+            disabled={disabled}
             InputLabelProps={{
               shrink: true,
             }}
@@ -57,9 +64,11 @@ class TimeInput extends React.Component {
 
 TimeInput.propTypes = {
   classes: PropTypes.object.isRequired,
+  cardId: PropTypes.string.isRequired,
   variant: PropTypes.string.isRequired,
-  initialTimeFrom: PropTypes.any.isRequired,
-  initialTimeTo: PropTypes.any.isRequired,
+  initialTimeFrom: PropTypes.string.isRequired,
+  initialTimeTo: PropTypes.string.isRequired,
+  disabled: PropTypes.bool.isRequired,
   onInputChange: PropTypes.func.isRequired,
 };
 

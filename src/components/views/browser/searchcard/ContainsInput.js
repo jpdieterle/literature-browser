@@ -5,23 +5,27 @@ import TextField from '@material-ui/core/TextField';
 import Tooltip from '@material-ui/core/Tooltip';
 
 //TODO: regex (oÄ) unterstützen
-class ContainsInput extends React.Component {
+class ContainsInput extends React.PureComponent {
   state = {
     keywords: this.props.initialValue,
   };
 
+  // Tipps zur Eingabe "Text enthält" in einer Teil-Suche
+  keywordTips = 'Tipps zur Stichworteingabe';
+
   onInputChange = (event) => {
     this.setState({keywords: event.target.value,}, () => {
-      this.props.onInputChange('keywords', this.state.keywords); // update SearchCard
+      this.props.onInputChange(this.props.cardId, 'keywords', this.state.keywords); // update SearchCard
     });
   };
 
   render() {
-    const { classes } = this.props;
+    const { classes, variant, disabled } = this.props;
+    const { keywords } = this.state;
 
     return(
       <div className={classes.root}>
-        <Tooltip title="Tipps zur Stichworteingabe" placement="right-start">
+        <Tooltip title={this.keywordTips} placement="right-start" disableHoverListener={disabled}>
           <TextField
             id="textContains"
             label="Text enthält"
@@ -29,8 +33,9 @@ class ContainsInput extends React.Component {
             multiline
             fullWidth={true}
             className={classes.textField}
-            variant={this.props.variant}
-            value={this.state.keywords}
+            variant={variant}
+            disabled={disabled}
+            value={keywords}
             onChange={this.onInputChange}
           />
         </Tooltip>
@@ -41,8 +46,10 @@ class ContainsInput extends React.Component {
 
 ContainsInput.propTypes = {
   classes: PropTypes.object.isRequired,
+  cardId: PropTypes.string.isRequired,
   variant: PropTypes.string.isRequired,
   initialValue: PropTypes.string.isRequired,
+  disabled: PropTypes.bool.isRequired,
   onInputChange: PropTypes.func.isRequired,
 };
 
