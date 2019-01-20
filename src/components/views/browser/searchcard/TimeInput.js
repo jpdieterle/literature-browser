@@ -20,6 +20,8 @@ class TimeInput extends React.PureComponent {
     });
   };
 
+  // TODO: render warning -> time frame
+
   render() {
     const { classes, variant, initialTimeTo, initialTimeFrom, disabled } = this.props;
     const { timeFrom, timeTo } = this.state;

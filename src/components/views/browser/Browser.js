@@ -13,10 +13,11 @@ import SearchCard from './searchcard/SearchCard';
 import AddSearchCardButton from './buttons/AddSearchCardButton';
 import SelectFormat from './SelectFormat';
 import SearchButton from './buttons/SearchButton';
+import ErrorMessage from './ErrorMessage';
 import shortid from 'shortid';
 import axios from 'axios';
 
-
+// TODO: Abfrage an Server => Autorenliste + Jahreszahlen aktualisieren
 const minYear = '1700';
 const maxYear = '1950';
 
@@ -36,8 +37,10 @@ class Browser extends React.PureComponent {
     cardList: [JSON.parse(JSON.stringify(initialSearchCardObject))],
     selectedFormats: {checkedTXT: false, checkedJSON: false, checkedXML: false},
     loading: false,
+    responseCode: 0, // 200 = results in
+    responseData: {},
     error: false,
-    resultsIn: false,
+    errorMessage: 'no error',
   };
 
   // TODO: set request URL
@@ -111,13 +114,36 @@ class Browser extends React.PureComponent {
   };
 
   handleSubmit = () => {
-    this.setState({loading: true});
-    // TODO: HTTP request => get texts according to criteria
+    this.setState({
+      responseCode: 0,
+      error: false,
+      loading: true,
+    });
+
     let payload = JSON.parse(JSON.stringify(this.state.cardList)); // => save state
-    let formats = this.state.selectedFormats;
-    axios.post(this.requestUrl, payload);
+    payload.formats = this.state.selectedFormats;
+
+    fetch(this.requestUrl, {
+      method: 'POST',
+      credentials: 'same-origin', // allow cookies -> session management
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    })
+      .then(response => {
+        this.setState({responseCode: response.status});
+        if(response.ok) {
+          this.renderResponseData(response.data);
+        } else {
+          this.setState({errorMessage: response.statusText, error: true});
+        }
+      })
+      .catch(error => {
+        this.setState({errorMessage: error.message});
+        this.setState({error: true});
+      });
     this.setState({loading: false});
-    this.renderResponseData();
   };
 
   handleGetAll = () => {
@@ -131,6 +157,13 @@ class Browser extends React.PureComponent {
   renderResponseData = data => {
     // TODO: render download link/icon/button after response from server has arrived
   };
+
+  renderErrorMessage = (message, statusCode) => {
+    let sCode = statusCode? statusCode : 0;
+    return <ErrorMessage statusCode={sCode} errorMessage={message}/>
+  };
+
+  // TODO: render warning -> 4 search cards at max!
 
   render() {
     const { classes } = this.props;
@@ -216,8 +249,8 @@ class Browser extends React.PureComponent {
         </form>
         <div className={classes.flexContainer}>
           {this.state.loading && <CircularProgress className={classes.loadingAnimation} />}
-          {!this.state.loading && this.state.resultsIn}
-          {!this.state.loading && this.state.error}
+          {!this.state.loading && (this.state.responseCode === 200) && this.renderResponseData()}
+          {this.state.error && this.renderErrorMessage(this.state.errorMessage, this.state.responseCode)}
         </div>
       </div>
     );
@@ -238,6 +271,7 @@ const styles = theme => ({
     padding: 20,
     display: 'flex',
     margin: theme.spacing.unit,
+    marginBottom: theme.spacing.unit * 3,
   },
   infoIcon: {
     marginRight: theme.spacing.unit,
