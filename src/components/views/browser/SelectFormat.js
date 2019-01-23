@@ -12,7 +12,6 @@ class SelectFormat extends React.Component {
   state = {
     checkedTXT: this.props.initialValues.checkedTXT,
     checkedJSON: this.props.initialValues.checkedJSON,
-    checkedXML: this.props.initialValues.checkedXML,
     error: false,
   };
 
@@ -23,7 +22,7 @@ class SelectFormat extends React.Component {
     });
   };
 
-  checkboxes = ['txt', 'json', 'xml'];
+  checkboxes = ['txt', 'json',];
 
   render() {
     const { classes, getDisabled } = this.props;

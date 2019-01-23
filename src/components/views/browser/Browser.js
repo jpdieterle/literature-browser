@@ -13,9 +13,10 @@ import SearchCard from './searchcard/SearchCard';
 import AddSearchCardButton from './buttons/AddSearchCardButton';
 import SelectFormat from './SelectFormat';
 import SearchButton from './buttons/SearchButton';
-import ErrorMessage from './ErrorMessage';
+import ErrorMessage from './results/ErrorMessage';
+import Results from './results/Results';
 import shortid from 'shortid';
-import axios from 'axios';
+import fetchTimeout from 'fetch-timeout';
 
 // TODO: Abfrage an Server => Autorenliste + Jahreszahlen aktualisieren
 const minYear = '1700';
@@ -35,7 +36,7 @@ const inputVariant = 'standard';
 class Browser extends React.PureComponent {
   state = {
     cardList: [JSON.parse(JSON.stringify(initialSearchCardObject))],
-    selectedFormats: {checkedTXT: false, checkedJSON: false, checkedXML: false},
+    selectedFormats: {checkedTXT: false, checkedJSON: false},
     loading: false,
     responseCode: 0, // 200 = results in
     responseData: {},
@@ -113,24 +114,26 @@ class Browser extends React.PureComponent {
     this.setState({selectedFormats: newSelectedFormats});
   };
 
-  handleSubmit = () => {
+  handleSubmit = (getAll) => {
     this.setState({
       responseCode: 0,
       error: false,
       loading: true,
     });
 
-    let payload = JSON.parse(JSON.stringify(this.state.cardList)); // => save state
-    payload.formats = this.state.selectedFormats;
+    let payload = JSON.parse(JSON.stringify(this.state.selectedFormats));
+    if (!getAll) {
+      payload.cardList = this.state.cardList;
+    }
 
-    fetch(this.requestUrl, {
+    fetchTimeout(this.requestUrl, {
       method: 'POST',
       credentials: 'same-origin', // allow cookies -> session management
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(payload),
-    })
+    }, 5000, '')
       .then(response => {
         this.setState({responseCode: response.status});
         if(response.ok) {
@@ -149,13 +152,20 @@ class Browser extends React.PureComponent {
   handleGetAll = () => {
     this.setState({loading: true});
     // TODO: HTTP request => whole corpus
-    axios.get('https://jsonplaceholder.typicode.com/todos',); // add criteria as payload!
+    fetch('https://jsonplaceholder.typicode.com/todos')
+      .then(response => {
+
+      })
+      .catch(error => {
+        console.log(error.message);
+      });
     this.setState({loading: false});
     this.renderResponseData();
   };
 
-  renderResponseData = data => {
+  renderResponseData = (data, getAll) => {
     // TODO: render download link/icon/button after response from server has arrived
+    return <Results data={data} getAll={getAll}/>;
   };
 
   renderErrorMessage = (message, statusCode) => {

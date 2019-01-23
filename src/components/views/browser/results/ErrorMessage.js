@@ -7,41 +7,49 @@ import Typography from '@material-ui/core/Typography';
 class ErrorMessage extends React.Component {
   state = {};
 
-  handleChange = name => event => {
-    this.setState({
-      [name]: event.target.value,
-    });
-  };
-
-  renderErrorText = statusCode => {
+  renderErrorText = (message, statusCode) => {
     let errorText = '';
-    switch (statusCode) {
-      // TODO: insert cases (most relevant error messages)
-      default:
-        errorText = 'Die Anfrage ist fehlgeschlagen. Bitte versuchen Sie es noch einmal.'
+    if(statusCode) {
+      switch (statusCode) {
+        case 404:
+          errorText = 'Der Server konnte nicht gefunden werden';
+          break;
+        case 500:
+          errorText = 'Es ist ein Fehler auf dem Server aufgetreten';
+          break;
+        case 503:
+          errorText = 'Der Server ist im Moment nicht verfügbar. Bitte versuchen Sie es später noch einmal.';
+          break;
+        case 550:
+          errorText = 'Sie sind nicht berechtigt, diese Suche durchzuführen.';
+          break;
+        default:
+          errorText = `Es ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.`
+      }
+    } else {
+      errorText = message;
     }
     return errorText;
   };
 
   render() {
-    const {classes, statusCode} = this.props;
+    const {classes, statusCode, errorMessage} = this.props;
 
     return (
       <div className={classes.root}>
         <Paper className={classes.errorContainer} elevation={0} >
           <Typography className={classes.errorText}>
-            {`Es ist ein Fehler aufgetreten: ${this.props.errorMessage}. Bitte versuchen Sie es erneut.`}
+            {this.renderErrorText(errorMessage, statusCode)}
           </Typography>
         </Paper>
       </div>
     )
   }
-
 }
 
 ErrorMessage.propTypes = {
   classes: PropTypes.object.isRequired,
-  statusCode: PropTypes.number.isRequired,
+  statusCode: PropTypes.number,
   errorMessage: PropTypes.string,
 };
 
