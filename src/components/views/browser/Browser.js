@@ -116,10 +116,24 @@ class Browser extends React.PureComponent {
     this.setState({
       responseCode: 0,
       error: false,
+    });
+    console.log('timeError: ', this.state.timeError);
+    console.log('keywordError: ', this.state.keywordError);
+    console.log('formatError: ', this.state.formatError);
+    // check for errors before sending request
+    if(this.state.timeError || this.state.keywordError || this.state.formatError) {
+      this.setState({
+        error: true,
+        errorMessage: 'Sie können keine Anfrage mit fehlenden/falschen Eingaben abschicken',
+      });
+      return;
+    }
+
+    this.setState({
       loading: true,
     });
 
-    let payload = JSON.parse(JSON.stringify(this.state.selectedFormats));
+    let payload = {formats:{txt: this.state.selectedFormats.checkedTXT, json: this.state.selectedFormats.checkedJSON}};
     if (!getAll || getAll === undefined) {
       console.log('not getAll');
       payload.cardList = this.state.cardList;
@@ -165,8 +179,6 @@ class Browser extends React.PureComponent {
     let sCode = statusCode? statusCode : 0;
     return <ErrorMessage statusCode={sCode} errorMessage={message}/>
   };
-
-  // TODO: render warning -> 4 search cards at max!
 
   render() {
     const { classes } = this.props;
@@ -216,6 +228,7 @@ class Browser extends React.PureComponent {
                   initialValue={card.keywords}
                   disabled={this.getLoading()}
                   onInputChange={this.updateSearchCardContent}
+                  handleBrowserChange={this.handleChange}
                 />
                 <TimeInput
                   key={card.id + '-time'}
@@ -241,6 +254,7 @@ class Browser extends React.PureComponent {
               initialValues={this.state.selectedFormats}
               getDisabled={this.getLoading}
               onChange={this.updateFormat}
+              handleBrowserChange={this.handleChange}
             />
           </div>
           <div className={classes.flexContainer}>

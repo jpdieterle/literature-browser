@@ -24,7 +24,7 @@ class TimeInput extends React.PureComponent {
     }
 
     this.setState(newState, () => {
-      this.props.handleBrowserChange('timeError')
+      this.props.handleBrowserChange('timeError', (this.state.timeFromError || this.state.timeToError));
       this.setState({
         [name]: value,
       }, () => {
@@ -73,7 +73,7 @@ class TimeInput extends React.PureComponent {
             }}
           />
           {(this.state.timeToError || this.state.timeFromError) &&
-          <Typography color={'error'}>
+          <Typography color={'error'} className={classes.errorMessage}>
             Bitte geben Sie eine Zahl zwischen {this.props.minYear} und {this.props.maxYear} ein.
           </Typography>}
         </FormGroup>
@@ -111,6 +111,9 @@ const styles = theme => ({
   },
   center:{
 
+  },
+  errorMessage:{
+    fontSize: '0.75rem'
   },
 });
 

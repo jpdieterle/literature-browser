@@ -12,7 +12,9 @@ import Dialog from '@material-ui/core/Dialog';
 class ContainsInput extends React.PureComponent {
   state = {
     keywords: this.props.initialValue,
-    dialogOpen: true,
+    dialogOpen: false,
+    syntaxError: false,
+    errorMessage: 'Fehler',
   };
 
   onInputChange = (event) => {
@@ -21,12 +23,46 @@ class ContainsInput extends React.PureComponent {
     });
   };
 
+  onFocus = () => {
+    this.setState({syntaxError: false})
+  };
+
   onOpenDialog = () => {
     this.setState({dialogOpen: true})
   };
 
   onCloseDialog = () => {
     this.setState({dialogOpen: false})
+  };
+
+  checkInput = () => {
+    console.log('checking input');
+    let error = false;
+    let errorMessage = '';
+    let string = this.state.keywords;
+
+    // check if quotes have been closed
+    let quotes = 0;
+    for(let i=0; i<string.length; i++) {
+      if(string.charAt(i) === '"') quotes++;
+    }
+    if(quotes % 2 !== 0) {
+      error = true;
+      errorMessage += 'Bitte schließen Sie die Anführungszeichen. ';
+    }
+
+    // check if semicolons have been used instead of commas
+    if(string.search(';') >= 0) {
+      error = true;
+      errorMessage += 'Bitte verwenden Sie Kommas statt Semikolons. '
+    }
+
+    this.setState({
+      syntaxError: error,
+      errorMessage: errorMessage,
+    }, () => {
+      this.props.handleBrowserChange('keywordError', error);
+    });
   };
 
   render() {
@@ -44,8 +80,11 @@ class ContainsInput extends React.PureComponent {
           className={classes.textField}
           variant={variant}
           disabled={disabled}
+          error={this.state.syntaxError}
           value={keywords}
           onChange={this.onInputChange}
+          onFocus={this.onFocus}
+          onBlur={this.checkInput}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
@@ -54,6 +93,10 @@ class ContainsInput extends React.PureComponent {
                 </IconButton>
               </InputAdornment>)}}
         />
+
+        {(this.state.syntaxError || this.state.timeFromError) &&
+        <Typography color={'error'} className={classes.errorMessage}>{this.state.errorMessage}</Typography>}
+
         <Dialog
           open={this.state.dialogOpen}
           onClose={this.onCloseDialog}
@@ -106,6 +149,7 @@ ContainsInput.propTypes = {
   initialValue: PropTypes.string.isRequired,
   disabled: PropTypes.bool.isRequired,
   onInputChange: PropTypes.func.isRequired,
+  handleBrowserChange: PropTypes.func.isRequired,
 };
 
 const styles = theme => ({
@@ -137,6 +181,9 @@ const styles = theme => ({
   dialogWrapper:{
     minWidth: 600,
   },
+  errorMessage:{
+    fontSize: '0.75rem',
+  }
 });
 
 export default withStyles(styles)(ContainsInput);
