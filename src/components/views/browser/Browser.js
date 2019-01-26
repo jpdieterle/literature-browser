@@ -42,11 +42,14 @@ class Browser extends React.PureComponent {
     responseData: {},
     error: false,
     errorMessage: 'no error',
+    timeError: false,
+    keywordError: false,
+    formatError: true,
   };
 
   // TODO: set request URL
   requestUrl = '';
-  testUrl='';
+  testUrl='https://jsonplaceholder.typicode.com/posts';
 
   getCardIndex = id => {
     return this.state.cardList.findIndex(card => card.id === id);
@@ -56,21 +59,16 @@ class Browser extends React.PureComponent {
     return this.state.loading;
   };
 
-  setLoading = (isLoading) => {
-    this.setState({loading: isLoading});
-  };
-
-  handleChange = name => event => {
+  handleChange = (name, value) => {
     this.setState({
-      [name]: event.target.value,
+      [name]: value,
     });
   };
 
   // fügt eine neue Teil-Suche hinzu
   onAddSearchCard = inputValues => {
 
-    if(this.state && this.state.cardList.length > 7 ) {
-      // TODO: Hinweis anzeigen, dass nicht mehr als 8 Karten hinzugefügt werden können.
+    if(this.state && this.state.cardList.length > 3 ) {
       return;
     }
 
@@ -122,18 +120,19 @@ class Browser extends React.PureComponent {
     });
 
     let payload = JSON.parse(JSON.stringify(this.state.selectedFormats));
-    if (!getAll) {
+    if (!getAll || getAll === undefined) {
+      console.log('not getAll');
       payload.cardList = this.state.cardList;
     }
 
-    fetchTimeout(this.requestUrl, {
+    fetchTimeout(this.testUrl, {
       method: 'POST',
-      credentials: 'same-origin', // allow cookies -> session management
+      // credentials: 'same-origin', // allow cookies -> session management
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(payload),
-    }, 5000, '')
+    }, 5000, 'Die Anfrage hat zu lang gedauert.')
       .then(response => {
         this.setState({responseCode: response.status});
         if(response.ok) {
@@ -149,23 +148,17 @@ class Browser extends React.PureComponent {
     this.setState({loading: false});
   };
 
-  handleGetAll = () => {
-    this.setState({loading: true});
-    // TODO: HTTP request => whole corpus
-    fetch('https://jsonplaceholder.typicode.com/todos')
-      .then(response => {
+  handleSearchCriteria = () => {
+    this.handleSubmit(false);
+  };
 
-      })
-      .catch(error => {
-        console.log(error.message);
-      });
-    this.setState({loading: false});
-    this.renderResponseData();
+  handleGetAll = () => {
+    this.handleSubmit(true);
   };
 
   renderResponseData = (data, getAll) => {
     // TODO: render download link/icon/button after response from server has arrived
-    return <Results data={data} getAll={getAll}/>;
+    // return <Results data={data} getAll={getAll}/>;
   };
 
   renderErrorMessage = (message, statusCode) => {
@@ -232,10 +225,16 @@ class Browser extends React.PureComponent {
                   initialTimeTo={card.timeTo}
                   disabled={this.getLoading()}
                   onInputChange={this.updateSearchCardContent}
+                  minYear={minYear}
+                  maxYear={maxYear}
+                  handleBrowserChange={this.handleChange}
                 />
               </SearchCard>
             ))}
           </div>
+          {this.state.cardList.length === 4
+            &&
+            <Typography color={"error"} className={classes.cardWarning}>Sie können maximal 4 Teil-Suchen kombinieren.</Typography>}
           <AddSearchCardButton action={this.onAddSearchCard} getDisabled={this.getLoading}/>
           <div className={classes.flexContainer}>
             <SelectFormat
@@ -249,7 +248,7 @@ class Browser extends React.PureComponent {
               type={'submit'} // form gets submitted when clicking on this button
               variant={'search'}
               getLoading={this.getLoading}
-              handleSubmit={this.handleSubmit}
+              handleSubmit={this.handleSearchCriteria}
             />
             <SearchButton
               getLoading={this.getLoading}
@@ -295,6 +294,9 @@ const styles = theme => ({
   flexContainer:{
     display: 'flex',
     marginTop: theme.spacing.unit * 2,
+  },
+  cardWarning:{
+    margin: theme.spacing.unit,
   },
   loadingAnimation:{
     marginLeft: theme.spacing.unit,

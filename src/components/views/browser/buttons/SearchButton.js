@@ -10,13 +10,14 @@ class SearchButton extends React.Component {
   buttonLabel = (this.props.variant === 'search')? 'Suchen' : 'gesamten Korpus herunterladen';
   buttonVariant = (this.props.variant === 'search')? 'contained' : 'text';
 
-  buttonTips = 'Alle Texte abfragen, die den eingegebenen Kriterien entsprechen (es wird noch nichts heruntergeladen)';
+  searchTip = 'Alle Texte abfragen, die den eingegebenen Kriterien entsprechen (es wird noch nichts heruntergeladen)';
+  getAllTip = 'Alle verfügbaren Gedichte abfragen (es wird noch nichts heruntergeladen)';
+  buttonTips = this.props.variant === 'search'? this.searchTip : this.getAllTip;
 
   render() {
-    const { classes, variant } = this.props;
+    const { classes } = this.props;
     return(
       <div className={classes.root}>
-        {(variant === 'search') &&
         <Tooltip title={this.buttonTips} placement={'bottom-start'}>
           <Button
             color={'primary'}
@@ -27,18 +28,6 @@ class SearchButton extends React.Component {
             {this.buttonLabel}
           </Button>
         </Tooltip>
-        }
-        {!(variant === 'search') &&
-        <Button
-          color={'primary'}
-          variant={this.buttonVariant}
-          disabled={this.props.getLoading()}
-          onClick={this.props.handleSubmit}
-        >
-          {this.buttonLabel}
-        </Button>
-        }
-
       </div>
     )
   }
