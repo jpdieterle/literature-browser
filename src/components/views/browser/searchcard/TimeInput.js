@@ -3,20 +3,35 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import FormGroup from '@material-ui/core/FormGroup';
+import Typography from '@material-ui/core/Typography';
 
 class TimeInput extends React.PureComponent {
   state = {
     timeFrom: this.props.initialTimeFrom,
     timeTo: this.props.initialTimeTo,
+    timeFromError: false,
+    timeToError: false,
   };
 
   handleChange = name => event => {
-    console.log('name: ' +name);
-    this.setState({
-      [name]: event.target.value,
-    }, () => {
-      // console.log(this.state);
-      this.props.onInputChange(this.props.cardId, name, this.state[name]);
+    const value = event.target.value;
+    const time = parseInt(value);
+    let newState = {};
+    if(name === 'timeFrom') {
+      newState.timeFromError = (time < this.props.minYear || time > this.props.maxYear);
+    } else if(name === 'timeTo') {
+      newState.timeToError = (time < this.props.minYear || time > this.props.maxYear);
+    }
+
+    this.setState(newState, () => {
+      this.props.handleBrowserChange('timeError', (this.state.timeFromError || this.state.timeToError));
+      this.setState({
+        [name]: value,
+      }, () => {
+        if(!this.state.timeFromError && !this.state.timeToError) {
+          this.props.onInputChange(this.props.cardId, name, this.state[name]);
+        }
+      });
     });
   };
 
@@ -37,6 +52,7 @@ class TimeInput extends React.PureComponent {
             className={classes.textField}
             variant={variant}
             disabled={disabled}
+            error={this.state.timeFromError}
             InputLabelProps={{
               shrink: true,
             }}
@@ -51,15 +67,19 @@ class TimeInput extends React.PureComponent {
             className={classes.textField}
             variant={variant}
             disabled={disabled}
+            error={this.state.timeToError}
             InputLabelProps={{
               shrink: true,
             }}
           />
+          {(this.state.timeToError || this.state.timeFromError) &&
+          <Typography color={'error'} className={classes.errorMessage}>
+            Bitte geben Sie eine Zahl zwischen {this.props.minYear} und {this.props.maxYear} ein.
+          </Typography>}
         </FormGroup>
       </div>
     )
   }
-
 }
 
 TimeInput.propTypes = {
@@ -70,6 +90,9 @@ TimeInput.propTypes = {
   initialTimeTo: PropTypes.string.isRequired,
   disabled: PropTypes.bool.isRequired,
   onInputChange: PropTypes.func.isRequired,
+  minYear: PropTypes.string.isRequired,
+  maxYear: PropTypes.string.isRequired,
+  handleBrowserChange: PropTypes.func.isRequired,
 };
 
 const styles = theme => ({
@@ -88,6 +111,9 @@ const styles = theme => ({
   },
   center:{
 
+  },
+  errorMessage:{
+    fontSize: '0.75rem'
   },
 });
 

@@ -12,18 +12,22 @@ class SelectFormat extends React.Component {
   state = {
     checkedTXT: this.props.initialValues.checkedTXT,
     checkedJSON: this.props.initialValues.checkedJSON,
-    checkedXML: this.props.initialValues.checkedXML,
-    error: false,
+    error: true,
   };
 
   handleChange = name => event => {
     let propName = "checked" + name.toUpperCase();
     this.setState({ [propName]: event.target.checked }, () => {
       this.props.onChange(propName, this.state[propName]);
+      this.setState({
+        error: !(this.state.checkedJSON || this.state.checkedTXT)
+      }, () => {
+        this.props.handleBrowserChange('formatError', !(this.state.checkedJSON || this.state.checkedTXT));
+      });
     });
   };
 
-  checkboxes = ['txt', 'json', 'xml'];
+  checkboxes = ['txt', 'json',];
 
   render() {
     const { classes, getDisabled } = this.props;
@@ -64,6 +68,7 @@ SelectFormat.propTypes = {
   initialValues: PropTypes.object.isRequired,
   getDisabled: PropTypes.func.isRequired,
   onChange: PropTypes.func.isRequired,
+  handleBrowserChange: PropTypes.func.isRequired,
 };
 
 const styles = theme => ({
