@@ -90,7 +90,7 @@ renderSuggestion.propTypes = {
 };
 
 // use class component to get input state
-class AuthorInput extends React.Component {
+class AuthorInput extends React.PureComponent {
   state = {
     inputValue: '',
     selectedItems: this.props.initialValues,
@@ -121,7 +121,7 @@ class AuthorInput extends React.Component {
       inputValue: '',
       selectedItems: selectedItems,
     }, () => {
-      this.props.onInputChange('authors', this.state.selectedItems); // update SearchCard state
+      this.props.onInputChange(this.props.cardId, 'authors', this.state.selectedItems); // update SearchCard state
     });
   };
 
@@ -134,7 +134,7 @@ class AuthorInput extends React.Component {
   };
 
   render() {
-    const { classes } = this.props;
+    const { classes, variant, disabled, autofocus } = this.props;
     const { inputValue, selectedItems } = this.state;
 
     return(
@@ -145,6 +145,7 @@ class AuthorInput extends React.Component {
             <div className={classes.container}>
               {renderInput({
                 fullWidth: true,
+                autoFocus: autofocus,
                 classes,
                 InputProps: getInputProps({
                   startAdornment: selectedItems.map(item => (
@@ -158,11 +159,12 @@ class AuthorInput extends React.Component {
                   )),
                   onChange: this.handleInputChange,
                   onKeyDown: this.handleKeyDown,
-                  value: this.state.inputValue,
+                  value: inputValue,
                   placeholder: 'Bsp.: Rilke, Rainer Maria',
                 }),
                 label: 'Autor*in',
-                variant: this.props.variant,
+                variant: variant,
+                disabled: disabled,
               })}
               {isOpen ? (
                 <Paper className={classes.paper} square>
@@ -188,8 +190,11 @@ class AuthorInput extends React.Component {
 
 AuthorInput.propTypes = {
   classes: PropTypes.object.isRequired,
+  cardId: PropTypes.string.isRequired,
   variant: PropTypes.string,
   initialValues: PropTypes.arrayOf(PropTypes.string).isRequired,
+  autofocus: PropTypes.bool.isRequired,
+  disabled: PropTypes.bool.isRequired,
   onInputChange: PropTypes.func.isRequired,
 };
 
