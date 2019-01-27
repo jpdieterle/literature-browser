@@ -39,7 +39,8 @@ class Browser extends React.PureComponent {
     selectedFormats: {checkedTXT: false, checkedJSON: false},
     loading: false,
     responseCode: 0, // 200 = results in
-    responseData: {},
+    responseData: null,
+    responseIn: false,
     error: false,
     errorMessage: 'no error',
     timeError: false,
@@ -113,13 +114,10 @@ class Browser extends React.PureComponent {
   };
 
   handleSubmit = (getAll) => {
-    this.setState({
-      responseCode: 0,
-      error: false,
-    });
     console.log('timeError: ', this.state.timeError);
     console.log('keywordError: ', this.state.keywordError);
     console.log('formatError: ', this.state.formatError);
+
     // check for errors before sending request
     if(this.state.timeError || this.state.keywordError || this.state.formatError) {
       this.setState({
@@ -129,16 +127,22 @@ class Browser extends React.PureComponent {
       return;
     }
 
+    // start loading animation, disable forms
     this.setState({
       loading: true,
+      responseCode: 0,
+      error: false,
+      responseIn: false,
+      responseData: {},
     });
 
+    // combine data to send
     let payload = {formats:{txt: this.state.selectedFormats.checkedTXT, json: this.state.selectedFormats.checkedJSON}};
-    if (!getAll || getAll === undefined) {
-      console.log('not getAll');
+    if (!getAll) {
       payload.cardList = this.state.cardList;
     }
 
+    // request data + handle response
     fetchTimeout(this.testUrl, {
       method: 'POST',
       // credentials: 'same-origin', // allow cookies -> session management
@@ -150,7 +154,15 @@ class Browser extends React.PureComponent {
       .then(response => {
         this.setState({responseCode: response.status});
         if(response.ok) {
-          this.renderResponseData(response.data);
+          if(response.headers.get("content-type").indexOf("application/json") !== -1) {
+            response.json().then(data => {
+              this.setState({
+                responseData: JSON.stringify(data),
+                responseIn: true,
+              });
+            });
+          }
+          // TODO: parse for zip instead of json! (or txt?)
         } else {
           this.setState({errorMessage: response.statusText, error: true});
         }
@@ -172,7 +184,8 @@ class Browser extends React.PureComponent {
 
   renderResponseData = (data, getAll) => {
     // TODO: render download link/icon/button after response from server has arrived
-    // return <Results data={data} getAll={getAll}/>;
+    console.log(data);
+    return <Results data={data} getAll={getAll}/>;
   };
 
   renderErrorMessage = (message, statusCode) => {
@@ -272,8 +285,10 @@ class Browser extends React.PureComponent {
         </form>
         <div className={classes.flexContainer}>
           {this.state.loading && <CircularProgress className={classes.loadingAnimation} />}
-          {!this.state.loading && (this.state.responseCode === 200) && this.renderResponseData()}
-          {this.state.error && this.renderErrorMessage(this.state.errorMessage, this.state.responseCode)}
+          {this.state.responseIn && (Math.floor(this.state.responseCode/100) === 2) &&
+            this.renderResponseData(this.state.responseData)}
+          {this.state.error && (Math.floor(this.state.responseCode/100) !== 2) &&
+            this.renderErrorMessage(this.state.errorMessage, this.state.responseCode)}
         </div>
       </div>
     );

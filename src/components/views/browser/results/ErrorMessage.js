@@ -24,7 +24,7 @@ class ErrorMessage extends React.Component {
           errorText = 'Sie sind nicht berechtigt, diese Suche durchzuführen.';
           break;
         default:
-          errorText = `Es ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.`
+          errorText = `Es ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.`;
       }
     } else {
       errorText = message;

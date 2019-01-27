@@ -10,8 +10,8 @@ class SearchButton extends React.Component {
   buttonLabel = (this.props.variant === 'search')? 'Suchen' : 'gesamten Korpus herunterladen';
   buttonVariant = (this.props.variant === 'search')? 'contained' : 'text';
 
-  searchTip = 'Alle Texte abfragen, die den eingegebenen Kriterien entsprechen (es wird noch nichts heruntergeladen)';
-  getAllTip = 'Alle verfügbaren Gedichte abfragen (es wird noch nichts heruntergeladen)';
+  searchTip = 'Alle Texte abfragen, die den eingegebenen Kriterien entsprechen';
+  getAllTip = 'Alle verfügbaren Gedichte abfragen';
   buttonTips = this.props.variant === 'search'? this.searchTip : this.getAllTip;
 
   render() {
