@@ -1,7 +1,7 @@
 {
   "genre": "geko-browser",
   "version": "0.1.0",
-  "private": false,
+  "private": true,
   "dependencies": {
     "@material-ui/core": "^3.9.1",
     "@material-ui/icons": "^3.0.1",
@@ -44,7 +44,7 @@
     "@babel/core": "^7.2.2",
     "@babel/preset-env": "^7.3.1",
     "@types/lodash": "^4.14.119",
-    "babel-loader": "^8.0.5",
-    "webpack": "^4.29.0"
+    "babel-loader": "^8.0.4",
+    "webpack": "^4.19.1"
   }
 }

@@ -2,7 +2,8 @@ import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import theme from './theme/theme'
 import { MuiThemeProvider } from '@material-ui/core/styles';
-import Header from "./components/views/navigation/Header";
+import Header from './components/views/navigation/Header';
+import Login from './components/views/login/Login';
 import Browser from './components/views/browser/Browser';
 import Wiki from './components/views/Wiki';
 import About from './components/views/About';
@@ -16,7 +17,7 @@ class App extends React.Component {
         <div className={classes.root}>
           <Header/>
           <div className={classes.contentWrapper}>
-            <Browser/>
+            <Login/>
             <Wiki/>
             <About/>
           </div>
