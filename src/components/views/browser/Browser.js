@@ -48,6 +48,10 @@ class Browser extends React.PureComponent {
     formatError: true,
   };
 
+  componentWillMount() {
+    // TODO: Abfrage an Server => Autorenliste + Jahreszahlen aktualisieren
+  }
+
   // TODO: set request URL
   requestUrl = '';
   testUrl='https://jsonplaceholder.typicode.com/posts';
@@ -145,7 +149,7 @@ class Browser extends React.PureComponent {
     // request data + handle response
     fetchTimeout(this.testUrl, {
       method: 'POST',
-      // credentials: 'same-origin', // allow cookies -> session management
+      credentials: 'same-origin', // allow cookies -> session management
       headers: {
         "Content-Type": "application/json",
       },

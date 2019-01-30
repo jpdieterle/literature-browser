@@ -9,6 +9,7 @@ import Wiki from './components/views/Wiki';
 import About from './components/views/About';
 
 class App extends React.Component {
+  requestURL = '';
 
   render() {
     const { classes } = this.props;
@@ -17,7 +18,7 @@ class App extends React.Component {
         <div className={classes.root}>
           <Header/>
           <div className={classes.contentWrapper}>
-            <Login/>
+            <Login url={this.requestURL}/>
             <Wiki/>
             <About/>
           </div>

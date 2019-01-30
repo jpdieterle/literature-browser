@@ -7,12 +7,41 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import fileDownload from 'js-file-download';
 import InfoIcon from '@material-ui/icons/Info';
+import fetchTimeout from 'fetch-timeout';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import ErrorMessage from '../browser/results/ErrorMessage';
 
 class Login extends React.Component {
-  state = {};
+  state = {
+    email: '',
+    password: '',
+    emailError: true,
+    passwordError: true,
+    eErrorMessage: '',
+    pErrorMessage: '',
+    loginError: false,
+    loading: false,
+  };
+
+  handleSubmit = () => {
+    this.setState({loading: true});
+    // TODO: send request to server to get cookie + status (admin?)
+    let payload = JSON.stringify({login: true});
+    fetchTimeout(this.props.url,{
+      method: 'POST',
+      credentials: 'same-origin', // allow cookies -> session management
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    }, 5000, 'Die Anfrage hat zu lang gedauert.');
+
+    this.setState({loading: false});
+  };
 
   render() {
     const {classes} = this.props;
+    const { email, password, emailError, passwordError, loginError, loading } = this.state;
 
     return (
       <div className={classes.root}>
@@ -29,19 +58,26 @@ class Login extends React.Component {
             <TextField
               className={classes.textField}
               label={'E-Mail'}
+              type={'email'}
             />
+            {<Typography color={'error'} className={classes.errorMessage}>{this.state.errorMessage}</Typography>}
             <TextField
               className={classes.textField}
               label={'Passwort'}
+              type={'password'}
             />
-            <Button
-              size="small"
-              color="primary"
-              variant={"contained"}
-              className={classes.button}
-            >
-              Anmelden
-            </Button>
+            <div className={classes.flexContainer}>
+              <Button
+                size="small"
+                color="primary"
+                variant={"contained"}
+                className={classes.button}
+                onClick={this.handleSubmit}
+              >
+                Anmelden
+              </Button>
+              {loading && <CircularProgress className={classes.loadingAnimation} size={30}/>}
+            </div>
           </div>
         </Paper>
       </div>
@@ -51,8 +87,8 @@ class Login extends React.Component {
 
 Login.propTypes = {
   classes: PropTypes.object.isRequired,
-  data: PropTypes.any.isRequired,
-  numberOfResults: PropTypes.number,
+  url: PropTypes.string.isRequired,
+  setStatus: PropTypes.func.isRequired,
 };
 
 const styles = theme => ({
@@ -71,6 +107,7 @@ const styles = theme => ({
   },
   button:{
     marginTop: theme.spacing.unit * 5,
+    marginRight: theme.spacing.unit * 2,
     width: 100,
   },
   infoBox:{
@@ -84,6 +121,10 @@ const styles = theme => ({
   },
   infoIcon: {
     marginRight: theme.spacing.unit,
+  },
+  flexContainer:{
+    display: 'flex',
+    alignItems: 'flex-end',
   },
 });
 
