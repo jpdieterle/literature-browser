@@ -74,7 +74,7 @@ SelectFormat.propTypes = {
 const styles = theme => ({
   root:{
     marginLeft: theme.spacing.unit,
-  }
+  },
 });
 
 export default withStyles(styles)(SelectFormat);

@@ -10,6 +10,7 @@ import {
   Redirect
 } from 'react-router-dom';
 import Header from "./components/views/navigation/Header";
+import Login from './components/views/login/Login';
 import Browser from './components/views/browser/Browser';
 import Wiki from './components/views/Wiki';
 import About from './components/views/About';
@@ -37,9 +38,9 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
 );
 
 class App extends React.Component {
+  requestURL = '';
 
   render() {
-    console.log('rendering app');
     const { classes } = this.props;
     return (
       <MuiThemeProvider theme={theme}>
@@ -59,8 +60,6 @@ class App extends React.Component {
     );
   }
 }
-
-
 
 const styles = {
   root: {
