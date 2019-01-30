@@ -5,6 +5,13 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
+import {
+  BrowserRouter as Router,
+  Route,
+  Link,
+  Switch,
+  Redirect
+} from 'react-router-dom';
 
 class Header extends React.Component {
   state = {
@@ -27,10 +34,21 @@ class Header extends React.Component {
             </div>
             <div className={classes.col8}>
               <ul className={classes.navElements} >
-                <li className={classes.login}> <Button color="inherit" className={classes.buttonstyle}>Suche</Button></li>
-                <li className={classes.login}> <Button color="inherit" className={classes.buttonstyle}>About</Button></li>
-                <li className={classes.login}> <Button color="inherit" className={classes.buttonstyle}>Wiki </Button></li>
-                <li className={classes.login}> <Button color="inherit" className={classes.buttonstyle}>Login</Button></li>
+                <li className={classes.login}>
+                  <Button component={Link} to='/browser' color="inherit" className={classes.buttonstyle}>Browser</Button>
+                </li>
+                <li className={classes.login}>
+                  <Button component={Link} to='/about' color="inherit" className={classes.buttonstyle}>About</Button>
+                </li>
+                <li className={classes.login}>
+                  <Button component={Link} to='/wiki' color="inherit" className={classes.buttonstyle}>Wiki </Button>
+                </li>
+                <li className={classes.login}>
+                  <Button component={Link} to='/admin' color="inherit" className={classes.buttonstyle}>Admin</Button>
+                </li>
+                <li className={classes.login}>
+                  <Button component={Link} to='/login' color="inherit" className={classes.buttonstyle}>Login</Button>
+                </li>
               </ul>
             </div>
           </Toolbar>
