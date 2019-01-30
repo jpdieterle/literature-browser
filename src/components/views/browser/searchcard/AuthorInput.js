@@ -28,7 +28,8 @@ function renderInput(inputProps) {
 
   return (
     <TextField
-      variant={'outlined'}
+      variant={inputProps.variant}
+      InputLabelProps={{disableAnimation: false,}}
       InputProps={{
         inputRef: ref,
         classes: {
@@ -84,23 +85,23 @@ renderSuggestion.propTypes = {
   highlightedIndex: PropTypes.number,
   index: PropTypes.number,
   itemProps: PropTypes.object,
-  selectedItem: PropTypes.string,
+  selectedItems: PropTypes.string,
   suggestion: PropTypes.shape({ label: PropTypes.string }).isRequired,
 };
 
 // use class component to get input state
-class AuthorInput extends React.Component {
+class AuthorInput extends React.PureComponent {
   state = {
     inputValue: '',
-    selectedItem: [],
+    selectedItems: this.props.initialValues,
   };
 
   handleKeyDown = event => {
-    const { inputValue, selectedItem } = this.state;
+    const { inputValue, selectedItems } = this.state;
 
-    if (selectedItem.length && !inputValue.length && keycode(event) === 'backspace') {
+    if (selectedItems.length && !inputValue.length && keycode(event) === 'backspace') {
       this.setState({
-        selectedItem: selectedItem.slice(0, selectedItem.length - 1),
+        selectedItems: selectedItems.slice(0, selectedItems.length - 1),
       });
     }
   };
@@ -110,41 +111,44 @@ class AuthorInput extends React.Component {
   };
 
   handleChange = item => {
-    let { selectedItem } = this.state;
+    let { selectedItems } = this.state;
 
-    if (selectedItem.indexOf(item) === -1) {
-      selectedItem = [...selectedItem, item];
+    if (selectedItems.indexOf(item) === -1) {
+      selectedItems = [...selectedItems, item];
     }
 
     this.setState({
       inputValue: '',
-      selectedItem,
+      selectedItems: selectedItems,
+    }, () => {
+      this.props.onInputChange(this.props.cardId, 'authors', this.state.selectedItems); // update SearchCard state
     });
   };
 
   handleDelete = item => () => {
     this.setState(state => {
-      const selectedItem = [...state.selectedItem];
+      const selectedItem = [...state.selectedItems];
       selectedItem.splice(selectedItem.indexOf(item), 1);
-      return { selectedItem };
+      return { selectedItems: selectedItem };
     });
   };
 
   render() {
-    const { classes } = this.props;
-    const { inputValue, selectedItem } = this.state;
+    const { classes, variant, disabled, autofocus } = this.props;
+    const { inputValue, selectedItems } = this.state;
 
     return(
       <div className={classes.root}>
-        <Downshift inputValue={inputValue} onChange={this.handleChange} selectedItem={selectedItem}>
+        <Downshift inputValue={inputValue} onChange={this.handleChange} selectedItem={selectedItems}>
           {({getInputProps, getItemProps, isOpen, inputValue: inputValue2, selectedItem: selectedItem2,
               highlightedIndex,}) => (
             <div className={classes.container}>
               {renderInput({
                 fullWidth: true,
+                autoFocus: autofocus,
                 classes,
                 InputProps: getInputProps({
-                  startAdornment: selectedItem.map(item => (
+                  startAdornment: selectedItems.map(item => (
                     <Chip
                       key={item}
                       tabIndex={-1}
@@ -155,9 +159,12 @@ class AuthorInput extends React.Component {
                   )),
                   onChange: this.handleInputChange,
                   onKeyDown: this.handleKeyDown,
+                  value: inputValue,
                   placeholder: 'Bsp.: Rilke, Rainer Maria',
                 }),
                 label: 'Autor*in',
+                variant: variant,
+                disabled: disabled,
               })}
               {isOpen ? (
                 <Paper className={classes.paper} square>
@@ -176,20 +183,25 @@ class AuthorInput extends React.Component {
           )}
         </Downshift>
       </div>
-    )
+    );
 
   }
 }
 
 AuthorInput.propTypes = {
   classes: PropTypes.object.isRequired,
+  cardId: PropTypes.string.isRequired,
+  variant: PropTypes.string,
+  initialValues: PropTypes.arrayOf(PropTypes.string).isRequired,
+  autofocus: PropTypes.bool.isRequired,
+  disabled: PropTypes.bool.isRequired,
+  onInputChange: PropTypes.func.isRequired,
 };
 
-// CSS
 const styles = theme => ({
   root: {
     flexGrow: 1,
-      height: 250,
+    paddingTop: 5,
   },
   container: {
     marginLeft: theme.spacing.unit,
@@ -212,7 +224,7 @@ const styles = theme => ({
   },
   inputInput: {
     width: 'auto',
-      flexGrow: 1,
+    flexGrow: 1,
   },
 });
 export default withStyles(styles)(AuthorInput);

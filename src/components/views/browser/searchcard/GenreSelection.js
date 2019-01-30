@@ -26,24 +26,27 @@ const genres = [
   'Sonett',
 ];
 
-class GenreSelection extends React.Component {
+class GenreSelection extends React.PureComponent {
   state = {
-    genre: [],
+    genre: this.props.initialValues,
   };
 
   handleChange = event => {
-    this.setState({ genre: event.target.value });
+    this.setState({ genre: event.target.value }, () => {
+      this.props.onInputChange(this.props.cardId, 'genres', this.state.genre); // update SearchCard state
+    });
   };
 
   render() {
-    const { classes } = this.props;
+    const { classes, variant, disabled } = this.props;
+    const { genre } = this.state;
     return(
-      <div className={classes.container}>
-        <FormControl className={classes.formControl}>
+      <div className={classes.root}>
+        <FormControl variant={variant} fullWidth={true} disabled={disabled}>
           <InputLabel htmlFor="selectGenre">Genre(s)</InputLabel>
           <Select
             multiple
-            value={this.state.genre}
+            value={genre}
             onChange={this.handleChange}
             input={<Input id="selectGenre" />}
             renderValue={selected => selected.join(', ')}
@@ -51,34 +54,34 @@ class GenreSelection extends React.Component {
           >
             {genres.map(name => (
               <MenuItem key={name} value={name}>
-                <Checkbox checked={this.state.genre.indexOf(name) > -1} />
+                <Checkbox checked={genre.indexOf(name) > -1} disableRipple={true} color={"primary"}/>
                 <ListItemText primary={name} />
               </MenuItem>
             ))}
           </Select>
         </FormControl>
       </div>
-    )
+    );
   }
 }
 
 GenreSelection.propTypes = {
   classes: PropTypes.object.isRequired,
+  cardId: PropTypes.string.isRequired,
+  variant: PropTypes.string.isRequired,
+  initialValues: PropTypes.array.isRequired,
+  disabled: PropTypes.bool.isRequired,
+  onInputChange: PropTypes.func.isRequired,
 };
 
 const styles = theme => ({
   root: {
-    display: 'flex',
-    flexWrap: 'wrap',
-  },
-  formControl: {
-    minWidth: 200,
+    flexGrow: 1,
+    paddingTop: 5,
     marginLeft: theme.spacing.unit,
     marginRight: theme.spacing.unit,
+    position: 'relative',
   },
-  container: {
-
-  }
 });
 
 export default withStyles(styles)(GenreSelection);
