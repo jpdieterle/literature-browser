@@ -5,6 +5,7 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
 
 
@@ -16,7 +17,7 @@ function ButtonAppBar(props) {
   const { classes } = props;
   return (
       <div className={classes.root}>
-        <AppBar position="static">
+        <AppBar className={classes.heightfix} position="static">
           <Toolbar className={classes.toolbar}>
             <IconButton
                 className={classes.menuButton}
@@ -24,14 +25,17 @@ function ButtonAppBar(props) {
                 aria-label="Menu"
             />
             <div className={classes.col4}>
-            <img className={classes.imgresponsive} src={'img/1064px-Fub-logo.png'}  alt={"FU-Berlin"} />
+              <img className={classes.imgresponsive} src={'img/1064px-Fub-logo.png'}  alt={"FU-Berlin"} />
             </div>
             <div className={classes.col8}>
-            <ul className={classes.navElements} >
-              <li className={classes.login}> <Button color="inherit" className={classes.buttonstyle}>About</Button></li>
-              <li className={classes.login}> <Button color="inherit" className={classes.buttonstyle}>Wiki </Button></li>
-              <li className={classes.login}> <Button color="inherit" className={classes.buttonstyle}>Login</Button></li>
-            </ul></div>
+              <Router>
+                <ul className={classes.navElements} >
+                  <li className={classes.login}> <Button color="inherit" className={classes.buttonstyle}><Link to='./components/views/About'/>About</Button></li>
+                  <li className={classes.login}> <Button color="inherit" className={classes.buttonstyle}><Link to='./components/views/Wiki'/>Wiki </Button></li>
+                  <li className={classes.login}> <Button color="inherit" className={classes.buttonstyle}><Link to='./components/views/Login'/>Login</Button></li>
+                </ul>
+              </Router>
+            </div>
           </Toolbar>
         </AppBar>
       </div>
@@ -43,12 +47,14 @@ class Header extends React.Component {
 
   };
 
-render() {
-     return(
-         <h1> </h1>
-
-   );
-}
+  render() {
+    return(
+        <div>
+          <Header>
+          </Header>
+        </div>
+    );
+  }
 }
 
 Header.propTypes = {
@@ -57,7 +63,13 @@ Header.propTypes = {
 
 const styles = {
   root: {
-    flexGrow: 1
+    flexGrow: 1,
+    position: 'fixed',
+    zIndex: '999!important',
+
+  },
+  heightfix: {
+    height: "50px"
   },
   grow: {
     flexGrow: 1
@@ -69,8 +81,8 @@ const styles = {
     backgroundColor: "#99CC00"
   },
   imgresponsive: {
-    width:"100%",
-    padding: '10px'
+    width:"70%",
+    padding: '5px'
   },
   col4:{
     width:"30%",
@@ -86,7 +98,8 @@ const styles = {
     display:'inline-block',
   },
   buttonstyle: {
-    fontSize: '13px'
+
+
   }
 };
 
