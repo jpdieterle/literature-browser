@@ -14,19 +14,25 @@ import Login from './components/views/login/Login';
 import Browser from './components/views/browser/Browser';
 import Wiki from './components/views/Wiki';
 import About from './components/views/About';
-import Login from './components/views/login/Login';
 import Admin from './components/views/admin/Admin'
 
 const fakeAuthentication = {
-  isAuthenticated: true,
-  authenticated(callback) {
+  authenticated: true,
+  authenticate(callback) {
+    console.log('authenticating...');
     this.authenticated = true;
     setTimeout(callback, 100); // fake login
+    console.log('authenticated? ', this.authenticated)
   },
   signout(callback) {
     this.isAuthenticated = false;
     setTimeout(callback, 100);
   }
+};
+
+const setAuthTrue = (callback) => {
+  console.log('setting auth true...');
+  fakeAuthentication.authenticate(callback);
 };
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
@@ -35,6 +41,10 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
       ? <Component {...props} />
       : <Redirect to='/login' />
   )}/>
+);
+
+const LoginWithProps = (props) => (
+  <Login setAuth={setAuthTrue} />
 );
 
 class App extends React.Component {
@@ -48,11 +58,11 @@ class App extends React.Component {
           <Router>
             <div>
               <Header/>
-              <Route path='/login' component={Login}/>
-              <PrivateRoute path='/admin' component={Admin}/>
-              <PrivateRoute path='/browser' component={Browser}/>
+              <Route path='/browser' component={Browser}/>
               <Route path='/wiki' component={Wiki}/>
               <Route path='/about' component={About}/>
+              <PrivateRoute path='/admin' component={Admin}/>
+              <Route path='/login' component={LoginWithProps}/>
             </div>
           </Router>
         </div>

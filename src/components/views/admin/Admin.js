@@ -15,7 +15,7 @@ class Admin extends React.Component {
     const {classes} = this.props;
 
     return (
-      <div></div>
+      <div>Ich bin die Admin-Seite!</div>
     )
   }
 

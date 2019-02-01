@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import fileDownload from 'js-file-download';
+import { Redirect } from 'react-router-dom';
 import InfoIcon from '@material-ui/icons/Info';
 import fetchTimeout from 'fetch-timeout';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -13,6 +14,7 @@ import ErrorMessage from '../browser/results/ErrorMessage';
 
 class Login extends React.Component {
   state = {
+    redirectToReferrer: false,
     email: '',
     password: '',
     emailError: true,
@@ -39,17 +41,32 @@ class Login extends React.Component {
     this.setState({loading: false});
   };
 
+  login = () => {
+    this.props.setAuth(() => {
+    });
+    this.setState({
+      redirectToReferrer: true
+    });
+  };
+
   render() {
-    const {classes} = this.props;
-    const { email, password, emailError, passwordError, loginError, loading } = this.state;
+    const {classes, setAuth } = this.props;
+    const { email, password, emailError, passwordError, loginError, loading, redirectToReferrer } = this.state;
+
+    if(redirectToReferrer === true) {
+      console.log('redirecting...');
+      return(
+        <Redirect to='/'/>
+      )
+    }
 
     return (
       <div className={classes.root}>
         <Paper className={classes.infoBox}>
           <InfoIcon color={"primary"} className={classes.infoIcon}/>
           <Typography color={"primary"}>
-            Falls Sie sich registrieren möchten, ihr Passwort vergessen haben
-            oder ihr Nutzerkonto löschen möchten wenden Sie sich bitte an den/die Administrator/in.
+            Falls Sie sich registrieren möchten, Ihr Passwort vergessen haben
+            oder Ihr Nutzerkonto löschen möchten wenden Sie sich bitte an den/die Administrator/in.
           </Typography>
         </Paper>
         <Paper className={classes.loginContainer}>
@@ -59,12 +76,14 @@ class Login extends React.Component {
               className={classes.textField}
               label={'E-Mail'}
               type={'email'}
+              value={email}
             />
             {<Typography color={'error'} className={classes.errorMessage}>{this.state.errorMessage}</Typography>}
             <TextField
               className={classes.textField}
               label={'Passwort'}
               type={'password'}
+              value={password}
             />
             <div className={classes.flexContainer}>
               <Button
@@ -72,7 +91,7 @@ class Login extends React.Component {
                 color="primary"
                 variant={"contained"}
                 className={classes.button}
-                onClick={this.handleSubmit}
+                onClick={this.login}
               >
                 Anmelden
               </Button>
@@ -87,8 +106,9 @@ class Login extends React.Component {
 
 Login.propTypes = {
   classes: PropTypes.object.isRequired,
-  url: PropTypes.string.isRequired,
-  setStatus: PropTypes.func.isRequired,
+  url: PropTypes.string,
+  setStatus: PropTypes.func,
+  setAuth: PropTypes.func.isRequired,
 };
 
 const styles = theme => ({
