@@ -59,7 +59,7 @@ class App extends React.Component {
             <div>
               <Header />
               <div className={classes.contentWrapper}>
-                <Route path='/browser' component={Browser}/>
+                <Route exact path='/' component={Browser}/>
                 <Route path='/wiki' component={Wiki}/>
                 <Route path='/about' component={About}/>
                 <PrivateRoute path='/admin' component={Admin}/>

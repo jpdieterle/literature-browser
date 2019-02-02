@@ -9,7 +9,7 @@ const styles = {
 function Wiki(props) {
   const { classes } = props;
   return(
-    <div></div>
+    <div>Ich bin das Wiki!</div>
     // TODO: Bsp.-Anfrage => Logik dahinter verständlich machen (Link auf Browser-Seite!)
   )
 }
