@@ -48,6 +48,10 @@ class Browser extends React.PureComponent {
     formatError: true,
   };
 
+  componentWillMount() {
+    // TODO: Abfrage an Server => Autorenliste + Jahreszahlen aktualisieren
+  }
+
   // TODO: set request URL
   requestUrl = '';
   testUrl='https://jsonplaceholder.typicode.com/posts';
@@ -145,7 +149,7 @@ class Browser extends React.PureComponent {
     // request data + handle response
     fetchTimeout(this.testUrl, {
       method: 'POST',
-      // credentials: 'same-origin', // allow cookies -> session management
+      credentials: 'same-origin', // allow cookies -> session management
       headers: {
         "Content-Type": "application/json",
       },
@@ -185,7 +189,8 @@ class Browser extends React.PureComponent {
   renderResponseData = (data, getAll) => {
     // TODO: render download link/icon/button after response from server has arrived
     console.log(data);
-    return <Results data={data} getAll={getAll}/>;
+
+    return <Results data={data} numberOfResults={data.number || undefined}/>;
   };
 
   renderErrorMessage = (message, statusCode) => {
@@ -303,17 +308,17 @@ const styles = theme => ({
   root:{
     padding: theme.spacing.unit * 3,
   },
-  infoBox:{
-    minWidth: 400,
-    maxWidth: 800 + theme.spacing.unit*7,
-    padding: 20,
-    display: 'flex',
-    margin: theme.spacing.unit,
-    marginBottom: theme.spacing.unit * 3,
-  },
-  infoIcon: {
-    marginRight: theme.spacing.unit,
-  },
+    infoBox:{
+      minWidth: 400,
+      maxWidth: 800 + theme.spacing.unit*7,
+      padding: 20,
+      display: 'flex',
+      margin: theme.spacing.unit,
+      marginBottom: theme.spacing.unit * 3,
+    },
+    infoIcon: {
+      marginRight: theme.spacing.unit,
+    },
   cardContainer:{
     display: 'flex',
     flexFlow: 'row wrap',
