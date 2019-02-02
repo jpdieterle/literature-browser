@@ -7,47 +7,52 @@ import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
+
+
+
+
+
+
+function ButtonAppBar(props) {
+  const { classes } = props;
+  return (
+      <div className={classes.root}>
+        <AppBar className={classes.heightfix} position="static">
+          <Toolbar className={classes.toolbar}>
+            <IconButton
+                className={classes.menuButton}
+                color="inherit"
+                aria-label="Menu"
+            />
+            <div className={classes.col4}>
+              <img className={classes.imgresponsive} src={'img/1064px-Fub-logo.png'}  alt={"FU-Berlin"} />
+            </div>
+            <div className={classes.col8}>
+              <Router>
+                <ul className={classes.navElements} >
+                  <li className={classes.login}> <Button color="inherit" className={classes.buttonstyle}><Link to='./components/views/About'/>About</Button></li>
+                  <li className={classes.login}> <Button color="inherit" className={classes.buttonstyle}><Link to='./components/views/Wiki'/>Wiki </Button></li>
+                  <li className={classes.login}> <Button color="inherit" className={classes.buttonstyle}><Link to='./components/views/Login'/>Login</Button></li>
+                </ul>
+              </Router>
+            </div>
+          </Toolbar>
+        </AppBar>
+      </div>
+  );
+}
+
 class Header extends React.Component {
   state = {
 
   };
 
   render() {
-    const { classes } = this.props;
     return(
-      <div className={classes.root}>
-        <AppBar className={classes.heightfix} position="static">
-          <Toolbar className={classes.toolbar}>
-            <IconButton
-              className={classes.menuButton}
-              color="inherit"
-              aria-label="Menu"
-            />
-            <div >
-              <img className={classes.imgresponsive} src={'img/fu-logo_blue.svg'}  alt={"FU-Berlin"} />
-            </div>
-            <div className={classes.col8}>
-              <ul className={classes.navElements} >
-                <li className={classes.login}>
-                  <Button component={Link} to='/browser' color="inherit" className={classes.buttonstyle}>Browser</Button>
-                </li>
-                <li className={classes.login}>
-                  <Button component={Link} to='/about' color="inherit" className={classes.buttonstyle}>About</Button>
-                </li>
-                <li className={classes.login}>
-                  <Button component={Link} to='/wiki' color="inherit" className={classes.buttonstyle}>Wiki </Button>
-                </li>
-                <li className={classes.login}>
-                  <Button component={Link} to='/admin' color="inherit" className={classes.buttonstyle}>Admin</Button>
-                </li>
-                <li className={classes.login}>
-                  <Button component={Link} to='/login' color="inherit" className={classes.buttonstyle}>Login</Button>
-                </li>
-              </ul>
-            </div>
-          </Toolbar>
-        </AppBar>
-      </div>
+        <div>
+          <Header>
+          </Header>
+        </div>
     );
   }
 }
@@ -56,7 +61,7 @@ Header.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-const styles = theme => ({
+const styles = {
   root: {
     flexGrow: 1,
     position: 'fixed',
@@ -96,7 +101,12 @@ const styles = theme => ({
 
 
   }
-});
+};
 
-export default withStyles(styles)(Header);
+export default withStyles(styles)(ButtonAppBar);
+
+
+ButtonAppBar.propTypes = {
+  classes: PropTypes.object.isRequired
+};
 
