@@ -29,14 +29,17 @@ class Login extends React.Component {
     this.setState({loading: true});
     // TODO: send request to server to get cookie + status (admin?)
     let payload = JSON.stringify({login: true});
-    fetchTimeout(this.props.url,{
+    fetch(this.props.url,{
       method: 'POST',
       credentials: 'same-origin', // allow cookies -> session management
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(payload),
-    }, 5000, 'Die Anfrage hat zu lang gedauert.');
+    })
+      .then(response => {
+
+      });
 
     this.setState({loading: false});
   };
@@ -136,7 +139,6 @@ const styles = theme => ({
     paddingRight: theme.spacing.unit * 4,
     display: 'flex',
     margin: 'auto',
-    marginTop: theme.spacing.unit * 5,
     marginBottom: theme.spacing.unit * 3,
   },
   infoIcon: {

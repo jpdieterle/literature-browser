@@ -16,15 +16,10 @@ class Header extends React.Component {
     const { classes } = this.props;
     return(
       <div className={classes.root}>
-        <AppBar className={classes.heightfix} position="static">
+        <AppBar position="fixed">
           <Toolbar className={classes.toolbar}>
-            <IconButton
-              className={classes.menuButton}
-              color="inherit"
-              aria-label="Menu"
-            />
-            <div >
-              <img className={classes.imgresponsive} src={'img/fu-logo_blue.svg'}  alt={"FU-Berlin"} />
+            <div className={classes.col4}>
+              <img className={classes.img} src={'img/fu-logo_blue.svg'} alt={"FU-Berlin"} />
             </div>
             <div className={classes.col8}>
               <ul className={classes.navElements} >
@@ -59,25 +54,24 @@ Header.propTypes = {
 const styles = theme => ({
   root: {
     flexGrow: 1,
-    position: 'fixed',
     zIndex: '999!important',
-
+    width: '100%',
+    height: 88,
   },
   heightfix: {
-    height: "50px"
+    height: 88
   },
   grow: {
     flexGrow: 1
   },
-  menuButton: {
-    marginLeft: -12
-  },
   toolbar: {
-    backgroundColor: "#99CC00"
+    backgroundColor: "#99CC00",
+    height: 88,
+    minWidth: 608,
   },
-  imgresponsive: {
-    width:"70%",
-    padding: '5px'
+  img: {
+    width: 240,
+    verticalAlign: 'middle',
   },
   col4:{
     width:"30%",
@@ -92,10 +86,6 @@ const styles = theme => ({
   login:{
     display:'inline-block',
   },
-  buttonstyle: {
-
-
-  }
 });
 
 export default withStyles(styles)(Header);

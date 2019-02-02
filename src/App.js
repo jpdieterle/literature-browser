@@ -17,7 +17,7 @@ import About from './components/views/About';
 import Admin from './components/views/admin/Admin'
 
 const fakeAuthentication = {
-  authenticated: true,
+  authenticated: false,
   authenticate(callback) {
     console.log('authenticating...');
     this.authenticated = true;
@@ -57,12 +57,14 @@ class App extends React.Component {
         <div className={classes.root}>
           <Router>
             <div>
-              <Header/>
-              <Route path='/browser' component={Browser}/>
-              <Route path='/wiki' component={Wiki}/>
-              <Route path='/about' component={About}/>
-              <PrivateRoute path='/admin' component={Admin}/>
-              <Route path='/login' component={LoginWithProps}/>
+              <Header />
+              <div className={classes.contentWrapper}>
+                <Route path='/browser' component={Browser}/>
+                <Route path='/wiki' component={Wiki}/>
+                <Route path='/about' component={About}/>
+                <PrivateRoute path='/admin' component={Admin}/>
+                <Route path='/login' component={LoginWithProps}/>
+              </div>
             </div>
           </Router>
         </div>
@@ -77,8 +79,11 @@ const styles = {
   },
   contentWrapper: {
     height: '100%',
-    backgroundColor: '#fcfcfc',
-  }
+    paddingTop: 32,
+  },
+  routerWrapper: {
+    height: '100%',
+  },
 };
 
 export default withStyles(styles)(App);

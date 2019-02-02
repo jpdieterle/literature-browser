@@ -306,19 +306,19 @@ Browser.propTypes = {
 
 const styles = theme => ({
   root:{
-    padding: theme.spacing.unit * 3,
+    paddingLeft: theme.spacing.unit * 3,
   },
-    infoBox:{
-      minWidth: 400,
-      maxWidth: 800 + theme.spacing.unit*7,
-      padding: 20,
-      display: 'flex',
-      margin: theme.spacing.unit,
-      marginBottom: theme.spacing.unit * 3,
-    },
-    infoIcon: {
-      marginRight: theme.spacing.unit,
-    },
+  infoBox:{
+    minWidth: 400,
+    maxWidth: 800 + theme.spacing.unit*7,
+    padding: 20,
+    display: 'flex',
+    marginLeft: theme.spacing.unit,
+    marginBottom: theme.spacing.unit * 3,
+  },
+  infoIcon: {
+    marginRight: theme.spacing.unit,
+  },
   cardContainer:{
     display: 'flex',
     flexFlow: 'row wrap',
