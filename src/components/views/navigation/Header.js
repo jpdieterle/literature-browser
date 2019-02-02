@@ -5,13 +5,7 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
-import {
-  BrowserRouter as Router,
-  Route,
-  Link,
-  Switch,
-  Redirect
-} from 'react-router-dom';
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
 class Header extends React.Component {
   state = {
@@ -22,7 +16,7 @@ class Header extends React.Component {
     const { classes } = this.props;
     return(
       <div className={classes.root}>
-        <AppBar position="static">
+        <AppBar className={classes.heightfix} position="static">
           <Toolbar className={classes.toolbar}>
             <IconButton
               className={classes.menuButton}
@@ -64,7 +58,13 @@ Header.propTypes = {
 
 const styles = theme => ({
   root: {
-    flexGrow: 1
+    flexGrow: 1,
+    position: 'fixed',
+    zIndex: '999!important',
+
+  },
+  heightfix: {
+    height: "50px"
   },
   grow: {
     flexGrow: 1
@@ -76,8 +76,8 @@ const styles = theme => ({
     backgroundColor: "#99CC00"
   },
   imgresponsive: {
-    width:"100%",
-    padding: '10px'
+    width:"70%",
+    padding: '5px'
   },
   col4:{
     width:"30%",
@@ -93,7 +93,8 @@ const styles = theme => ({
     display:'inline-block',
   },
   buttonstyle: {
-    fontSize: '13px'
+
+
   }
 });
 
