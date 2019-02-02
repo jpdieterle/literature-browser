@@ -35,6 +35,7 @@ class Results extends React.Component {
 Results.propTypes = {
   classes: PropTypes.object.isRequired,
   data: PropTypes.any.isRequired,
+  getAll: PropTypes.bool,
   numberOfResults: PropTypes.number,
 };
 

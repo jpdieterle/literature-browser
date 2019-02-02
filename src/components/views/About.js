@@ -10,7 +10,7 @@ class About extends React.Component {
   render() {
     const { classes } = this.props;
     return(
-      <div>Ich bin die About-Seite!</div>
+      <div></div>
     );
   }
 }
