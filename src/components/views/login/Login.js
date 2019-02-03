@@ -5,10 +5,8 @@ import Paper from "@material-ui/core/Paper/Paper";
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import fileDownload from 'js-file-download';
 import { Redirect } from 'react-router-dom';
 import InfoIcon from '@material-ui/icons/Info';
-import fetchTimeout from 'fetch-timeout';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import ErrorMessage from '../browser/results/ErrorMessage';
 
@@ -21,6 +19,7 @@ class Login extends React.Component {
     passwordError: true,
     eErrorMessage: '',
     pErrorMessage: '',
+    statusCode: 0,
     loginError: false,
     loading: false,
   };
@@ -28,16 +27,26 @@ class Login extends React.Component {
   handleSubmit = () => {
     this.setState({loading: true});
     // TODO: send request to server to get cookie + status (admin?)
-    let payload = JSON.stringify({login: true});
     fetch(this.props.url,{
       method: 'POST',
       credentials: 'same-origin', // allow cookies -> session management
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(payload),
+      body: JSON.stringify({login: true}),
     })
       .then(response => {
+        if (response.ok) {
+          response.json().then(responseJson => {
+            // TODO: read user status (admin/normal)
+
+            // TODO: set app state (user state, logged in)
+          })
+        } else {
+
+        }
+      })
+      .catch(error => {
 
       });
 
@@ -100,6 +109,7 @@ class Login extends React.Component {
               </Button>
               {loading && <CircularProgress className={classes.loadingAnimation} size={30}/>}
             </div>
+            {!this.state.loading && this.state.loginError && <ErrorMessage component='login' statusCode=/>}
           </div>
         </Paper>
       </div>

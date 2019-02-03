@@ -47,8 +47,25 @@ const LoginWithProps = (props) => (
   <Login setAuth={setAuthTrue} />
 );
 
+// TODO: logout
+// TODO: remove cookie!
+
 class App extends React.Component {
+  state = {
+    loggedIn: false,
+    userStatus: 'normal',
+    minYear: 1700,
+    maxYear: 1950,
+    authors: {},
+  };
+
   requestURL = '';
+
+  componentWillMount = () => {
+    // TODO: send request -> check if sessionID in cookie is still valid i.e. if user should still be logged in
+    // TODO: send request -> get minYear + maxYear
+    // TODO: send request -> get author list
+  };
 
   render() {
     const { classes } = this.props;
