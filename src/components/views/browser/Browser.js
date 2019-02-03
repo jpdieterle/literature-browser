@@ -147,14 +147,14 @@ class Browser extends React.PureComponent {
     }
 
     // request data + handle response
-    fetchTimeout(this.testUrl, {
+    fetch("/backend/lib/functions.php", {
       method: 'POST',
       credentials: 'same-origin', // allow cookies -> session management
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(payload),
-    }, 5000, 'Die Anfrage hat zu lang gedauert.')
+      body: JSON.stringify({cards: payload})
+    })
       .then(response => {
         this.setState({responseCode: response.status});
         if(response.ok) {
@@ -164,9 +164,9 @@ class Browser extends React.PureComponent {
                 responseData: JSON.stringify(data),
                 responseIn: true,
               });
+              console.log(response.json);
             });
           }
-          // TODO: parse for zip instead of json! (or txt?)
         } else {
           this.setState({errorMessage: response.statusText, error: true});
         }

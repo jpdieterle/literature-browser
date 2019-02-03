@@ -4,13 +4,37 @@ import {withStyles} from '@material-ui/core/styles';
 import Paper from "@material-ui/core/Paper/Paper";
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
-import fileDownload from 'js-file-download';
 
 class Results extends React.Component {
   state = {};
 
   downloadResults = () => {
-    fileDownload(this.props.data, 'results.json');
+    let file = JSON.parse(this.props.data);
+
+    // request data + handle response
+    fetch("/backend/lib/ziper.php", {
+      method: 'POST',
+      credentials: 'same-origin', // allow cookies -> session management
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        download: true,
+        file: file['filename']
+      }),
+    })
+      .then(response => response.json())
+      .then(responseJson => {
+        console.log(responseJson);
+        // create invisible anchor and click it
+        let a = document.createElement('a');
+        a.href = responseJson['path'];
+        a.download = true;
+        a.click();
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   render() {
