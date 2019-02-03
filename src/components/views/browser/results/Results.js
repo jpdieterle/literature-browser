@@ -31,6 +31,8 @@ class Results extends React.Component {
         a.href = responseJson['path'];
         a.download = true;
         a.click();
+        // alternative for downloading file:
+        // window.open(responseJson['path'], "_blank")
       })
       .catch((error) => {
         console.error(error);
