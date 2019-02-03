@@ -24,6 +24,11 @@ class Login extends React.Component {
     loading: false,
   };
 
+  onInputChange = (event) => {
+    console.log(event.target);
+    this.setState({[event.target.type]: event.target.value});
+  };
+
   handleSubmit = () => {
     this.setState({loading: true});
     // TODO: send request to server to get cookie + status (admin?)
@@ -89,6 +94,7 @@ class Login extends React.Component {
               label={'E-Mail'}
               type={'email'}
               value={email}
+              onChange={this.onInputChange}
             />
             {<Typography color={'error'} className={classes.errorMessage}>{this.state.errorMessage}</Typography>}
             <TextField
@@ -96,6 +102,7 @@ class Login extends React.Component {
               label={'Passwort'}
               type={'password'}
               value={password}
+              onChange={this.onInputChange}
             />
             <div className={classes.flexContainer}>
               <Button

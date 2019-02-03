@@ -66,7 +66,7 @@ class ContainsInput extends React.PureComponent {
 
   render() {
     const { classes, variant, disabled } = this.props;
-    const { keywords } = this.state;
+    const { keywords, syntaxError } = this.state;
 
     return(
       <div className={classes.root}>
@@ -79,7 +79,7 @@ class ContainsInput extends React.PureComponent {
           className={classes.textField}
           variant={variant}
           disabled={disabled}
-          error={this.state.syntaxError}
+          error={syntaxError}
           value={keywords}
           onChange={this.onInputChange}
           onFocus={this.onFocus}
