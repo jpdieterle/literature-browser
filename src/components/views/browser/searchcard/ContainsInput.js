@@ -41,20 +41,19 @@ class ContainsInput extends React.PureComponent {
     let errorMessage = '';
     let string = this.state.keywords;
 
-    // check if quotes have been closed
-    let quotes = 0;
-    for(let i=0; i<string.length; i++) {
-      if(string.charAt(i) === '"') quotes++;
-    }
-    if(quotes % 2 !== 0) {
-      error = true;
-      errorMessage += 'Bitte schließen Sie die Anführungszeichen. ';
+    // use regex to check pattern
+    let regex = /(^|,)\s*(("([^\*].[^"\*]*(\*)?)"\s*or)|not)?\s*"([^\*].[^"\*]*(\*)?)"(?=\s*(,|$))/giu;
+    let matches = string.match(regex);
+    let matchLength = 0;
+    if(matches) {
+      matches.forEach((match, index) => {
+        matchLength += match.length;
+      });
     }
 
-    // check if semicolons have been used instead of commas
-    if(string.search(';') >= 0) {
+    if(string.length !== matchLength) {
       error = true;
-      errorMessage += 'Bitte verwenden Sie Kommas statt Semikolons. '
+      errorMessage = 'Eingabe syntaktisch nicht korrekt.';
     }
 
     this.setState({
