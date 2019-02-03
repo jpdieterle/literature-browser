@@ -109,7 +109,7 @@ class Login extends React.Component {
               </Button>
               {loading && <CircularProgress className={classes.loadingAnimation} size={30}/>}
             </div>
-            {!this.state.loading && this.state.loginError && <ErrorMessage component='login' statusCode=/>}
+            {!this.state.loading && this.state.loginError && <ErrorMessage component='login' statusCode={this.state.statusCode} />}
           </div>
         </Paper>
       </div>
