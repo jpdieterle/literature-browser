@@ -7,10 +7,6 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseButton from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
 
-import whyDidYouUpdate from "why-did-you-update";
-
-//whyDidYouUpdate(React);
-
 class SearchCard extends React.PureComponent {
   state = {}; // stateless component (container for inputs)
 

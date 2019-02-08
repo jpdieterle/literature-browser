@@ -4,8 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Button from "@material-ui/core/Button";
-import IconButton from "@material-ui/core/IconButton";
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 class Header extends React.Component {
   state = {
@@ -13,7 +12,8 @@ class Header extends React.Component {
   };
 
   render() {
-    const { classes } = this.props;
+    const { classes, loggedIn, isAdmin } = this.props;
+
     return(
       <div className={classes.root}>
         <AppBar position="fixed">
@@ -23,21 +23,24 @@ class Header extends React.Component {
             </div>
             <div className={classes.col8}>
               <ul className={classes.navElements} >
-                <li className={classes.login}>
+                <li className={classes.navElement}>
                   <Button component={Link} to='/' color="inherit" className={classes.buttonstyle}>Browser</Button>
                 </li>
-                <li className={classes.login}>
+                <li className={classes.navElement}>
                   <Button component={Link} to='/about' color="inherit" className={classes.buttonstyle}>About</Button>
                 </li>
-                <li className={classes.login}>
+                <li className={classes.navElement}>
                   <Button component={Link} to='/wiki' color="inherit" className={classes.buttonstyle}>Wiki </Button>
                 </li>
-                <li className={classes.login}>
+                {isAdmin && <li className={classes.navElement}>
                   <Button component={Link} to='/admin' color="inherit" className={classes.buttonstyle}>Admin</Button>
-                </li>
-                <li className={classes.login}>
+                </li>}
+                {!loggedIn && <li className={classes.navElement}>
                   <Button component={Link} to='/login' color="inherit" className={classes.buttonstyle}>Login</Button>
-                </li>
+                </li>}
+                {loggedIn && <li className={classes.navElement}>
+                  <Button color="primary" className={classes.buttonstyle}>Logout</Button>
+                </li>}
               </ul>
             </div>
           </Toolbar>
@@ -49,6 +52,8 @@ class Header extends React.Component {
 
 Header.propTypes = {
   classes: PropTypes.object.isRequired,
+  loggedIn: PropTypes.bool.isRequired,
+  isAdmin: PropTypes.bool.isRequired,
 };
 
 const styles = theme => ({
@@ -83,7 +88,7 @@ const styles = theme => ({
     listStyleType: "none",
     float: "right",
   },
-  login:{
+  navElement:{
     display:'inline-block',
   },
 });

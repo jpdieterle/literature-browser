@@ -21,17 +21,17 @@ class Login extends React.Component {
     pErrorMessage: '',
     statusCode: 0,
     loginError: false,
+    errorMessage: '',
     loading: false,
   };
 
   onInputChange = (event) => {
-    console.log(event.target);
     this.setState({[event.target.type]: event.target.value});
   };
 
   handleSubmit = () => {
     this.setState({loading: true});
-    // TODO: send request to server to get cookie + status (admin?)
+    // TODO: send request to server to get cookie + status (isAdmin?)
     fetch(this.props.url,{
       method: 'POST',
       credentials: 'same-origin', // allow cookies -> session management
@@ -43,12 +43,18 @@ class Login extends React.Component {
       .then(response => {
         if (response.ok) {
           response.json().then(responseJson => {
-            // TODO: read user status (admin/normal)
+            // TODO: read user status (isAdmin)
 
             // TODO: set app state (user state, logged in)
+            this.props.handleAppStateChange('loggedIn', true);
+            this.props.handleAppStateChange('isAdmin', responseJson.admin);
           })
         } else {
-
+          // TODO: set errormessage, set error: true
+          this.setState({
+            loginError: true,
+            errorMessage: '',
+          });
         }
       })
       .catch(error => {
@@ -58,24 +64,9 @@ class Login extends React.Component {
     this.setState({loading: false});
   };
 
-  login = () => {
-    this.props.setAuth(() => {
-    });
-    this.setState({
-      redirectToReferrer: true
-    });
-  };
-
   render() {
     const {classes, setAuth } = this.props;
-    const { email, password, emailError, passwordError, loginError, loading, redirectToReferrer } = this.state;
-
-    if(redirectToReferrer === true) {
-      console.log('redirecting...');
-      return(
-        <Redirect to='/'/>
-      )
-    }
+    const { email, password, emailError, passwordError, loginError, loading } = this.state;
 
     return (
       <div className={classes.root}>
@@ -110,7 +101,7 @@ class Login extends React.Component {
                 color="primary"
                 variant={"contained"}
                 className={classes.button}
-                onClick={this.login}
+                onClick={this.handleSubmit}
               >
                 Anmelden
               </Button>
@@ -127,8 +118,7 @@ class Login extends React.Component {
 Login.propTypes = {
   classes: PropTypes.object.isRequired,
   url: PropTypes.string,
-  setStatus: PropTypes.func,
-  setAuth: PropTypes.func.isRequired,
+  handleAppStateChange: PropTypes.func,
 };
 
 const styles = theme => ({

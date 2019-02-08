@@ -16,7 +16,6 @@ import SearchButton from './buttons/SearchButton';
 import ErrorMessage from './results/ErrorMessage';
 import Results from './results/Results';
 import shortid from 'shortid';
-import fetchTimeout from 'fetch-timeout';
 
 // TODO: Abfrage an Server => Autorenliste + Jahreszahlen aktualisieren
 const minYear = '1700';
@@ -37,6 +36,7 @@ class Browser extends React.PureComponent {
   state = {
     cardList: [JSON.parse(JSON.stringify(initialSearchCardObject))],
     selectedFormats: {checkedTXT: false, checkedJSON: false},
+    authorsList: [],
     loading: false,
     responseCode: 0, // 200 = results in
     responseData: null,
@@ -200,7 +200,7 @@ class Browser extends React.PureComponent {
 
   render() {
     const { classes } = this.props;
-    const { cardList } = this.state;
+    const { cardList, authorsList } = this.state;
 
     return(
       <div className={classes.root}>
@@ -227,6 +227,7 @@ class Browser extends React.PureComponent {
                   cardId={card.id}
                   variant={inputVariant}
                   initialValues={card.authors}
+                  authorsList={authorsList}
                   autofocus={(index === cardList.length-1)}
                   disabled={this.getLoading()}
                   onInputChange={this.updateSearchCardContent}
@@ -302,6 +303,9 @@ class Browser extends React.PureComponent {
 
 Browser.propTypes = {
   classes: PropTypes.object.isRequired,
+  authorsList: PropTypes.arrayOf(PropTypes.string).isRequired,
+  minYear: PropTypes.string.isRequired,
+  maxYear: PropTypes.string.isRequired,
 };
 
 const styles = theme => ({
@@ -322,8 +326,6 @@ const styles = theme => ({
   cardContainer:{
     display: 'flex',
     flexFlow: 'row wrap',
-    //flexDirection: 'row-reverse',
-    //justifyContent: 'flex-end',
   },
   flexContainer:{
     display: 'flex',
