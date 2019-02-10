@@ -21,7 +21,9 @@ class UserManagement extends React.Component {
     // TODO: render user list (w/ checkboxes)
 
     return (
-      <div>Ich bin die Admin-Seite!</div>
+      <div>
+        Nutzer hinzufügen, löschen, Passwort ändern
+      </div>
     )
   }
 

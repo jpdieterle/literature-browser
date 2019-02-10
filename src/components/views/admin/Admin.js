@@ -22,7 +22,6 @@ class Admin extends React.Component {
 
     return (
       <div className={classes.root}>
-        Ich bin die Admin-Seite!
         <AdminNav/>
         <div className={classes.pageContainer}>
           <Switch>

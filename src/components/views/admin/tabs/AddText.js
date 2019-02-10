@@ -25,7 +25,9 @@ class AddText extends React.Component {
     const {classes} = this.props;
 
     return (
-      <div></div>
+      <div>
+        Text hinzufügen
+      </div>
     )
   }
 

@@ -1,9 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {withStyles} from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
 import { Link } from "react-router-dom";
 import Drawer from '@material-ui/core/Drawer';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import Typography from '@material-ui/core/Typography';
 
 class AdminNav extends React.Component {
   state = {};
@@ -27,17 +30,17 @@ class AdminNav extends React.Component {
           }}
           anchor="left"
         >
-          <ul className={classes.navElements}>
-            <li className={classes.navElement}>
-              <Button component={Link} to='/admin/users' color='primary'>Nutzer verwalten</Button>
-            </li>
-            <li className={classes.navElement}>
-              <Button component={Link} to='/admin/server' color='primary'>Server verwalten</Button>
-            </li>
-            <li className={classes.navElement}>
-              <Button component={Link} to='/admin/texts' color='primary'>Texte hinzufügen</Button>
-            </li>
-          </ul>
+          <List className={classes.navElements}>
+            <ListItem button component={Link} to='/admin/users' color='primary'>
+              <ListItemText primary={<Typography color={'primary'} variant={'overline'}>Nutzer verwalten</Typography>} />
+            </ListItem>
+            <ListItem button component={Link} to='/admin/server' color='primary'>
+              <ListItemText primary={<Typography color={'primary'} variant={'overline'}>Server verwalten</Typography>}/>
+            </ListItem>
+            <ListItem button component={Link} to='/admin/texts' color='primary'>
+              <ListItemText primary={<Typography color={'primary'} variant={'overline'}>Texte hinzufügen</Typography>}/>
+            </ListItem>
+          </List>
         </Drawer>
       </div>
     )
@@ -56,15 +59,8 @@ const styles = theme => ({
     //zIndex: 1,
   },
   navElements:{
-    listStyleType: "none",
     paddingTop: 100,
-    paddingLeft: 0,
     height: 150,
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    //float: "right",
   },
   navElement:{
     //display:'block',

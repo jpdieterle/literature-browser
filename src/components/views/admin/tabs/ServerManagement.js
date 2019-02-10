@@ -19,7 +19,9 @@ class ServerManagement extends React.Component {
     const {classes} = this.props;
 
     return (
-      <div>Ich bin die Admin-Seite!</div>
+      <div>
+        Import starten oder Cache leeren
+      </div>
     )
   }
 
