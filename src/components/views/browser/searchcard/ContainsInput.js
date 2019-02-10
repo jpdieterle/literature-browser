@@ -104,16 +104,19 @@ class ContainsInput extends React.PureComponent {
           <Typography variant={"h6"} color="primary" className={classes.listHeader}>Hinweise zum "Text enthält" Suchfeld</Typography>
           <div className={classes.listWrapper}>
             <ul>
+              <Typography color={"error"}>
+                <b>Achtung: Durch umfangreiche Eingaben kann die Suche auf dem Server sehr speicherintensiv und kann eventuell nicht ausgeführt werden.</b>
+              </Typography>
               <li>
                 <Typography>Geben Sie einzelne Wörter oder Phrasen in <b>Anführungszeichen</b> (") an.</Typography>
                 <Typography color={"textSecondary"}>Bsp.: "Frühling"</Typography>
               </li>
               <li>
-                <Typography>Wenn Sie Phrasen suchen, die mit einem bestimmten Wort anfangen, kennzeichnen Sie dies mit einem <b>Stern</b> (*).</Typography>
+                <Typography>Wenn Sie Phrasen suchen, die mit einem bestimmten Wort anfangen, kennzeichnen Sie dies mit einem <b>Stern</b> (*) am Ende der Phrase.</Typography>
                 <Typography color={"textSecondary"}>Bsp.: "Frühling*" trifft auf Frühling zu, aber auch auf Frühlingsgefühle.</Typography>
               </li>
               <li>
-                <Typography>Verbinde Sie Phrasen durch ein <b>Komma</b>.</Typography>
+                <Typography>Verbinden Sie Phrasen durch ein <b>Komma</b>.</Typography>
                 <Typography color={"textSecondary"}>Bsp.: "Frühling", "Sonne"</Typography>
                 <Typography color={"textSecondary"}>Ergebnis: Texte, die die Worte "Frühling" und "Sonne" gleichzeitig enthalten.</Typography>
               </li>
