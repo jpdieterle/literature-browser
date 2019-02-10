@@ -8,7 +8,6 @@ import InfoIcon from '@material-ui/icons/Info';
 import Typography from '@material-ui/core/Typography';
 import Dialog from '@material-ui/core/Dialog';
 
-//TODO: regex (oÄ) unterstützen
 class ContainsInput extends React.PureComponent {
   state = {
     keywords: this.props.initialValue,

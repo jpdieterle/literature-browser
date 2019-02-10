@@ -8,6 +8,7 @@ import TextField from '@material-ui/core/TextField';
 import InfoIcon from '@material-ui/icons/Info';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import ErrorMessage from '../browser/results/ErrorMessage';
+import ErrorContext from "../../error/ErrorContext";
 
 class Login extends React.Component {
   state = {
@@ -73,6 +74,7 @@ class Login extends React.Component {
             loginError: true,
             errorMessage: response.statusText,
           });
+          this.context.onErrorChange(true, response.statusText)
         }
       })
       .catch(error => {
@@ -151,6 +153,8 @@ Login.propTypes = {
   url: PropTypes.string,
   handleAppStateChange: PropTypes.func,
 };
+
+Login.contextType = ErrorContext;
 
 const styles = theme => ({
   root: {},
