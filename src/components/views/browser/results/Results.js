@@ -4,6 +4,7 @@ import {withStyles} from '@material-ui/core/styles';
 import Paper from "@material-ui/core/Paper/Paper";
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
+import green from '@material-ui/core/colors/green';
 
 class Results extends React.Component {
   state = {};
@@ -70,7 +71,7 @@ const styles = theme => ({
   },
   resultContainer:{
     padding: theme.spacing.unit,
-    background: 'rgba(0,204,51,0.6)',
+    backgroundColor: green[600],
   },
   resultLink:{
     color: 'white',

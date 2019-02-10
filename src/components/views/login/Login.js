@@ -7,17 +7,13 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import InfoIcon from '@material-ui/icons/Info';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import ErrorMessage from '../browser/results/ErrorMessage';
-import ErrorContext from "../../error/ErrorContext";
+import NotificationContext from "../../notifications/NotificationContext";
 
 class Login extends React.Component {
   state = {
     email: '',
     password: '',
     emailError: true,
-    statusCode: 0,
-    loginError: false,
-    errorMessage: '',
     loading: false,
   };
 
@@ -37,13 +33,14 @@ class Login extends React.Component {
   };
 
   handleSubmit = () => {
-    let message = this.state.emailError? 'Bitte geben Sie eine gültige E-Mail-Adresse ein.' : '';
+    let message = this.state.emailError? 'Bitte geben Sie eine gültige E-Mail-Adresse ein. ' : '';
     message += (this.state.password.length < 5)? 'Das Passwort muss mindestens 5 Zeichen haben.' : '';
-    if(message !== '') {
+    if(message) {
       this.setState({
         loginError: true,
         errorMessage: message
       });
+      this.context.handleNotificationChange(true, message, 'login', 'error');
       return;
     }
 
@@ -68,13 +65,14 @@ class Login extends React.Component {
           response.json().then(responseJson => {
             this.props.handleAppStateChange('loggedIn', true);
             this.props.handleAppStateChange('isAdmin', responseJson.isAdmin);
-          })
+          });
+          this.context.handleNotificationChange(true, '', 'login', 'success', response.statusCode);
         } else {
           this.setState({
             loginError: true,
             errorMessage: response.statusText,
           });
-          this.context.onErrorChange(true, response.statusText)
+          this.context.handleNotificationChange(true, response.statusText, 'login', 'error', response.statusCode);
         }
       })
       .catch(error => {
@@ -82,6 +80,7 @@ class Login extends React.Component {
           loginError: true,
           errorMessage: error.message,
         });
+        this.context.handleNotificationChange(true, error.message, 'login', 'error');
       });
 
     this.setState({loading: false});
@@ -137,10 +136,6 @@ class Login extends React.Component {
               </Button>
               {loading && <CircularProgress className={classes.loadingAnimation} size={30}/>}
             </div>
-            {!this.state.loading && this.state.loginError && (Math.floor(statusCode/100) !== 2) &&
-            <div className={classes.loginErrorMessage}>
-              <ErrorMessage component='login' statusCode={statusCode} errorMessage={errorMessage} />
-            </div>}
           </div>
         </Paper>
       </div>
@@ -154,7 +149,7 @@ Login.propTypes = {
   handleAppStateChange: PropTypes.func,
 };
 
-Login.contextType = ErrorContext;
+Login.contextType = NotificationContext;
 
 const styles = theme => ({
   root: {},

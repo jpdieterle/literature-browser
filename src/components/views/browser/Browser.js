@@ -5,6 +5,7 @@ import Paper from "@material-ui/core/Paper/Paper";
 import InfoButton from '@material-ui/icons/Info';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
+import NotificationContext from '../../notifications/NotificationContext';
 import AuthorInput from "./searchcard/AuthorInput";
 import GenreSelection from "./searchcard/GenreSelection";
 import ContainsInput from "./searchcard/ContainsInput";
@@ -13,28 +14,26 @@ import SearchCard from './searchcard/SearchCard';
 import AddSearchCardButton from './buttons/AddSearchCardButton';
 import SelectFormat from './SelectFormat';
 import SearchButton from './buttons/SearchButton';
-import ErrorMessage from './results/ErrorMessage';
 import Results from './results/Results';
 import shortid from 'shortid';
 
-// TODO: Abfrage an Server => Autorenliste + Jahreszahlen aktualisieren
-const minYear = '1700';
-const maxYear = '1950';
-
-const initialSearchCardObject = {
-  id: shortid.generate(),
-  authors: [],
-  genres: [],
-  keywords: '',
-  timeFrom: minYear,
-  timeTo: maxYear,
-};
-
+// MUI variant of input fields inside browser
 const inputVariant = 'standard';
+const maxCards = 4;
 
 class Browser extends React.PureComponent {
+
+  initialSearchCardObject = {
+    id: shortid.generate(),
+    authors: [],
+    genres: [],
+    keywords: '',
+    timeFrom: this.props.minYear,
+    timeTo: this.props.maxYear,
+  };
+
   state = {
-    cardList: [JSON.parse(JSON.stringify(initialSearchCardObject))],
+    cardList: [JSON.parse(JSON.stringify(this.initialSearchCardObject))],
     selectedFormats: {checkedTXT: false, checkedJSON: false},
     loading: false,
     responseCode: 0, // 200 = results in
@@ -46,10 +45,6 @@ class Browser extends React.PureComponent {
     keywordError: false,
     formatError: true,
   };
-
-  componentWillMount() {
-    // TODO: Abfrage an Server => Autorenliste + Jahreszahlen aktualisieren
-  }
 
   // TODO: set request URL
   requestUrl = '';
@@ -72,19 +67,24 @@ class Browser extends React.PureComponent {
   // fügt eine neue Teil-Suche hinzu
   onAddSearchCard = inputValues => {
 
-    if(this.state && this.state.cardList.length > 3 ) {
+    if(this.state && this.state.cardList.length >= maxCards ) {
+      this.context.handleNotificationChange(true, `Ihre Anfrage enthält bereits ${maxCards} Teilsuchen.`, 'addCard', 'error');
       return;
     }
 
     let paramsPassed = (inputValues instanceof Object && 'authors' in inputValues);
     inputValues = paramsPassed?
-      JSON.parse(JSON.stringify(inputValues)) : JSON.parse(JSON.stringify(initialSearchCardObject));
+      JSON.parse(JSON.stringify(inputValues)) : JSON.parse(JSON.stringify(this.initialSearchCardObject));
 
     inputValues.id = shortid.generate();
 
     this.setState(state => ({
       cardList: [...state.cardList, inputValues]
-    }));
+    }), () => {
+      if(this.state.cardList.length === maxCards) {
+        this.context.handleNotificationChange(true, `Sie können max. ${maxCards} Teilsuchen erstellen.`, 'addCard', 'warning');
+      }
+    });
   };
 
   onDuplicateSearchCard = id => {
@@ -94,7 +94,6 @@ class Browser extends React.PureComponent {
   updateSearchCardContent = (id, prop, value) => {
     if(this.state && this.state.cardList) {
       let newCardList = JSON.parse(JSON.stringify(this.state.cardList));
-      console.log('render browser' , newCardList);
 
       newCardList.find(card => card.id === id)[prop] = JSON.parse(JSON.stringify(value));
       this.setState({cardList: newCardList });
@@ -102,14 +101,17 @@ class Browser extends React.PureComponent {
   };
 
   deleteSearchCard = id => {
+    // last remaining card should not be deleted => warning
     if(this.state.cardList.length === 1) {
-      return; // letzte verbleibende Karte soll nicht gelöscht werden
+      this.context.handleNotificationChange(true, 'Ihre Anfrage muss min. 1 Teil-Suche enthalten.', 'deleteCard', 'warning');
+      return;
     }
     this.setState(state => ({
       cardList: state.cardList.filter( card => (card.id !== id))
     }));
   };
 
+  // update list of selected formats for results (txt, json)
   updateFormat = (formatProp, newValue) => {
     let newSelectedFormats = JSON.parse(JSON.stringify(this.state.selectedFormats));
     newSelectedFormats[formatProp] = JSON.parse(JSON.stringify(newValue));
@@ -117,9 +119,6 @@ class Browser extends React.PureComponent {
   };
 
   handleSubmit = (getAll) => {
-    console.log('timeError: ', this.state.timeError);
-    console.log('keywordError: ', this.state.keywordError);
-    console.log('formatError: ', this.state.formatError);
 
     // check for errors before sending request
     if(this.state.timeError || this.state.keywordError || this.state.formatError) {
@@ -171,6 +170,7 @@ class Browser extends React.PureComponent {
             errorMessage: response.statusText,
             error: true
           });
+          this.context.handleNotificationChange(true, response.statusText, 'search', 'error', response.statusCode)
         }
       })
       .catch(error => {
@@ -178,32 +178,29 @@ class Browser extends React.PureComponent {
           errorMessage: error.message,
           error: true
         });
+        this.context.handleNotificationChange(true, error.message, 'search', 'error')
       });
     this.setState({loading: false});
   };
 
+  // do search with criteria entered by user
   handleSearchCriteria = () => {
     this.handleSubmit(false);
   };
 
+  // do search not regarding criteria that might have been entered by user
   handleGetAll = () => {
     this.handleSubmit(true);
   };
 
   render() {
     const { classes, authorsList, minYear, maxYear } = this.props;
-    const { cardList, selectedFormats, responseData, responseIn, responseCode,errorMessage, error, loading} = this.state;
+    const { cardList, selectedFormats, responseData, responseIn, responseCode, loading} = this.state;
 
     const renderResponseData = (data, getAll) => {
-      // TODO: render download link/icon/button after response from server has arrived
       console.log(data);
 
       return <Results data={data} numberOfResults={data.number || undefined}/>;
-    };
-
-    const renderErrorMessage = (message, statusCode) => {
-      let sCode = statusCode? statusCode : 0;
-      return <ErrorMessage statusCode={sCode} errorMessage={message} component={'browser'}/>
     };
 
     return(
@@ -268,9 +265,6 @@ class Browser extends React.PureComponent {
               </SearchCard>
             ))}
           </div>
-          {cardList.length === 4
-            &&
-            <Typography color={"error"} className={classes.cardWarning}>Sie können maximal 4 Teil-Suchen kombinieren.</Typography>}
           <AddSearchCardButton action={this.onAddSearchCard} getDisabled={this.getLoading}/>
           <div className={classes.flexContainer}>
             <SelectFormat
@@ -297,8 +291,6 @@ class Browser extends React.PureComponent {
           {loading && <CircularProgress className={classes.loadingAnimation} />}
           {responseIn && (Math.floor(responseCode/100) === 2) &&
             renderResponseData(responseData)}
-          {error && (Math.floor(responseCode/100) !== 2) &&
-            renderErrorMessage(errorMessage, responseCode)}
         </div>
       </div>
     );
@@ -311,6 +303,8 @@ Browser.propTypes = {
   minYear: PropTypes.string.isRequired,
   maxYear: PropTypes.string.isRequired,
 };
+
+Browser.contextType = NotificationContext;
 
 const styles = theme => ({
   root:{

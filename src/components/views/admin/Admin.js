@@ -20,7 +20,7 @@ class Admin extends React.Component {
     const {classes} = this.props;
 
     return (
-      <div>Ich bin die Admin-Seite!</div>
+      <div className={classes.root}>Ich bin die Admin-Seite!</div>
     )
   }
 
@@ -31,7 +31,9 @@ Admin.propTypes = {
 };
 
 const styles = theme => ({
-  root: {},
+  root: {
+    marginLeft: theme.spacing.unit * 4,
+  },
 });
 
 export default withStyles(styles)(Admin);

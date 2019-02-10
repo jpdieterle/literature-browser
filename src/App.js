@@ -8,7 +8,7 @@ import {
   Redirect,
   Switch,
 } from 'react-router-dom';
-import ErrorContext from './components/error/ErrorContext';
+import NotificationContext from './components/notifications/NotificationContext';
 import Header from './components/views/navigation/Header';
 import Login from './components/views/login/Login';
 import Browser from './components/views/browser/Browser';
@@ -16,7 +16,7 @@ import Wiki from './components/views/Wiki';
 import About from './components/views/About';
 import Admin from './components/views/admin/Admin';
 import MissingPage from './components/views/MissingPage';
-import ErrorSnackbar from './components/error/ErrorSnackbar';
+import ErrorSnackbar from './components/notifications/NotificationSnackbar';
 
 // TODO: add authors list as file that persists reload! => set initial state (before loading authors)
 const exampleAuthors = ['Goethe, Johann Wolfgang',
@@ -35,9 +35,13 @@ class App extends React.Component {
     minYear: '1700',
     maxYear: '1950',
     authorsList: exampleAuthors,
-    error: true,
-    errorCode: 0,
-    errorMessage: 'Blabla',
+    notification: {
+      show: false,
+      statusCode: 0,
+      message: 'Blabla',
+      action: '',
+      variant: 'error',
+    }
   };
 
   requestURL = '';
@@ -49,13 +53,16 @@ class App extends React.Component {
     });
   };
 
-  // open/close error snackbar, display message (depending on optional errorCode)
-  onErrorChange = (isError, message, errorCode) => {
-    this.setState({
-      error: isError,
-      message: message,
-      errorCode: errorCode,
-    })
+  // open/close notification snackbar, display message (depending on optional statusCode and variant)
+  handleNotificationChange = (show, message, action, variant, statusCode, ) => {
+    console.log('error? ', this.state.error);
+    this.handleStateChange('notification', {
+      show: show,
+      statusCode: statusCode? statusCode : 0,
+      message: message? message : '',
+      action: action,
+      variant: variant? variant : 'error',
+    });
   };
 
   // executed after component is inserted into the tree
@@ -66,7 +73,6 @@ class App extends React.Component {
 
   // logout user, request server to delete sessionID, display error if necessary
   logout = () => {
-    // TODO: reset cookie! -> request to backend
     fetch('', {
       method: 'POST',
       credentials: 'same-origin', // allow cookies -> session management
@@ -76,33 +82,41 @@ class App extends React.Component {
       body: JSON.stringify({logout: true})
     })
       .then(response => {
-        if(response.ok) {
-          this.setState({
-            loggedIn: false,
-            isAdmin: false,
-          })
-        } else {
-          this.setState({
-            error: true,
-            errorMessage: response.statusText,
-          })
+        if(!response.ok) {
+          this.handleNotificationChange(true, response.statusText, 'logout', 'error', response.statusCode);
+          // TODO: delete cookie locally + set state
         }
+        this.setState({
+          loggedIn: false,
+          isAdmin: false,
+        })
       })
       .catch(error => {
+        this.handleNotificationChange(true, error.message, 'logout');
+        // TODO: delete cookie locally
         this.setState({
-          error: true,
-          errorMessage: error.message,
+          loggedIn: false,
+          isAdmin: false,
         })
       });
   };
 
   render() {
     const { classes } = this.props;
-    const { loggedIn, isAdmin, authorsList, minYear, maxYear, error, errorMessage } = this.state;
+    const { loggedIn, isAdmin, authorsList, minYear, maxYear, notification } = this.state;
 
     return (
       <MuiThemeProvider theme={theme}>
-        <ErrorContext.Provider value={{onErrorChange: this.onErrorChange}}>
+        <NotificationContext.Provider
+          value={{
+            error: notification.show,
+            message: notification.message,
+            statusCode: notification.statusCode,
+            action: notification.action,
+            variant: notification.variant,
+            handleNotificationChange: this.handleNotificationChange,
+          }}
+        >
           <div className={classes.root}>
             <Router>
               <div>
@@ -124,14 +138,11 @@ class App extends React.Component {
                     <Route component={MissingPage}/>
                   </Switch>
                 </div>
-                <ErrorSnackbar
-                  message={errorMessage}
-                  open={error}
-                />
+                <ErrorSnackbar />
               </div>
             </Router>
           </div>
-        </ErrorContext.Provider>
+        </NotificationContext.Provider>
       </MuiThemeProvider>
     );
   }
