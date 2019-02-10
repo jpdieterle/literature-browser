@@ -129,12 +129,13 @@ class App extends React.Component {
                     )}/>
                     <Route path='/wiki' component={Wiki}/>
                     <Route path='/about' component={About}/>
-                    <Route exact path='/admin' render={() => (
+                    <Route path='/admin' render={() => (
                       (loggedIn && isAdmin)? (<Admin />) : (<Redirect to='/' />)
                     )}/>
                     <Route path='/login' render={() => (
                       loggedIn? (<Redirect to='/'/>) : (<Login handleAppStateChange={this.handleStateChange} />)
                     )}/>
+
                     <Route component={MissingPage}/>
                   </Switch>
                 </div>

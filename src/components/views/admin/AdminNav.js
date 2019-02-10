@@ -14,10 +14,6 @@ class AdminNav extends React.Component {
     });
   };
 
-  // TODO: add navbar/tabs/...
-
-  // TODO: router
-
   render() {
     const {classes} = this.props;
 

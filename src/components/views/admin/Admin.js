@@ -24,12 +24,14 @@ class Admin extends React.Component {
       <div className={classes.root}>
         Ich bin die Admin-Seite!
         <AdminNav/>
-        <Switch>
-          <Route path='/admin/users' render={() => <UserManagement/>} />
-          <Route path='/admin/server' render={() => <ServerManagement/>} />
-          <Route path='/admin/texts' render={() => <AddText/>} />
-          <Route path='/admin/:other' render={() => <MissingPage/>} />
-        </Switch>
+        <div className={classes.pageContainer}>
+          <Switch>
+            <Route path='/admin/users' render={() => <UserManagement/>} />
+            <Route path='/admin/server' render={() => <ServerManagement/>} />
+            <Route path='/admin/texts' render={() => <AddText/>} />
+            <Route exact path='/admin/:other' render={() => <MissingPage/>} />
+          </Switch>
+        </div>
       </div>
     )
   }
@@ -43,6 +45,9 @@ Admin.propTypes = {
 const styles = theme => ({
   root: {
     marginLeft: theme.spacing.unit * 4,
+  },
+  pageContainer:{
+    paddingLeft: 200,
   },
 });
 
