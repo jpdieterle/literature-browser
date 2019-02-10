@@ -5,20 +5,15 @@ import Paper from "@material-ui/core/Paper/Paper";
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import { Redirect } from 'react-router-dom';
 import InfoIcon from '@material-ui/icons/Info';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import ErrorMessage from '../browser/results/ErrorMessage';
 
 class Login extends React.Component {
   state = {
-    redirectToReferrer: false,
     email: '',
     password: '',
     emailError: true,
-    passwordError: true,
-    eErrorMessage: '',
-    pErrorMessage: '',
     statusCode: 0,
     loginError: false,
     errorMessage: '',
@@ -27,46 +22,72 @@ class Login extends React.Component {
 
   onInputChange = (event) => {
     this.setState({[event.target.type]: event.target.value});
+    if(event.target.type === 'email') {
+      this.setState({
+        emailError: !this.checkEmail(event.target.value)
+      })
+    }
+  };
+
+  // check if format is [string]@[string].[string]
+  checkEmail = email => {
+    const regex = /\S+@\S+\.\S+/;
+    return regex.test(email);
   };
 
   handleSubmit = () => {
-    this.setState({loading: true});
-    // TODO: send request to server to get cookie + status (isAdmin?)
+    let message = this.state.emailError? 'Bitte geben Sie eine gültige E-Mail-Adresse ein.' : '';
+    message += (this.state.password.length < 5)? 'Das Passwort muss mindestens 5 Zeichen haben.' : '';
+    if(message !== '') {
+      this.setState({
+        loginError: true,
+        errorMessage: message
+      });
+      return;
+    }
+
+    this.setState({
+      loading: true,
+      error: false,
+    });
     fetch(this.props.url,{
       method: 'POST',
       credentials: 'same-origin', // allow cookies -> session management
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({login: true}),
+      body: JSON.stringify({
+        email: this.state.email,
+        password: this.state.password
+      }),
     })
       .then(response => {
+        this.setState({statusCode: response.status});
         if (response.ok) {
           response.json().then(responseJson => {
-            // TODO: read user status (isAdmin)
-
-            // TODO: set app state (user state, logged in)
             this.props.handleAppStateChange('loggedIn', true);
-            this.props.handleAppStateChange('isAdmin', responseJson.admin);
+            this.props.handleAppStateChange('isAdmin', responseJson.isAdmin);
           })
         } else {
-          // TODO: set errormessage, set error: true
           this.setState({
             loginError: true,
-            errorMessage: '',
+            errorMessage: response.statusText,
           });
         }
       })
       .catch(error => {
-
+        this.setState({
+          loginError: true,
+          errorMessage: error.message,
+        });
       });
 
     this.setState({loading: false});
   };
 
   render() {
-    const {classes, setAuth } = this.props;
-    const { email, password, emailError, passwordError, loginError, loading } = this.state;
+    const {classes } = this.props;
+    const { email, password, emailError, loading, statusCode, errorMessage } = this.state;
 
     return (
       <div className={classes.root}>
@@ -81,15 +102,21 @@ class Login extends React.Component {
           <div className={classes.formContainer}>
             <Typography variant={'h6'} color={'primary'}>Bitte melden Sie sich an</Typography>
             <TextField
+              disabled={loading}
+              autoFocus={true}
               className={classes.textField}
               label={'E-Mail'}
               type={'email'}
               value={email}
+              error={!loading && emailError}
               onChange={this.onInputChange}
             />
-            {<Typography color={'error'} className={classes.errorMessage}>{this.state.errorMessage}</Typography>}
+            {!loading && emailError && <Typography color={'error'} className={classes.errorMessage}>
+              Geben Sie eine gültige E-Mail-Adresse ein.
+            </Typography>}
             <TextField
               className={classes.textField}
+              disabled={loading}
               label={'Passwort'}
               type={'password'}
               value={password}
@@ -97,6 +124,7 @@ class Login extends React.Component {
             />
             <div className={classes.flexContainer}>
               <Button
+                disabled={loading}
                 size="small"
                 color="primary"
                 variant={"contained"}
@@ -107,7 +135,10 @@ class Login extends React.Component {
               </Button>
               {loading && <CircularProgress className={classes.loadingAnimation} size={30}/>}
             </div>
-            {!this.state.loading && this.state.loginError && <ErrorMessage component='login' statusCode={this.state.statusCode} />}
+            {!this.state.loading && this.state.loginError && (Math.floor(statusCode/100) !== 2) &&
+            <div className={classes.loginErrorMessage}>
+              <ErrorMessage component='login' statusCode={statusCode} errorMessage={errorMessage} />
+            </div>}
           </div>
         </Paper>
       </div>
@@ -154,6 +185,11 @@ const styles = theme => ({
   flexContainer:{
     display: 'flex',
     alignItems: 'flex-end',
+  },
+  loginErrorMessage:{
+    marginLeft: -theme.spacing.unit,
+    marginTop: theme.spacing.unit * 3,
+    width: theme.spacing.unit * 52,
   },
 });
 

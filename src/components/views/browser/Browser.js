@@ -36,7 +36,6 @@ class Browser extends React.PureComponent {
   state = {
     cardList: [JSON.parse(JSON.stringify(initialSearchCardObject))],
     selectedFormats: {checkedTXT: false, checkedJSON: false},
-    authorsList: [],
     loading: false,
     responseCode: 0, // 200 = results in
     responseData: null,
@@ -168,12 +167,17 @@ class Browser extends React.PureComponent {
             });
           }
         } else {
-          this.setState({errorMessage: response.statusText, error: true});
+          this.setState({
+            errorMessage: response.statusText,
+            error: true
+          });
         }
       })
       .catch(error => {
-        this.setState({errorMessage: error.message});
-        this.setState({error: true});
+        this.setState({
+          errorMessage: error.message,
+          error: true
+        });
       });
     this.setState({loading: false});
   };
@@ -186,21 +190,21 @@ class Browser extends React.PureComponent {
     this.handleSubmit(true);
   };
 
-  renderResponseData = (data, getAll) => {
-    // TODO: render download link/icon/button after response from server has arrived
-    console.log(data);
-
-    return <Results data={data} numberOfResults={data.number || undefined}/>;
-  };
-
-  renderErrorMessage = (message, statusCode) => {
-    let sCode = statusCode? statusCode : 0;
-    return <ErrorMessage statusCode={sCode} errorMessage={message}/>
-  };
-
   render() {
-    const { classes } = this.props;
-    const { cardList, authorsList } = this.state;
+    const { classes, authorsList, minYear, maxYear } = this.props;
+    const { cardList, selectedFormats, responseData, responseIn, responseCode,errorMessage, error, loading} = this.state;
+
+    const renderResponseData = (data, getAll) => {
+      // TODO: render download link/icon/button after response from server has arrived
+      console.log(data);
+
+      return <Results data={data} numberOfResults={data.number || undefined}/>;
+    };
+
+    const renderErrorMessage = (message, statusCode) => {
+      let sCode = statusCode? statusCode : 0;
+      return <ErrorMessage statusCode={sCode} errorMessage={message} component={'browser'}/>
+    };
 
     return(
       <div className={classes.root}>
@@ -264,13 +268,13 @@ class Browser extends React.PureComponent {
               </SearchCard>
             ))}
           </div>
-          {this.state.cardList.length === 4
+          {cardList.length === 4
             &&
             <Typography color={"error"} className={classes.cardWarning}>Sie können maximal 4 Teil-Suchen kombinieren.</Typography>}
           <AddSearchCardButton action={this.onAddSearchCard} getDisabled={this.getLoading}/>
           <div className={classes.flexContainer}>
             <SelectFormat
-              initialValues={this.state.selectedFormats}
+              initialValues={selectedFormats}
               getDisabled={this.getLoading}
               onChange={this.updateFormat}
               handleBrowserChange={this.handleChange}
@@ -290,11 +294,11 @@ class Browser extends React.PureComponent {
           </div>
         </form>
         <div className={classes.flexContainer}>
-          {this.state.loading && <CircularProgress className={classes.loadingAnimation} />}
-          {this.state.responseIn && (Math.floor(this.state.responseCode/100) === 2) &&
-            this.renderResponseData(this.state.responseData)}
-          {this.state.error && (Math.floor(this.state.responseCode/100) !== 2) &&
-            this.renderErrorMessage(this.state.errorMessage, this.state.responseCode)}
+          {loading && <CircularProgress className={classes.loadingAnimation} />}
+          {responseIn && (Math.floor(responseCode/100) === 2) &&
+            renderResponseData(responseData)}
+          {error && (Math.floor(responseCode/100) !== 2) &&
+            renderErrorMessage(errorMessage, responseCode)}
         </div>
       </div>
     );

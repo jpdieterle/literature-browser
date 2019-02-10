@@ -5,44 +5,37 @@ import { MuiThemeProvider } from '@material-ui/core/styles';
 import {
   BrowserRouter as Router,
   Route,
-  Link,
+  Redirect,
   Switch,
-  Redirect
 } from 'react-router-dom';
 import Header from "./components/views/navigation/Header";
 import Login from './components/views/login/Login';
 import Browser from './components/views/browser/Browser';
 import Wiki from './components/views/Wiki';
 import About from './components/views/About';
-import Admin from './components/views/admin/Admin'
+import Admin from './components/views/admin/Admin';
+import MissingPage from './components/views/MissingPage';
 
-// redirects Admin and Browser to Login page if user is not logged in
-const PrivateRoute = ({ component: Component, ...rest }) => (
-  <Route {...rest} render={(props) => (
-    this.state.loggedIn === true
-      ? <Component {...props} />
-      : <Redirect to='/login' />
-  )}/>
-);
-
-// TODO: real login
 // TODO: logout
-// TODO: remove cookie!
+// TODO: remove cookie! (when user logs out)
+
+// TODO: add authors list as file that persists reload! => set initial state (before loading authors)
+const exampleAuthors = ['Goethe, Johann Wolfgang',
+  'Schiller, Friedrich',
+  'Rilke, Rainer Maria',
+  'Spitteler, Carl',
+  'Dauthendey, Max',
+  'Grün, Anastasius',
+  'Lessing, Gotthold Ephraim'];
 
 // App component
 class App extends React.Component {
   state = {
-    loggedIn: true,
-    isAdmin: false,
-    minYear: 1700,
-    maxYear: 1950,
-    authorsList: ['Goethe, Johann Wolfgang',
-      'Schiller, Friedrich',
-      'Rilke, Rainer Maria',
-      'Spitteler, Carl',
-      'Dauthendey, Max',
-      'Grün, Anastasius',
-      'Lessing, Gotthold Ephraim'],
+    loggedIn: false,
+    isAdmin: true,
+    minYear: '1700',
+    maxYear: '1950',
+    authorsList: exampleAuthors,
   };
 
   requestURL = '';
@@ -54,45 +47,52 @@ class App extends React.Component {
     });
   };
 
-  // executed when component finished rendering
+  // executed after component is inserted into the tree
   componentDidMount = () => {
     // TODO: send request -> check if sessionID in cookie is still valid i.e. if user should still be logged in
     // TODO: send request -> get minYear + maxYear
     // TODO: send request -> get author list
+    // in 1 request?!
+    // TODO: set App state with response values
   };
 
-  // hand props to Login
-  LoginWithProps = () => (
-    <Login
-      handleAppStateChange={this.handleStateChange}
-    />
-  );
+  logout = () => {
+    // TODO: reset cookie! -> request to backend
+    fetch('',{
 
-  // hand props to Browser
-  BrowserWithProps = () => (
-    <Browser
-      authorsList={this.state.authorsList}
-      minYear={this.state.minYear}
-      maxYear={this.state.maxYear}
-    />
-  );
+    })
+    this.setState({
+      loggedIn: false,
+      isAdmin: false,
+    })
+  };
 
   render() {
     const { classes } = this.props;
-    const { loggedIn, isAdmin } = this.state;
+    const { loggedIn, isAdmin, authorsList, minYear, maxYear } = this.state;
 
     return (
       <MuiThemeProvider theme={theme}>
         <div className={classes.root}>
           <Router>
             <div>
-              <Header loggedIn={loggedIn} isAdmin={isAdmin}/>
+              <Header loggedIn={loggedIn} isAdmin={isAdmin} logout={this.logout}/>
               <div className={classes.contentWrapper}>
-                <Route exact path='/' component={this.BrowserWithProps}/>
-                <Route path='/wiki' component={Wiki}/>
-                <Route path='/about' component={About}/>
-                <PrivateRoute path='/admin' component={Admin}/>
-                <Route path='/login' component={this.LoginWithProps}/>
+                <Switch>
+                  <Route exact path='/' render={() => (
+                    loggedIn? (<Browser authorsList={authorsList} minYear={minYear} maxYear={maxYear}/>) :
+                      (<Redirect to='/login'/>)
+                  )}/>
+                  <Route path='/wiki' component={Wiki}/>
+                  <Route path='/about' component={About}/>
+                  <Route path='/admin' render={() => (
+                    (loggedIn && isAdmin)? (<Admin />) : (<Redirect to='/' />)
+                  )}/>
+                  <Route path='/login' render={() => (
+                    loggedIn? (<Redirect to='/'/>) : (<Login handleAppStateChange={this.handleStateChange} />)
+                  )}/>
+                  <Route component={MissingPage}/>
+                </Switch>
               </div>
             </div>
           </Router>

@@ -58,7 +58,7 @@ ErrorMessage.propTypes = {
 };
 
 const styles = theme => ({
-  root: {
+  root:{
     margin: theme.spacing.unit,
   },
   errorContainer:{

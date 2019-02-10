@@ -24,22 +24,22 @@ class Header extends React.Component {
             <div className={classes.col8}>
               <ul className={classes.navElements} >
                 <li className={classes.navElement}>
-                  <Button component={Link} to='/' color="inherit" className={classes.buttonstyle}>Browser</Button>
+                  <Button component={Link} to='/' color="inherit" className={classes.buttons}>Browser</Button>
                 </li>
                 <li className={classes.navElement}>
-                  <Button component={Link} to='/about' color="inherit" className={classes.buttonstyle}>About</Button>
+                  <Button component={Link} to='/about' color="inherit" className={classes.buttons}>About</Button>
                 </li>
                 <li className={classes.navElement}>
-                  <Button component={Link} to='/wiki' color="inherit" className={classes.buttonstyle}>Wiki </Button>
+                  <Button component={Link} to='/wiki' color="inherit" className={classes.buttons}>Wiki </Button>
                 </li>
-                {isAdmin && <li className={classes.navElement}>
-                  <Button component={Link} to='/admin' color="inherit" className={classes.buttonstyle}>Admin</Button>
+                {loggedIn && isAdmin && <li className={classes.navElement}>
+                  <Button component={Link} to='/admin' color="inherit" className={classes.buttons}>Admin</Button>
                 </li>}
                 {!loggedIn && <li className={classes.navElement}>
-                  <Button component={Link} to='/login' color="inherit" className={classes.buttonstyle}>Login</Button>
+                  <Button component={Link} to='/login' color="inherit" className={classes.buttons}>Login</Button>
                 </li>}
                 {loggedIn && <li className={classes.navElement}>
-                  <Button color="primary" className={classes.buttonstyle}>Logout</Button>
+                  <Button color="primary" className={classes.buttons} onClick={this.props.logout}>Logout</Button>
                 </li>}
               </ul>
             </div>
@@ -54,6 +54,7 @@ Header.propTypes = {
   classes: PropTypes.object.isRequired,
   loggedIn: PropTypes.bool.isRequired,
   isAdmin: PropTypes.bool.isRequired,
+  logout: PropTypes.func.isRequired,
 };
 
 const styles = theme => ({
@@ -91,6 +92,7 @@ const styles = theme => ({
   navElement:{
     display:'inline-block',
   },
+  buttons:{},
 });
 
 export default withStyles(styles)(Header);

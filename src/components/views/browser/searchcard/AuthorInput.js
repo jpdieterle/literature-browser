@@ -9,21 +9,10 @@ import Chip from '@material-ui/core/Chip';
 import Paper from '@material-ui/core/Paper';
 import MenuItem from '@material-ui/core/MenuItem';
 
-// credit: https://material-ui.com/demos/autocomplete/
+// Quelle: https://material-ui.com/demos/autocomplete/ (Stand: Dezember 2018, mit eigenen Veränderungen)
 
-// TODO: replace with external and complete list
-const authorSuggestions = [
-  {label: 'Goethe, Johann Wolfgang'},
-  {label: 'Schiller, Friedrich'},
-  {label: 'Rilke, Rainer Maria'},
-  {label: 'Spitteler, Carl'},
-  {label: 'Dauthendey, Max'},
-  {label: 'Grün, Anastasius'},
-  {label: 'Lessing, Gotthold Ephraim'},
-];
-
-// render author list to be displayed below input field
-function renderInput(inputProps) {
+// render input field for user
+const InputField = inputProps => {
   const { InputProps, classes, ref, ...other } = inputProps;
 
   return (
@@ -41,61 +30,44 @@ function renderInput(inputProps) {
       {...other}
     />
   );
-}
+};
 
-// extract suggestions from list above
-function getSuggestions(value) {
-  const inputValue = deburr(value.trim()).toLowerCase();
-  const inputLength = inputValue.length;
-  let count = 0;
-
-  return inputLength === 0
-    ? []
-    : authorSuggestions.filter(suggestion => {
-      const keep =
-        count < 5 && suggestion.label.slice(0, inputLength).toLowerCase() === inputValue;
-
-      if (keep) {
-        count += 1;
-      }
-
-      return keep;
-    });
-}
-
-function renderSuggestion({ suggestion, index, itemProps, highlightedIndex, selectedItem }) {
+// render author list to be displayed below input field
+const Suggestion = ({ suggestion, index, itemProps, highlightedIndex, selectedItem }) => {
   const isHighlighted = highlightedIndex === index;
-  const isSelected = (selectedItem || '').indexOf(suggestion.label) > -1;
+  const isSelected = (selectedItem || '').indexOf(suggestion) > -1;
 
   return (
     <MenuItem
       {...itemProps}
-      key={suggestion.label}
+      key={suggestion}
       selected={isHighlighted}
       component="div"
       style={{
         fontWeight: isSelected ? 500 : 400,
       }}
     >
-      {suggestion.label}
+      {suggestion}
     </MenuItem>
   );
-}
-renderSuggestion.propTypes = {
+};
+
+Suggestion.propTypes = {
   highlightedIndex: PropTypes.number,
   index: PropTypes.number,
   itemProps: PropTypes.object,
   selectedItems: PropTypes.string,
-  suggestion: PropTypes.shape({ label: PropTypes.string }).isRequired,
+  suggestion: PropTypes.string.isRequired,
 };
 
-// use class component to get input state
+// render AuthorInput component
 class AuthorInput extends React.PureComponent {
   state = {
     inputValue: '',
-    selectedItems: this.props.initialValues,
+    selectedItems: this.props.initialValues, // shape: ['Goethe, Johann Wolfgang', 'Rilke, Rainer Maria']
   };
 
+  // handle pressing of keys (used to detect user deleting with backspace key)
   handleKeyDown = event => {
     const { inputValue, selectedItems } = this.state;
 
@@ -106,10 +78,27 @@ class AuthorInput extends React.PureComponent {
     }
   };
 
+  // extract suggestions from authorsList (max. 5 suggestions are being displayed)
+  getSuggestions = value => {
+    const inputValue = deburr(value.trim()).toLowerCase();
+    const inputLength = inputValue.length;
+    let count = 0;
+    return inputLength === 0 ? [] : this.props.authorsList.filter(author => {
+      const keep = (count < 8 && author.slice(0, inputLength).toLowerCase() === inputValue
+        && this.state.selectedItems.indexOf(author) === -1);
+      if (keep) {
+        count += 1;
+      }
+      return keep;
+    });
+  };
+
+  // set new state when input changes (not selected authors)
   handleInputChange = event => {
     this.setState({ inputValue: event.target.value });
   };
 
+  // add new selected author to list that will be used for search
   handleChange = item => {
     let { selectedItems } = this.state;
 
@@ -125,6 +114,7 @@ class AuthorInput extends React.PureComponent {
     });
   };
 
+  // delete selected authors from state => not search for them
   handleDelete = item => () => {
     this.setState(state => {
       const selectedItem = [...state.selectedItems];
@@ -143,7 +133,7 @@ class AuthorInput extends React.PureComponent {
           {({getInputProps, getItemProps, isOpen, inputValue: inputValue2, selectedItem: selectedItem2,
               highlightedIndex,}) => (
             <div className={classes.container}>
-              {renderInput({
+              {InputField({
                 fullWidth: true,
                 autoFocus: autofocus,
                 classes,
@@ -168,11 +158,11 @@ class AuthorInput extends React.PureComponent {
               })}
               {isOpen ? (
                 <Paper className={classes.paper} square>
-                  {getSuggestions(inputValue2).map((suggestion, index) =>
-                    renderSuggestion({
+                  {this.getSuggestions(inputValue2).map((suggestion, index) =>
+                    Suggestion({
                       suggestion,
                       index,
-                      itemProps: getItemProps({ item: suggestion.label }),
+                      itemProps: getItemProps({ item: suggestion }),
                       highlightedIndex,
                       selectedItem: selectedItem2,
                     }),
@@ -196,6 +186,7 @@ AuthorInput.propTypes = {
   autofocus: PropTypes.bool.isRequired,
   disabled: PropTypes.bool.isRequired,
   onInputChange: PropTypes.func.isRequired,
+  authorsList: PropTypes.arrayOf(PropTypes.string),
 };
 
 const styles = theme => ({
