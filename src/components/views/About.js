@@ -10,7 +10,7 @@ class About extends React.Component {
   render() {
     const { classes } = this.props;
     return(
-      <div>
+      <div className={classes.root}>
         Ich bin die About Seite!
         <div>
           Favicon made by <a href="https://www.freepik.com/" title="Freepik">Freepik</a>
@@ -26,8 +26,10 @@ About.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-const styles = {
-
-};
+const styles = theme => ({
+  root:{
+    marginLeft: theme.spacing.unit * 4
+  }
+});
 
 export default withStyles(styles)(About);

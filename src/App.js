@@ -16,9 +16,6 @@ import About from './components/views/About';
 import Admin from './components/views/admin/Admin';
 import MissingPage from './components/views/MissingPage';
 
-// TODO: logout
-// TODO: remove cookie! (when user logs out)
-
 // TODO: add authors list as file that persists reload! => set initial state (before loading authors)
 const exampleAuthors = ['Goethe, Johann Wolfgang',
   'Schiller, Friedrich',
@@ -49,10 +46,7 @@ class App extends React.Component {
 
   // executed after component is inserted into the tree
   componentDidMount = () => {
-    // TODO: send request -> check if sessionID in cookie is still valid i.e. if user should still be logged in
-    // TODO: send request -> get minYear + maxYear
-    // TODO: send request -> get author list
-    // in 1 request?!
+    // TODO: send request -> check if sessionID in cookie is still valid, get minYear + maxYear, get author list
     // TODO: set App state with response values
   };
 
