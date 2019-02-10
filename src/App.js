@@ -129,7 +129,7 @@ class App extends React.Component {
                     )}/>
                     <Route path='/wiki' component={Wiki}/>
                     <Route path='/about' component={About}/>
-                    <Route path='/admin' render={() => (
+                    <Route exact path='/admin' render={() => (
                       (loggedIn && isAdmin)? (<Admin />) : (<Redirect to='/' />)
                     )}/>
                     <Route path='/login' render={() => (
