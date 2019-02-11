@@ -12,35 +12,31 @@ class Header extends React.Component {
   };
 
   render() {
-    const { classes, loggedIn, isAdmin } = this.props;
-
+    const { classes } = this.props;
     return(
       <div className={classes.root}>
-        <AppBar position="fixed" className={classes.onTop}>
+        <AppBar position="fixed">
           <Toolbar className={classes.toolbar}>
             <div className={classes.col4}>
               <img className={classes.img} src={'img/fu-logo_blue.svg'} alt={"FU-Berlin"} />
             </div>
             <div className={classes.col8}>
               <ul className={classes.navElements} >
-                <li className={classes.navElement}>
-                  <Button component={Link} to='/' color="inherit" className={classes.buttons}>Browser</Button>
+                <li className={classes.login}>
+                  <Button component={Link} to='/' color="inherit" className={classes.buttonstyle}>Browser</Button>
                 </li>
-                <li className={classes.navElement}>
-                  <Button component={Link} to='/about' color="inherit" className={classes.buttons}>About</Button>
+                <li className={classes.login}>
+                  <Button component={Link} to='/about' color="inherit" className={classes.buttonstyle}>About</Button>
                 </li>
-                <li className={classes.navElement}>
-                  <Button component={Link} to='/wiki' color="inherit" className={classes.buttons}>Wiki </Button>
+                <li className={classes.login}>
+                  <Button component={Link} to='/wiki' color="inherit" className={classes.buttonstyle}>Wiki </Button>
                 </li>
-                {loggedIn && isAdmin && <li className={classes.navElement}>
-                  <Button component={Link} to='/admin' color="inherit" className={classes.buttons}>Admin</Button>
-                </li>}
-                {!loggedIn && <li className={classes.navElement}>
-                  <Button component={Link} to='/login' color="inherit" className={classes.buttons}>Login</Button>
-                </li>}
-                {loggedIn && <li className={classes.navElement}>
-                  <Button color="primary" className={classes.buttons} onClick={this.props.logout}>Logout</Button>
-                </li>}
+                <li className={classes.login}>
+                  <Button component={Link} to='/admin' color="inherit" className={classes.buttonstyle}>Admin</Button>
+                </li>
+                <li className={classes.login}>
+                  <Button component={Link} to='/login' color="inherit" className={classes.buttonstyle}>Login</Button>
+                </li>
               </ul>
             </div>
           </Toolbar>
@@ -52,9 +48,6 @@ class Header extends React.Component {
 
 Header.propTypes = {
   classes: PropTypes.object.isRequired,
-  loggedIn: PropTypes.bool.isRequired,
-  isAdmin: PropTypes.bool.isRequired,
-  logout: PropTypes.func.isRequired,
 };
 
 const styles = theme => ({
@@ -63,9 +56,7 @@ const styles = theme => ({
     zIndex: '999!important',
     width: '100%',
     height: 88,
-  },
-  onTop:{
-    zIndex: theme.zIndex.drawer + 1,
+
   },
   heightfix: {
     height: 88
@@ -79,8 +70,9 @@ const styles = theme => ({
     minWidth: 608,
   },
   img: {
-    width: 240,
+    width: 200,
     verticalAlign: 'middle',
+    padding: '5px'
   },
   col4:{
     width:"30%",
@@ -92,10 +84,9 @@ const styles = theme => ({
     listStyleType: "none",
     float: "right",
   },
-  navElement:{
+  login:{
     display:'inline-block',
   },
-  buttons:{},
 });
 
 export default withStyles(styles)(Header);

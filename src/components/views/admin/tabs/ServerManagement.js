@@ -1,6 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {withStyles} from '@material-ui/core/styles';
+import InfoButton from '@material-ui/icons/Info';
+import Button from "@material-ui/core/Button";
+import Typography from '@material-ui/core/Typography';
+import Paper from "@material-ui/core/Paper/Paper";
 
 class ServerManagement extends React.Component {
   state = {};
@@ -20,7 +24,21 @@ class ServerManagement extends React.Component {
 
     return (
       <div>
-        Import starten oder Cache leeren
+        <Paper className={classes.serverPaper}>
+          <InfoButton color={"primary"} className={classes.infoIcon}/>
+          <Typography color={"primary"} className={classes.serverBox}>
+            Hier können Sie den Cache der Suchaufrufe nach belieben leeren.
+          </Typography>
+        </Paper>
+        <Button color="inherit"  className={classes.cacheButton}> Cache Leeren </Button>
+        <p/>
+        <Paper className={classes.serverPaper}>
+          <InfoButton color={"primary"} className={classes.infoIcon}/>
+          <Typography color={"primary"} className={classes.serverBox}>
+            Hier können Sie den Import der Kinderbücher starten.
+          </Typography>
+        </Paper>
+        <Button color="inherit"  className={classes.serverButton}> Import starten </Button>
       </div>
     )
   }
@@ -33,6 +51,22 @@ ServerManagement.propTypes = {
 
 const styles = theme => ({
   root: {},
+  serverPaper: {
+    marginTop:'10px',
+    marginRight: '20px',
+  },
+  serverBox: {
+    padding: 5,
+    display: 'flex',
+  },
+  cacheButton: {
+    backgroundColor: '#CCCCCC',
+    marginTop: '10px',
+  },
+  serverButton: {
+    backgroundColor: '#CCCCCC',
+    marginTop: '10px'
+  }
 });
 
 export default withStyles(styles)(ServerManagement);

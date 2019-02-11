@@ -8,6 +8,7 @@ import ServerManagement from './tabs/ServerManagement';
 import UserManagement from './tabs/UserManagement';
 import MissingPage from '../MissingPage';
 
+
 class Admin extends React.Component {
   state = {};
 
@@ -30,6 +31,7 @@ class Admin extends React.Component {
             <Route path='/admin/texts' render={() => <AddText/>} />
             <Route exact path='/admin/:other' render={() => <MissingPage/>} />
           </Switch>
+          <h2>Willkommen Admin</h2>
         </div>
       </div>
     )
@@ -47,7 +49,7 @@ const styles = theme => ({
   },
   pageContainer:{
     paddingLeft: 200,
-  },
+  }
 });
 
 export default withStyles(styles)(Admin);
