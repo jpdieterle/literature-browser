@@ -15,7 +15,6 @@ class ServerManagement extends React.Component {
     });
   };
 
-  // TODO: start import request
 
   // TODO: empty cache request
 
@@ -31,15 +30,7 @@ class ServerManagement extends React.Component {
           </Typography>
         </Paper>
         <Button color="inherit"  className={classes.cacheButton}> Cache Leeren </Button>
-        <p/>
-        <Paper className={classes.serverPaper}>
-          <InfoButton color={"primary"} className={classes.infoIcon}/>
-          <Typography color={"primary"} className={classes.serverBox}>
-            Hier können Sie den Import der Kinderbücher starten.
-          </Typography>
-        </Paper>
-        <Button color="inherit"  className={classes.serverButton}> Import starten </Button>
-      </div>
+         </div>
     )
   }
 
@@ -49,8 +40,7 @@ ServerManagement.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-const styles = theme => ({
-  root: {},
+const styles =  ({
   serverPaper: {
     marginTop:'10px',
     marginRight: '20px',
@@ -62,10 +52,6 @@ const styles = theme => ({
   cacheButton: {
     backgroundColor: '#CCCCCC',
     marginTop: '10px',
-  },
-  serverButton: {
-    backgroundColor: '#CCCCCC',
-    marginTop: '10px'
   }
 });
 

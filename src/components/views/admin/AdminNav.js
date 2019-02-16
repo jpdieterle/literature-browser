@@ -31,11 +31,11 @@ class AdminNav extends React.Component {
           anchor="left"
         >
           <List className={classes.navElements}>
+            <ListItem button component={Link} to='/admin/texts' color='primary'>
+              <ListItemText primary={<Typography color={'primary'} variant={'overline'}>Import</Typography>}/>
+            </ListItem>
             <ListItem button component={Link} to='/admin/users' color='primary'>
               <ListItemText primary={<Typography color={'primary'} variant={'overline'}>Nutzer verwalten</Typography>} />
-            </ListItem>
-            <ListItem button component={Link} to='/admin/texts' color='primary'>
-              <ListItemText primary={<Typography color={'primary'} variant={'overline'}>Import Gutenberg</Typography>}/>
             </ListItem>
             <ListItem button component={Link} to='/admin/server' color='primary'>
               <ListItemText primary={<Typography color={'primary'} variant={'overline'}>Server verwalten</Typography>}/>
@@ -52,7 +52,7 @@ AdminNav.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-const styles = theme => ({
+const styles = ({
   root: {
     width: 'auto',
     height: '100%',

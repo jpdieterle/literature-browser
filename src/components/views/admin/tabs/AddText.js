@@ -31,8 +31,8 @@ class AddText extends Component {
     const {classes} = this.props;
 
     return (
-      <div className={classes.root}>
-        <Paper>
+      <div>
+        <Paper className={classes.textPaper}>
         <InfoButton color={"primary"} className={classes.infoIcon}/>
         <Typography color={"primary"} className={classes.infoBox}>
           Hier können Sie weitere Texte zur Gutenberg-Sammlung hinzufügen.
@@ -50,22 +50,19 @@ AddText.propTypes = {
 };
 
 const styles = theme => ({
-  root: {
-    padding: '10px',
-    paddingLeft: theme.spacing.unit * 3,
+  textPaper: {
+    paddingTop: '10px',
   },
   infoBox:{
-    maxWidth: 800 + theme.spacing.unit*7,
     padding: 5,
     display: 'flex',
-    marginLeft: theme.spacing.unit,
-    marginBottom: theme.spacing.unit * 3,
   },
   infoIcon: {
     marginRight: theme.spacing.unit,
   },
   importbutton:{
     backgroundColor: '#CCCCCC',
+      marginTop: '10px'
   },
 
 

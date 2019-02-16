@@ -22,6 +22,7 @@ class Admin extends React.Component {
     const {classes} = this.props;
 
     return (
+
       <div className={classes.root}>
         <AdminNav/>
         <div className={classes.pageContainer}>
