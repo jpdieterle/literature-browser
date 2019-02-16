@@ -20,6 +20,7 @@ const MenuProps = {
   },
 };
 
+// TODO: get list from server on start
 const genres = [
   'Ballade',
   'Gedicht',

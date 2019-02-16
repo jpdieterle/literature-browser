@@ -151,7 +151,7 @@ class Browser extends React.PureComponent {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({cards: payload})
+      body: JSON.stringify({cards: payload, getAll: getAll})
     })
       .then(response => {
         this.setState({responseCode: response.status});

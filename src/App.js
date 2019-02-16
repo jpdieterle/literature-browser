@@ -27,6 +27,13 @@ const exampleAuthors = ['Goethe, Johann Wolfgang',
   'Grün, Anastasius',
   'Lessing, Gotthold Ephraim'];
 
+// TODO: add genres list as file
+const genres = [
+  'Ballade',
+  'Gedicht',
+  'Sonett',
+];
+
 // App component
 class App extends React.Component {
   state = {
@@ -35,6 +42,7 @@ class App extends React.Component {
     minYear: '1700',
     maxYear: '1950',
     authorsList: exampleAuthors,
+    genres: genres,
     notification: {
       show: false,
       statusCode: 0,
@@ -67,7 +75,7 @@ class App extends React.Component {
 
   // executed after component is inserted into the tree
   componentDidMount = () => {
-    // TODO: send request -> check if sessionID in cookie is still valid, get minYear + maxYear, get author list
+    // TODO: send request -> check if sessionID in cookie is still valid, get minYear + maxYear, get author list, genres list
     // TODO: set App state with response values
   };
 
