@@ -32,7 +32,7 @@ class Admin extends React.Component {
             <Route path='/admin/texts' render={() => <AddText/>} />
             <Route exact path='/admin/:other' render={() => <MissingPage/>} />
           </Switch>
-          <h2>Willkommen Admin</h2>
+
         </div>
       </div>
     )
