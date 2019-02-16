@@ -194,7 +194,7 @@ class Browser extends React.PureComponent {
   };
 
   render() {
-    const { classes, authorsList, minYear, maxYear } = this.props;
+    const { classes, authorsList, minYear, maxYear, genres } = this.props;
     const { cardList, selectedFormats, responseData, responseIn, responseCode, loading} = this.state;
 
     const renderResponseData = (data, getAll) => {
@@ -236,6 +236,7 @@ class Browser extends React.PureComponent {
                 <GenreSelection
                   key={card.id + '-genres'}
                   cardId={card.id}
+                  genres={genres}
                   variant={inputVariant}
                   initialValues={card.genres}
                   disabled={this.getLoading()}
@@ -302,6 +303,7 @@ Browser.propTypes = {
   authorsList: PropTypes.arrayOf(PropTypes.string).isRequired,
   minYear: PropTypes.string.isRequired,
   maxYear: PropTypes.string.isRequired,
+  genres: PropTypes.arrayOf(PropTypes.string),
 };
 
 Browser.contextType = NotificationContext;

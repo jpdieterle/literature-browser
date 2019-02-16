@@ -46,7 +46,7 @@ class App extends React.Component {
     notification: {
       show: false,
       statusCode: 0,
-      message: 'Blabla',
+      message: 'notification',
       action: '',
       variant: 'error',
     }
@@ -111,7 +111,7 @@ class App extends React.Component {
 
   render() {
     const { classes } = this.props;
-    const { loggedIn, isAdmin, authorsList, minYear, maxYear, notification } = this.state;
+    const { loggedIn, isAdmin, authorsList, minYear, maxYear, notification, genres } = this.state;
 
     return (
       <MuiThemeProvider theme={theme}>
@@ -132,7 +132,7 @@ class App extends React.Component {
                 <div className={classes.contentWrapper}>
                   <Switch>
                     <Route exact path='/' render={() => (
-                      loggedIn? (<Browser authorsList={authorsList} minYear={minYear} maxYear={maxYear}/>) :
+                      loggedIn? (<Browser authorsList={authorsList} minYear={minYear} maxYear={maxYear} genres={genres}/>) :
                         (<Redirect to='/login'/>)
                     )}/>
                     <Route path='/wiki' component={Wiki}/>
