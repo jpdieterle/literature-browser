@@ -48,13 +48,14 @@ class Login extends React.Component {
       loading: true,
       error: false,
     });
-    fetch(this.props.url,{
+    fetch('/backend/lib/functions.php',{
       method: 'POST',
       credentials: 'same-origin', // allow cookies -> session management
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
+        login: true,
         email: this.state.email,
         password: this.state.password
       }),

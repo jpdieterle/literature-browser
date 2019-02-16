@@ -156,15 +156,13 @@ class Browser extends React.PureComponent {
       .then(response => {
         this.setState({responseCode: response.status});
         if(response.ok) {
-          if(response.headers.get("content-type").indexOf("application/json") !== -1) {
-            response.json().then(data => {
-              this.setState({
-                responseData: JSON.stringify(data),
-                responseIn: true,
-              });
-              console.log(response.json);
+          response.json().then(data => {
+            this.setState({
+              responseData: JSON.stringify(data),
+              responseIn: true,
             });
-          }
+            console.log(response.json);
+          });
         } else {
           this.setState({
             errorMessage: response.statusText,
