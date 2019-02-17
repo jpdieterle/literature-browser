@@ -85,15 +85,20 @@ class App extends React.Component {
     }).then(response => {
         if(response.ok) {
           response.json().then(data => {
-            this.handleStateChange('authors', data.authors);
-            localStorage.setItem('authors', data.authors);
+            if(data && data.status === 'success' && data.authors) {
+              this.handleStateChange('authors', data.authors);
+              localStorage.setItem('authors', data.authors);
+            } else {
+              // server error
+              this.handleNotificationChange(true, 'Autoren/Genres/Zeitspanne konnten nicht vom Server geladen werden.', 'initialLoad', 'error');
+            }
           });
         } else {
-          this.handleNotificationChange(true, 'Autoren konnten nicht vom Server geladen werden.', 'initialLoad', 'error');
+          this.handleNotificationChange(true, 'Autoren/Genres/Zeitspanne konnten nicht vom Server geladen werden.', 'initialLoad', 'error');
         }
       }
     ).catch(error => {
-        this.handleNotificationChange(true, 'Autoren konnten nicht vom Server geladen werden.', 'initialLoad', 'error');
+        this.handleNotificationChange(true, 'Autoren/Genres/Zeitspanne konnten nicht vom Server geladen werden.', 'initialLoad', 'error', 404);
       }
     );
   };
@@ -110,18 +115,22 @@ class App extends React.Component {
     }).then(response => {
         if(response.ok) {
           response.json().then(data => {
-            this.handleStateChange('genres', data.genres);
-            this.handleStateChange('timeRange', {minYear: data.minYear, maxYear: data.maxYear});
-            localStorage.setItem('genres', data.genres);
-            localStorage.setItem('minYear', data.minYear);
-            localStorage.setItem('maxYear', data.maxYear);
+            if(data && data.status === 'success' && data.genres && data.minYear && data.maxYear) {
+              this.handleStateChange('genres', data.genres);
+              this.handleStateChange('timeRange', {minYear: data.minYear, maxYear: data.maxYear});
+              localStorage.setItem('genres', data.genres);
+              localStorage.setItem('minYear', data.minYear);
+              localStorage.setItem('maxYear', data.maxYear);
+            } else {
+              this.handleNotificationChange(true, 'Autoren/Genres/Zeitspanne konnten nicht vom Server geladen werden.', 'initialLoad', 'error');
+            }
           });
         } else {
-          this.handleNotificationChange(true, 'Genres und Zeitspanne konnten nicht vom Server geladen werden.', 'initialLoad', 'error');
+          this.handleNotificationChange(true, 'Autoren/Genres/Zeitspanne konnten nicht vom Server geladen werden.', 'initialLoad', 'error');
         }
       }
     ).catch(error => {
-        this.handleNotificationChange(true, 'Genres und Zeitspanne konnten nicht vom Server geladen werden.', 'initialLoad', 'error');
+        this.handleNotificationChange(true, 'Autoren/Genres/Zeitspanne konnten nicht vom Server geladen werden.', 'initialLoad', 'error', 404);
       }
     );
   };
@@ -138,19 +147,25 @@ class App extends React.Component {
     }).then(response => {
         if(response.ok) {
           response.json().then(data => {
-            this.handleStateChange('loggedIn', data.loggedIn);
-            this.handleStateChange('isAdmin', data.isadmin);
+            if(data && data.loggedIn && !(data.isadmin === undefined)) {
+              this.handleStateChange('loggedIn', data.loggedIn);
+              this.handleStateChange('isAdmin', data.isadmin);
+            } else {
+              this.handleNotificationChange(true, 'Sitzung konnte nicht wiederhergestellt werden.', 'initialLoad', 'error');
+            }
           });
         } else {
-          this.handleNotificationChange(true, 'Sitzung konnte nicht wiederhergestellt werden.', 'initialLoad', 'error');
-          this.handleStateChange('loggedIn', false);
-          this.handleStateChange('isAdmin', false);
+          // TODO: uncomment following!
+          //this.handleNotificationChange(true, 'Sitzung konnte nicht wiederhergestellt werden.', 'initialLoad', 'error');
+          //this.handleStateChange('loggedIn', false);
+          //this.handleStateChange('isAdmin', false);
         }
       }
     ).catch(error => {
-        this.handleNotificationChange(true, 'Sitzung konnte nicht wiederhergestellt werden.', 'initialLoad', 'error');
-      this.handleStateChange('loggedIn', false);
-      this.handleStateChange('isAdmin', false);
+      // TODO: uncomment! (just for development)
+        //this.handleNotificationChange(true, 'Sitzung konnte nicht wiederhergestellt werden.', 'initialLoad', 'error', 404);
+        // this.handleStateChange('loggedIn', false);
+        // this.handleStateChange('isAdmin', false);
       }
     );
   };
@@ -176,10 +191,12 @@ class App extends React.Component {
       body: JSON.stringify({logout: true})
     })
       .then(response => {
-        if(!response.ok) {
-          this.handleNotificationChange(true, response.statusText, 'logout', 'error', response.statusCode);
-          // TODO: delete cookie locally + set state
+        if(response.ok && response.json().status === 'success') {
+          this.handleNotificationChange(true, 'Logout erfolgreich', 'logout', 'success');
+        } else {
+          this.handleNotificationChange(true, 'Logout auf dem Server fehlgeshlagen.', 'logout', 'error', response.statusCode);
         }
+        // TODO: delete cookie locally + set state
         this.setState({
           loggedIn: false,
           isAdmin: false,
@@ -187,7 +204,7 @@ class App extends React.Component {
         localStorage.clear();
       })
       .catch(error => {
-        this.handleNotificationChange(true, error.message, 'logout');
+        this.handleNotificationChange(true, error.message, 'logout', 'error', 404);
         // TODO: delete cookie locally
         this.setState({
           loggedIn: false,

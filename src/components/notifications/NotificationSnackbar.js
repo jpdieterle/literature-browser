@@ -32,6 +32,12 @@ class NotificationSnackbar extends React.Component {
     let msg = '';
     if(statusCode) {
       switch (statusCode) {
+        // custom codes for login
+        case 0: msg = ''; break;
+        case 1: msg = action === 'login'? 'Sie sind mit diesem Benutzernamen nicht registriert.' : ''; break;
+        case 2: msg = action === 'login'? 'Das eingegebene Passwort ist falsch.' : ''; break;
+        case 3: msg = action === 'login'? 'Der Login hat nicht funktioniert.' : ''; break;
+
         // success (all HTTP status codes that start with 2)
         case (Math.floor(statusCode % 100) === 2):
           switch (action) {
@@ -61,9 +67,8 @@ class NotificationSnackbar extends React.Component {
         default:
           msg = `Es ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.`;
       }
-    } else {
-      msg = message;
     }
+    msg = msg === ''? message : msg;
     return msg;
   };
 

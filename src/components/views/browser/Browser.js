@@ -126,6 +126,7 @@ class Browser extends React.PureComponent {
         error: true,
         errorMessage: 'Sie können keine Anfrage mit fehlenden/falschen Eingaben abschicken',
       });
+      this.context.handleNotificationChange(true, 'Sie können keine Anfrage mit fehlenden/falschen Eingaben abschicken', 'login', 'error');
       return;
     }
 
@@ -157,13 +158,24 @@ class Browser extends React.PureComponent {
         this.setState({responseCode: response.status});
         if(response.ok) {
           response.json().then(data => {
-            this.setState({
-              responseData: JSON.stringify(data),
-              responseIn: true,
-            });
-            console.log(response.json);
+            if(data && data.status && data.status === 'success') {
+              // search succeeded (there are results)
+              this.setState({
+                responseData: JSON.stringify(data),
+                responseIn: true,
+              });
+              console.log(response.json);
+            } else {
+              // server error / search not possible on server
+              this.setState({
+                errorMessage: 'Es ist ein Fehler auf dem Server aufgetreten.',
+                error: true
+              });
+              this.context.handleNotificationChange(true, 'Es ist ein Fehler auf dem Server aufgetreten.', 'search', 'error');
+            }
           });
         } else {
+          // other problem
           this.setState({
             errorMessage: response.statusText,
             error: true
@@ -176,7 +188,7 @@ class Browser extends React.PureComponent {
           errorMessage: error.message,
           error: true
         });
-        this.context.handleNotificationChange(true, error.message, 'search', 'error')
+        this.context.handleNotificationChange(true, error.message, 'search', 'error', 404)
       });
     this.setState({loading: false});
   };
