@@ -1,35 +1,70 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {withStyles} from '@material-ui/core/styles';
-import InfoButton from '@material-ui/icons/Info';
 import Button from "@material-ui/core/Button";
-import Typography from '@material-ui/core/Typography';
-import Paper from "@material-ui/core/Paper/Paper";
+import NotificationContext from '../../../notifications/NotificationContext';
+import InfoCard from '../../../InfoCard';
 
 class ServerManagement extends React.Component {
-  state = {};
+  state = {
+    loading: false,
+  };
 
-  handleChange = name => event => {
+  handleChange = (prop, value) => {
     this.setState({
-      [name]: event.target.value,
+      [prop]: value,
     });
   };
 
+  // request server to empty its cache
+  requestEmptyCache = () => {
+    this.handleChange('loading', true);
+    fetch(' /backend/lib/admin.php',{
+      method: 'POST',
+      credentials: 'same-origin', // allow cookies -> session management
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({cache: true})
+    })
+      .then(response => {
+        if(response.ok) {
+          response.json().then(data => {
+            if(data && data.status === 'success') {
+              // cache was emptied
+              this.context.handleNotificationChange(true, 'Der Server-Cache wurde geleert.', 'emptyCache', 'success');
+            } else {
+              this.context.handleNotificationChange(true, 'Der Server-Cache konnte nicht geleert werden.', 'emptyCache', 'error');
+            }
+          })
+        } else {
+          this.context.handleNotificationChange(true, 'Der Server-Cache konnte nicht geleert werden.', 'emptyCache', 'error');
+        }
+        this.handleChange('loading', false);
 
-  // TODO: empty cache request
+      })
+      .catch(error => {
+        this.context.handleNotificationChange(true, 'Der Server-Cache konnte nicht geleert werden.', 'emptyCache', 'error');
+        this.handleChange('loading', false);
+      });
+  };
 
   render() {
     const {classes} = this.props;
+    const {loading} = this.state;
 
     return (
       <div>
-        <Paper className={classes.serverPaper}>
-          <InfoButton color={"primary"} className={classes.infoIcon}/>
-          <Typography color={"primary"} className={classes.serverBox}>
-            Hier können Sie den Cache der Suchaufrufe nach belieben leeren.
-          </Typography>
-        </Paper>
-        <Button color="inherit"  className={classes.cacheButton}> Cache Leeren </Button>
+        <InfoCard message={'Hier können Sie den Cache der Suchaufrufe auf dem Server leeren.'}/>
+        <Button
+          color={'primary'}
+          variant={'contained'}
+          disabled={loading}
+          className={classes.cacheButton}
+          onClick={this.requestEmptyCache}
+        >
+          Cache Leeren
+        </Button>
          </div>
     )
   }
@@ -40,7 +75,9 @@ ServerManagement.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-const styles =  ({
+ServerManagement.contextType = NotificationContext;
+
+const styles =  theme => ({
   serverPaper: {
     marginTop:'10px',
     marginRight: '20px',
@@ -50,8 +87,7 @@ const styles =  ({
     display: 'flex',
   },
   cacheButton: {
-    backgroundColor: '#CCCCCC',
-    marginTop: '10px',
+    margin: theme.spacing.unit,
   }
 });
 
