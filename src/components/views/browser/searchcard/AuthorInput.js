@@ -102,6 +102,9 @@ class AuthorInput extends React.PureComponent {
   handleChange = item => {
     let { selectedItems } = this.state;
 
+    // allow a max. of 10 authors per search card
+    if (selectedItems.length === 10) return;
+
     if (selectedItems.indexOf(item) === -1) {
       selectedItems = [...selectedItems, item];
     }

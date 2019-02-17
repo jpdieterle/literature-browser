@@ -48,25 +48,31 @@ class Login extends React.Component {
       loading: true,
       error: false,
     });
-    fetch(this.props.url,{
+    fetch('/backend/lib/functions.php',{
       method: 'POST',
       credentials: 'same-origin', // allow cookies -> session management
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
+        login: true,
         email: this.state.email,
-        password: this.state.password
+        password: this.state.password,
       }),
     })
       .then(response => {
         this.setState({statusCode: response.status});
         if (response.ok) {
-          response.json().then(responseJson => {
-            this.props.handleAppStateChange('loggedIn', true);
-            this.props.handleAppStateChange('isAdmin', responseJson.isAdmin);
+          response.json().then(data => {
+            if(data && data.status === 'success' && data.isadmin) {
+              this.props.handleAppStateChange('loggedIn', true);
+              this.props.handleAppStateChange('isAdmin', data.isAdmin);
+              this.context.handleNotificationChange(true, 'Login erfolgreich.', 'login', 'success', response.statusCode);
+            } else {
+              // server error
+              this.context.handleNotificationChange(true, 'Es ist ein Fehler beim Login aufgetreten.', 'login', 'error', data.error);
+            }
           });
-          this.context.handleNotificationChange(true, '', 'login', 'success', response.statusCode);
         } else {
           this.setState({
             loginError: true,
@@ -80,7 +86,7 @@ class Login extends React.Component {
           loginError: true,
           errorMessage: error.message,
         });
-        this.context.handleNotificationChange(true, error.message, 'login', 'error');
+        this.context.handleNotificationChange(true, error.message, 'login', 'error', 404);
       });
 
     this.setState({loading: false});

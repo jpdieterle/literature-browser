@@ -126,6 +126,7 @@ class Browser extends React.PureComponent {
         error: true,
         errorMessage: 'Sie können keine Anfrage mit fehlenden/falschen Eingaben abschicken',
       });
+      this.context.handleNotificationChange(true, 'Sie können keine Anfrage mit fehlenden/falschen Eingaben abschicken', 'login', 'error');
       return;
     }
 
@@ -151,21 +152,30 @@ class Browser extends React.PureComponent {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({cards: payload})
+      body: JSON.stringify({cards: payload, getAll: getAll})
     })
       .then(response => {
         this.setState({responseCode: response.status});
         if(response.ok) {
-          if(response.headers.get("content-type").indexOf("application/json") !== -1) {
-            response.json().then(data => {
+          response.json().then(data => {
+            if(data && data.status && data.status === 'success') {
+              // search succeeded (there are results)
               this.setState({
                 responseData: JSON.stringify(data),
                 responseIn: true,
               });
               console.log(response.json);
-            });
-          }
+            } else {
+              // server error / search not possible on server
+              this.setState({
+                errorMessage: 'Es ist ein Fehler auf dem Server aufgetreten.',
+                error: true
+              });
+              this.context.handleNotificationChange(true, 'Es ist ein Fehler auf dem Server aufgetreten.', 'search', 'error');
+            }
+          });
         } else {
+          // other problem
           this.setState({
             errorMessage: response.statusText,
             error: true
@@ -178,7 +188,7 @@ class Browser extends React.PureComponent {
           errorMessage: error.message,
           error: true
         });
-        this.context.handleNotificationChange(true, error.message, 'search', 'error')
+        this.context.handleNotificationChange(true, error.message, 'search', 'error', 404)
       });
     this.setState({loading: false});
   };
@@ -194,7 +204,7 @@ class Browser extends React.PureComponent {
   };
 
   render() {
-    const { classes, authorsList, minYear, maxYear } = this.props;
+    const { classes, authorsList, minYear, maxYear, genres } = this.props;
     const { cardList, selectedFormats, responseData, responseIn, responseCode, loading} = this.state;
 
     const renderResponseData = (data, getAll) => {
@@ -236,6 +246,7 @@ class Browser extends React.PureComponent {
                 <GenreSelection
                   key={card.id + '-genres'}
                   cardId={card.id}
+                  genres={genres}
                   variant={inputVariant}
                   initialValues={card.genres}
                   disabled={this.getLoading()}
@@ -302,6 +313,7 @@ Browser.propTypes = {
   authorsList: PropTypes.arrayOf(PropTypes.string).isRequired,
   minYear: PropTypes.string.isRequired,
   maxYear: PropTypes.string.isRequired,
+  genres: PropTypes.arrayOf(PropTypes.string),
 };
 
 Browser.contextType = NotificationContext;

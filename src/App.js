@@ -27,24 +27,32 @@ const exampleAuthors = ['Goethe, Johann Wolfgang',
   'Grün, Anastasius',
   'Lessing, Gotthold Ephraim'];
 
+// TODO: add genres list as file
+const genres = [
+  'ballad',
+  'poem',
+  'sonnet',
+];
+
 // App component
 class App extends React.Component {
   state = {
     loggedIn: true,
     isAdmin: true,
-    minYear: '1700',
-    maxYear: '1950',
-    authorsList: exampleAuthors,
+    timeRange: {
+      minYear: localStorage.getItem('minYear') || '1700',
+      maxYear: localStorage.getItem('maxYear') || '1950',
+    },
+    authors: localStorage.getItem('authors') || exampleAuthors,
+    genres: localStorage.getItem('genres') || genres,
     notification: {
       show: false,
       statusCode: 0,
-      message: 'Blabla',
+      message: 'notification',
       action: '',
       variant: 'error',
     }
   };
-
-  requestURL = '';
 
   // set state of App component
   handleStateChange = (prop, value) => {
@@ -65,15 +73,116 @@ class App extends React.Component {
     });
   };
 
+  // request authors list
+  requestAuthors = () => {
+    fetch("/backend/lib/functions.php", {
+      method: 'POST',
+      credentials: 'same-origin', // allow cookies -> session management
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({authors: true})
+    }).then(response => {
+        if(response.ok) {
+          response.json().then(data => {
+            if(data && data.status === 'success' && data.authors) {
+              this.handleStateChange('authors', data.authors);
+              localStorage.setItem('authors', data.authors);
+            } else {
+              // server error
+              this.handleNotificationChange(true, 'Autoren/Genres/Zeitspanne konnten nicht vom Server geladen werden.', 'initialLoad', 'error');
+            }
+          });
+        } else {
+          this.handleNotificationChange(true, 'Autoren/Genres/Zeitspanne konnten nicht vom Server geladen werden.', 'initialLoad', 'error');
+        }
+      }
+    ).catch(error => {
+        this.handleNotificationChange(true, 'Autoren/Genres/Zeitspanne konnten nicht vom Server geladen werden.', 'initialLoad', 'error', 404);
+      }
+    );
+  };
+
+  // request genres + time range
+  requestLog = () => {
+    fetch("/backend/lib/functions.php", {
+      method: 'POST',
+      credentials: 'same-origin', // allow cookies -> session management
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({log: true})
+    }).then(response => {
+        if(response.ok) {
+          response.json().then(data => {
+            if(data && data.status === 'success' && data.genres && data.minYear && data.maxYear) {
+              this.handleStateChange('genres', data.genres);
+              this.handleStateChange('timeRange', {minYear: data.minYear, maxYear: data.maxYear});
+              localStorage.setItem('genres', data.genres);
+              localStorage.setItem('minYear', data.minYear);
+              localStorage.setItem('maxYear', data.maxYear);
+            } else {
+              this.handleNotificationChange(true, 'Autoren/Genres/Zeitspanne konnten nicht vom Server geladen werden.', 'initialLoad', 'error');
+            }
+          });
+        } else {
+          this.handleNotificationChange(true, 'Autoren/Genres/Zeitspanne konnten nicht vom Server geladen werden.', 'initialLoad', 'error');
+        }
+      }
+    ).catch(error => {
+        this.handleNotificationChange(true, 'Autoren/Genres/Zeitspanne konnten nicht vom Server geladen werden.', 'initialLoad', 'error', 404);
+      }
+    );
+  };
+
+  // check if user is logged in (valid session id) and if he is an admin
+  requestUserStatus = () => {
+    fetch("/backend/lib/functions.php", {
+      method: 'POST',
+      credentials: 'same-origin', // allow cookies -> session management
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({status: true})
+    }).then(response => {
+        if(response.ok) {
+          response.json().then(data => {
+            if(data && data.loggedIn && !(data.isadmin === undefined)) {
+              this.handleStateChange('loggedIn', data.loggedIn);
+              this.handleStateChange('isAdmin', data.isadmin);
+            } else {
+              this.handleNotificationChange(true, 'Sitzung konnte nicht wiederhergestellt werden.', 'initialLoad', 'error');
+            }
+          });
+        } else {
+          // TODO: uncomment following!
+          //this.handleNotificationChange(true, 'Sitzung konnte nicht wiederhergestellt werden.', 'initialLoad', 'error');
+          //this.handleStateChange('loggedIn', false);
+          //this.handleStateChange('isAdmin', false);
+        }
+      }
+    ).catch(error => {
+      // TODO: uncomment! (just for development)
+        //this.handleNotificationChange(true, 'Sitzung konnte nicht wiederhergestellt werden.', 'initialLoad', 'error', 404);
+        // this.handleStateChange('loggedIn', false);
+        // this.handleStateChange('isAdmin', false);
+      }
+    );
+  };
+
   // executed after component is inserted into the tree
   componentDidMount = () => {
-    // TODO: send request -> check if sessionID in cookie is still valid, get minYear + maxYear, get author list
-    // TODO: set App state with response values
+    // request initial data (authors, genres, time range, user status
+    this.requestAuthors();
+    this.requestLog();
+
+    // check if user is still logged in
+    this.requestUserStatus();
   };
 
   // logout user, request server to delete sessionID, display error if necessary
   logout = () => {
-    fetch('', {
+    fetch('/backend/lib/functions.php', {
       method: 'POST',
       credentials: 'same-origin', // allow cookies -> session management
       headers: {
@@ -82,28 +191,32 @@ class App extends React.Component {
       body: JSON.stringify({logout: true})
     })
       .then(response => {
-        if(!response.ok) {
-          this.handleNotificationChange(true, response.statusText, 'logout', 'error', response.statusCode);
-          // TODO: delete cookie locally + set state
+        if(response.ok && response.json().status === 'success') {
+          this.handleNotificationChange(true, 'Logout erfolgreich', 'logout', 'success');
+        } else {
+          this.handleNotificationChange(true, 'Logout auf dem Server fehlgeshlagen.', 'logout', 'error', response.statusCode);
         }
+        // TODO: delete cookie locally + set state
         this.setState({
           loggedIn: false,
           isAdmin: false,
-        })
+        });
+        localStorage.clear();
       })
       .catch(error => {
-        this.handleNotificationChange(true, error.message, 'logout');
+        this.handleNotificationChange(true, error.message, 'logout', 'error', 404);
         // TODO: delete cookie locally
         this.setState({
           loggedIn: false,
           isAdmin: false,
-        })
+        });
+        localStorage.clear();
       });
   };
 
   render() {
     const { classes } = this.props;
-    const { loggedIn, isAdmin, authorsList, minYear, maxYear, notification } = this.state;
+    const { loggedIn, isAdmin, authors, timeRange, notification, genres } = this.state;
 
     return (
       <MuiThemeProvider theme={theme}>
@@ -124,7 +237,7 @@ class App extends React.Component {
                 <div className={classes.contentWrapper}>
                   <Switch>
                     <Route exact path='/' render={() => (
-                      loggedIn? (<Browser authorsList={authorsList} minYear={minYear} maxYear={maxYear}/>) :
+                      loggedIn? (<Browser authorsList={authors} minYear={timeRange.minYear} maxYear={timeRange.maxYear} genres={genres}/>) :
                         (<Redirect to='/login'/>)
                     )}/>
                     <Route path='/wiki' component={Wiki}/>
