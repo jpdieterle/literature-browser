@@ -15,7 +15,7 @@ class Header extends React.Component {
     const { classes } = this.props;
     return(
       <div className={classes.root}>
-        <AppBar position="fixed">
+        <AppBar position="fixed" className={classes.onTop}>
           <Toolbar className={classes.toolbar}>
             <div className={classes.col4}>
               <img className={classes.img} src={'img/fu-logo_blue.svg'} alt={"FU-Berlin"} />
@@ -86,6 +86,9 @@ const styles = theme => ({
   },
   login:{
     display:'inline-block',
+  },
+  onTop:{
+    zIndex: theme.zIndex.drawer + 1,
   },
 });
 

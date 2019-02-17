@@ -36,7 +36,7 @@ class UserManagement extends React.Component {
     const {  isOpened } = this.state;
 
     return (
-        <>
+        <div>
           {SimpleTable(this.props)}
           <Button
               onClick={() => this.setState({ isOpened: !isOpened })}
@@ -68,7 +68,7 @@ class UserManagement extends React.Component {
               </Paper>
             </div>
           </Collapse>
-        </>
+        </div>
     );
   }
 
