@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {withStyles} from '@material-ui/core/styles';
 import {Switch, Route} from 'react-router-dom';
 import AdminNav from './AdminNav';
-import AddText from './tabs/AddText';
+import AddText from './tabs/TextManagement';
 import ServerManagement from './tabs/ServerManagement';
 import UserManagement from './tabs/UserManagement';
 import MissingPage from '../MissingPage';

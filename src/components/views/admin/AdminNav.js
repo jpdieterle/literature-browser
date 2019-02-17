@@ -32,7 +32,7 @@ class AdminNav extends React.Component {
         >
           <List className={classes.navElements}>
             <ListItem button component={Link} to='/admin/texts' color='primary'>
-              <ListItemText primary={<Typography color={'primary'} variant={'overline'}>Import</Typography>}/>
+              <ListItemText primary={<Typography color={'primary'} variant={'overline'}>Texte verwalten</Typography>}/>
             </ListItem>
             <ListItem button component={Link} to='/admin/users' color='primary'>
               <ListItemText primary={<Typography color={'primary'} variant={'overline'}>Nutzer verwalten</Typography>} />
