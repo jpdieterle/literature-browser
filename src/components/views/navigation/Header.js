@@ -5,6 +5,7 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Button from "@material-ui/core/Button";
 import { Link } from "react-router-dom";
+import logo from './img/fu-logo_blue.svg';
 
 class Header extends React.Component {
   state = {
@@ -18,7 +19,7 @@ class Header extends React.Component {
         <AppBar position="fixed" className={classes.onTop}>
           <Toolbar className={classes.toolbar}>
             <div className={classes.col4}>
-              <img className={classes.img} src={'img/fu-logo_blue.svg'} alt={"FU-Berlin"} />
+              <img className={classes.img} src={logo} alt={"FU-Berlin"} />
             </div>
             <div className={classes.col8}>
               <ul className={classes.navElements} >

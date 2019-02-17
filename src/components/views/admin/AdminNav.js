@@ -9,16 +9,23 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Typography from '@material-ui/core/Typography';
 
 class AdminNav extends React.Component {
-  state = {};
+  state = {
+    selectedItem: -1,
+  };
 
-  handleChange = name => event => {
+  handleChange = (prop, value) => {
     this.setState({
-      [name]: event.target.value,
+      [prop]: value,
     });
+  };
+
+  handleSelectChange = (item) => {
+    this.handleChange('selectedItem', item);
   };
 
   render() {
     const {classes} = this.props;
+    const {selectedItem} = this.state;
 
     return (
       <div className={classes.root}>
@@ -31,14 +38,14 @@ class AdminNav extends React.Component {
           anchor="left"
         >
           <List className={classes.navElements}>
-            <ListItem button component={Link} to='/admin/texts' color='primary'>
-              <ListItemText primary={<Typography color={'primary'} variant={'overline'}>Texte verwalten</Typography>}/>
+            <ListItem button component={Link} to='/admin/texts' color='primary' selected={selectedItem === 0}>
+              <ListItemText primary={<Typography color={'primary'} variant={'button'}>Texte verwalten</Typography>}/>
             </ListItem>
-            <ListItem button component={Link} to='/admin/users' color='primary'>
-              <ListItemText primary={<Typography color={'primary'} variant={'overline'}>Nutzer verwalten</Typography>} />
+            <ListItem button component={Link} to='/admin/users' color='primary' selected={selectedItem === 1}>
+              <ListItemText primary={<Typography color={'primary'} variant={'button'}>Nutzer verwalten</Typography>} />
             </ListItem>
-            <ListItem button component={Link} to='/admin/server' color='primary'>
-              <ListItemText primary={<Typography color={'primary'} variant={'overline'}>Server verwalten</Typography>}/>
+            <ListItem button component={Link} to='/admin/server' color='primary' selected={selectedItem === 2}>
+              <ListItemText primary={<Typography color={'primary'} variant={'button'}>Server verwalten</Typography>}/>
             </ListItem>
           </List>
         </Drawer>
@@ -66,11 +73,11 @@ const styles = ({
     //display:'block',
   },
   drawer:{
-    width: 200,
+    width: 210,
     flexShrink: 0,
   },
   drawerPaper:{
-    width: 200,
+    width: 210,
     backgroundColor: '#e8e8e8',
   },
 });

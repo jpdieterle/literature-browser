@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {withStyles} from '@material-ui/core/styles';
 import {Switch, Route} from 'react-router-dom';
 import AdminNav from './AdminNav';
-import AddText from './tabs/TextManagement';
+import TextManagement from './tabs/TextManagement';
 import ServerManagement from './tabs/ServerManagement';
 import UserManagement from './tabs/UserManagement';
 import MissingPage from '../MissingPage';
@@ -19,7 +19,7 @@ class Admin extends React.Component {
   };
 
   render() {
-    const {classes} = this.props;
+    const {classes, requestNewAuthors, requestNewLog} = this.props;
 
     return (
 
@@ -29,7 +29,7 @@ class Admin extends React.Component {
           <Switch>
             <Route path='/admin/users' render={() => <UserManagement/>} />
             <Route path='/admin/server' render={() => <ServerManagement/>} />
-            <Route path='/admin/texts' render={() => <AddText/>} />
+            <Route path='/admin/texts' render={() => <TextManagement requestNewAuthors={requestNewAuthors} requestNewLog={requestNewLog}/>} />
             <Route exact path='/admin/:other' render={() => <MissingPage/>} />
           </Switch>
 
@@ -42,6 +42,8 @@ class Admin extends React.Component {
 
 Admin.propTypes = {
   classes: PropTypes.object.isRequired,
+  requestNewAuthors: PropTypes.func.isRequired,
+  requestNewLog: PropTypes.func.isRequired,
 };
 
 const styles = theme => ({

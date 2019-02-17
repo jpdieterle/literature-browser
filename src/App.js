@@ -243,7 +243,7 @@ class App extends React.Component {
                     <Route path='/wiki' component={Wiki}/>
                     <Route path='/about' component={About}/>
                     <Route path='/admin' render={() => (
-                      (loggedIn && isAdmin)? (<Admin />) : (<Redirect to='/' />)
+                      (loggedIn && isAdmin)? (<Admin requestNewAuthors={this.requestAuthors} requestNewLog={this.requestLog}/>) : (<Redirect to='/' />)
                     )}/>
                     <Route path='/login' render={() => (
                       loggedIn? (<Redirect to='/'/>) : (<Login handleAppStateChange={this.handleStateChange} />)
