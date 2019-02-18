@@ -160,7 +160,7 @@ class UserManagement extends React.Component {
 
     return (
         <div>
-          <InfoCard message={'Hier können Sie Nutzer hinzufügen und entfernen.'}/>
+          <InfoCard message={'Hier können Sie Nutzer*innen hinzufügen und entfernen oder das Passwort ändern.'}/>
           {SimpleTable(this.props)}
           <Button
               onClick={() => this.setState({ isOpen: !isOpen })}

@@ -12,7 +12,6 @@ import NotificationContext from './components/notifications/NotificationContext'
 import Header from './components/views/navigation/Header';
 import Login from './components/views/login/Login';
 import Browser from './components/views/browser/Browser';
-import Wiki from './components/views/Wiki';
 import About from './components/views/About';
 import Admin from './components/views/admin/Admin';
 import MissingPage from './components/views/MissingPage';
@@ -84,8 +83,10 @@ class App extends React.Component {
     }).then(response => {
         if(response.ok) {
           response.json().then(data => {
+            console.log('authorData: ', JSON.parse(data.authors));
             if(data && data.status === 'success' && data.authors) {
               console.log('authors: ', typeof data.authors, data.authors);
+              console.log('parsed authors: ', typeof JSON.parse(data.authors), JSON.parse(data.authors));
               this.handleStateChange('authors', data.authors);
               localStorage.setItem('authors', data.authors);
             } else {
@@ -249,7 +250,6 @@ class App extends React.Component {
                       loggedIn? (<Browser sessionID={sessionID} authorsList={authors} minYear={timeRange.minYear} maxYear={timeRange.maxYear} genres={genres}/>) :
                         (<Redirect to='/login'/>)
                     )}/>
-                    <Route path='/wiki' component={Wiki}/>
                     <Route path='/about' component={About}/>
                     <Route path='/admin' render={() => (
                       (loggedIn && isAdmin)? (<Admin requestNewAuthors={this.requestAuthors} requestNewLog={this.requestLog}/>) : (<Redirect to='/' />)

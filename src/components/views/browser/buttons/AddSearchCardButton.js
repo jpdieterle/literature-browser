@@ -4,6 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
 
+// button to add new empty search card in browser
 class AddSearchCardButton extends React.Component {
   state = {
 

@@ -8,7 +8,7 @@ import Divider from '@material-ui/core/Divider';
 import TextField from '@material-ui/core/TextField';
 import NotificationContext from '../../../notifications/NotificationContext';
 
-
+// add new texts to server database, start importing texts from external database on server, view import status
 class TextManagement extends Component {
   state= {
     newText: '',
@@ -17,6 +17,7 @@ class TextManagement extends Component {
     importStatus: 'unbekannt'
   };
 
+  // see if server is currently importing or when last import was started
   requestImportStatus = () => {
     fetch(' /backend/lib/admin.php',{
       method: 'POST',
@@ -106,7 +107,6 @@ class TextManagement extends Component {
       });
   };
 
-  // TODO: add text request
   // request server to add input from textfield as new text to database
   requestAddText = () => {
     this.handleChange('loading', true);
@@ -144,25 +144,40 @@ class TextManagement extends Component {
       });
   };
 
-  // TODO: format example
-  textExample = `
-  (Beispieltext)
-  `;
-  // show example for how entered text should be formatted
-  FormatExample = () => (
-    <div>
-      <Typography>
-        Bitte geben Sie Texte im folgenden Format ein:
-      </Typography>
-      <Typography>
-        {this.textExample}
-      </Typography>
-    </div>
-  );
-
   render() {
     const {classes} = this.props;
     const {newText, loading, lastImportTime, importStatus} = this.state;
+
+    // show example for how entered text should be formatted
+    const FormatExample = () => (
+      <div>
+        <Typography>
+          Bitte geben Sie Texte im folgenden Format ein (\n gibt einen Zeilenumbruch an):
+        </Typography><br/>
+        <Typography className={classes.newLine} color={'primary'}>
+          {`{"metadata": {
+            "type": "poem",
+            "author": "Guido Zernatto",
+            "title": "18 Gedichte",
+            "booktitle": "... kündet laut die Zeit",
+            "publisher": "Stiasny Verlag",
+            "editor": "Hans Brunmayr",
+            "year": "1961"
+          },
+            "content": {
+            "Sommerabend": "Gegen neun verdreht der Wind
+            \\n Über uns den Zug der Wolkenfläume
+            \\n Und fällt tiefer unten in die Bäume,
+            \\n Die schon schattenlos im Dämmer sind.
+            \\n In den Gräsern ist noch Ruh
+            \\n Und die abendliche Feuchte zeigt sich
+            \\n Kühl. Aus einem Fenster neigt sich
+            \\n Mein Gesicht der Erde zu."
+          }
+          }`}
+        </Typography>
+      </div>
+    );
 
     return (
       <div>
@@ -196,8 +211,7 @@ class TextManagement extends Component {
         <Divider variant='middle' className={classes.divider}/><br/>
         <div className={classes.addTextContainer}>
           <Typography variant={'h6'} color={'primary'}>Text hinzufügen</Typography><br/>
-          {this.FormatExample()}
-          <br/>
+
           <div className={classes.flexContainer}>
             <TextField
               variant='outlined'
@@ -229,6 +243,9 @@ class TextManagement extends Component {
               Eingabe löschen
             </Button>
           </div>
+          <br/>
+          {FormatExample()}
+          <br/>
         </div>
       </div>
     )
@@ -266,11 +283,15 @@ const styles = theme => ({
   buttonsContainer:{
     display: 'flex',
     marginTop: theme.spacing.unit,
+    marginBottom: theme.spacing.unit * 2,
   },
   secondaryButton:{
     marginLeft: theme.spacing.unit * 2,
     marginTop: theme.spacing.unit,
   },
+  newLine:{
+    whiteSpace: 'pre-wrap',
+  }
 });
 
 export default withStyles(styles)(TextManagement);
