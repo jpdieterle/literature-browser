@@ -139,6 +139,7 @@ class Browser extends React.PureComponent {
     });
 
     // request data + handle response
+    console.log(this.state.cardList);
     fetch("/backend/lib/functions.php", {
       method: 'POST',
       credentials: 'same-origin', // allow cookies -> session management
