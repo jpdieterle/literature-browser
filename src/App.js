@@ -85,10 +85,8 @@ class App extends React.Component {
           response.json().then(data => {
             console.log('authorData: ', JSON.parse(data.authors));
             if(data && data.status === 'success' && data.authors) {
-              console.log('authors: ', typeof data.authors, data.authors);
-              console.log('parsed authors: ', typeof JSON.parse(data.authors), JSON.parse(data.authors));
-              this.handleStateChange('authors', data.authors);
-              localStorage.setItem('authors', data.authors);
+              this.handleStateChange('authors', JSON.parse(data.authors));
+              localStorage.setItem('authors', JSON.parse(data.authors));
             } else {
               // server error
               this.handleNotificationChange(true, 'Autoren/Genres/Zeitspanne konnten nicht vom Server geladen werden.', 'initialLoad', 'error');
