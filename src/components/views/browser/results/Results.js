@@ -40,16 +40,16 @@ class Results extends React.Component {
                 // alternative for downloading file:
                 // window.open(responseJson['path'], "_blank")
               } else {
-                this.context.handleNotificationChange(true, 'Die Ergebnis-Dateinamen konnten nicht vom Server geladen werden.', 'download', 'error');
+                this.context.handleNotificationChange(true, 'Die Ergebnis-Dateien konnten nicht vom Server geladen werden.', 'download', 'error');
               }
             })
           } else {
-            this.context.handleNotificationChange(true, 'Die Ergebnis-Dateinamen konnten nicht vom Server geladen werden.', 'download', 'error');
+            this.context.handleNotificationChange(true, 'Die Ergebnis-Dateien konnten nicht vom Server geladen werden.', 'download', 'error');
           }
         })
         .catch((error) => {
           console.error(error);
-          this.context.handleNotificationChange(true, 'Die Ergebnis-Dateinamen konnten nicht vom Server geladen werden.', 'download', 'error');
+          this.context.handleNotificationChange(true, 'Die Ergebnis-Dateien konnten nicht vom Server geladen werden.', 'download', 'error');
         });
     })
 
