@@ -19,6 +19,8 @@ import shortid from 'shortid';
 
 // MUI variant of input fields inside browser
 const inputVariant = 'standard';
+
+// max. number of search cards that can be added by user
 const maxCards = 4;
 
 class Browser extends React.PureComponent {
@@ -46,10 +48,6 @@ class Browser extends React.PureComponent {
     formatError: true,
   };
 
-  // TODO: set request URL
-  requestUrl = '';
-  testUrl='https://jsonplaceholder.typicode.com/posts';
-
   getCardIndex = id => {
     return this.state.cardList.findIndex(card => card.id === id);
   };
@@ -64,7 +62,7 @@ class Browser extends React.PureComponent {
     });
   };
 
-  // fügt eine neue Teil-Suche hinzu
+  // add new search card
   onAddSearchCard = inputValues => {
 
     if(this.state && this.state.cardList.length >= maxCards ) {
@@ -87,6 +85,7 @@ class Browser extends React.PureComponent {
     });
   };
 
+  // duplicate existing search card with content
   onDuplicateSearchCard = id => {
     this.onAddSearchCard(this.state.cardList.find(card => card.id === id));
   };
@@ -118,6 +117,7 @@ class Browser extends React.PureComponent {
     this.setState({selectedFormats: newSelectedFormats});
   };
 
+  // submit search with or without criteria
   handleSubmit = (getAll) => {
 
     // check for errors before sending request
@@ -138,12 +138,6 @@ class Browser extends React.PureComponent {
       responseFiles: [],
     });
 
-    // combine data to send
-    let payload = {formats:{txt: this.state.selectedFormats.checkedTXT, json: this.state.selectedFormats.checkedJSON}};
-    if (!getAll) {
-      payload.cardList = this.state.cardList;
-    }
-
     // request data + handle response
     fetch("/backend/lib/functions.php", {
       method: 'POST',
@@ -151,7 +145,11 @@ class Browser extends React.PureComponent {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({cards: payload, getAll: getAll})
+      body: JSON.stringify({
+        cards: this.state.cardList,
+        getAll: getAll,
+        id: this.props.sessionID
+      })
     })
       .then(response => {
         if(response.ok) {
@@ -310,6 +308,7 @@ Browser.propTypes = {
   minYear: PropTypes.string.isRequired,
   maxYear: PropTypes.string.isRequired,
   genres: PropTypes.arrayOf(PropTypes.string),
+  sessionID: PropTypes.any.isRequired,
 };
 
 Browser.contextType = NotificationContext;

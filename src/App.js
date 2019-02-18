@@ -227,7 +227,7 @@ class App extends React.Component {
 
   render() {
     const { classes } = this.props;
-    const { loggedIn, isAdmin, authors, timeRange, notification, genres } = this.state;
+    const { loggedIn, isAdmin, authors, timeRange, notification, genres, sessionID } = this.state;
 
     return (
       <MuiThemeProvider theme={theme}>
@@ -248,7 +248,7 @@ class App extends React.Component {
                 <div className={classes.contentWrapper}>
                   <Switch>
                     <Route exact path='/' render={() => (
-                      loggedIn? (<Browser authorsList={authors} minYear={timeRange.minYear} maxYear={timeRange.maxYear} genres={genres}/>) :
+                      loggedIn? (<Browser sessionID={sessionID} authorsList={authors} minYear={timeRange.minYear} maxYear={timeRange.maxYear} genres={genres}/>) :
                         (<Redirect to='/login'/>)
                     )}/>
                     <Route path='/wiki' component={Wiki}/>
