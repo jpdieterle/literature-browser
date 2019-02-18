@@ -5,6 +5,7 @@ import TextField from '@material-ui/core/TextField';
 import FormGroup from '@material-ui/core/FormGroup';
 import Typography from '@material-ui/core/Typography';
 
+// select time range in which to search
 class TimeInput extends React.PureComponent {
   state = {
     timeFrom: this.props.initialTimeFrom,
@@ -17,6 +18,8 @@ class TimeInput extends React.PureComponent {
     const value = event.target.value;
     const time = parseInt(value);
     let newState = {};
+
+    // check input for right time frame
     if(name === 'timeFrom') {
       newState.timeFromError = (time < this.props.minYear || time > this.props.maxYear);
     } else if(name === 'timeTo') {

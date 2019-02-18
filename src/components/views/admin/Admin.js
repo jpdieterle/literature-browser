@@ -8,7 +8,7 @@ import ServerManagement from './tabs/ServerManagement';
 import UserManagement from './tabs/UserManagement';
 import MissingPage from '../MissingPage';
 
-
+// routing for Admin page
 class Admin extends React.Component {
   state = {};
 

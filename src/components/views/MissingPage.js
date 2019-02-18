@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {withStyles} from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 
+// shown when user enters path manually that is not handled in router
 class MissingPage extends React.Component {
   state = {};
 

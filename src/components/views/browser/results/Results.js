@@ -7,6 +7,7 @@ import Link from '@material-ui/core/Link';
 import green from '@material-ui/core/colors/green';
 import NotificationContext from '../../../notifications/NotificationContext';
 
+// display search results + provide download link
 class Results extends React.Component {
   state = {};
 
