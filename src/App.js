@@ -18,7 +18,6 @@ import Admin from './components/views/admin/Admin';
 import MissingPage from './components/views/MissingPage';
 import ErrorSnackbar from './components/notifications/NotificationSnackbar';
 
-// TODO: add authors list as file that persists reload! => set initial state (before loading authors)
 const exampleAuthors = ['Goethe, Johann Wolfgang',
   'Schiller, Friedrich',
   'Rilke, Rainer Maria',
@@ -27,7 +26,6 @@ const exampleAuthors = ['Goethe, Johann Wolfgang',
   'Grün, Anastasius',
   'Lessing, Gotthold Ephraim'];
 
-// TODO: add genres list as file
 const genres = [
   'ballad',
   'poem',
@@ -87,6 +85,7 @@ class App extends React.Component {
         if(response.ok) {
           response.json().then(data => {
             if(data && data.status === 'success' && data.authors) {
+              console.log('authors: ', typeof data.authors, data.authors);
               this.handleStateChange('authors', data.authors);
               localStorage.setItem('authors', data.authors);
             } else {
@@ -189,6 +188,7 @@ class App extends React.Component {
 
     // check if user is still logged in
     this.requestUserStatus();
+    console.log('initial app state: ', this.state.authorsList, this.state.timeRange, this.state.genres, this.state.loggedIn, this.state.isAdmin);
   };
 
   // logout user, request server to delete sessionID, display error if necessary
@@ -207,7 +207,6 @@ class App extends React.Component {
         } else {
           this.handleNotificationChange(true, 'Logout auf dem Server fehlgeshlagen.', 'logout', 'error', response.statusCode);
         }
-        // TODO: delete cookie locally + set state
         this.setState({
           loggedIn: false,
           isAdmin: false,
@@ -216,7 +215,6 @@ class App extends React.Component {
       })
       .catch(error => {
         this.handleNotificationChange(true, error.message, 'logout', 'error', 404);
-        // TODO: delete cookie locally
         this.setState({
           loggedIn: false,
           isAdmin: false,
