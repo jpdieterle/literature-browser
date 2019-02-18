@@ -38,7 +38,7 @@ class AdminNav extends React.Component {
           anchor="left"
         >
           <List className={classes.navElements}>
-            <ListItem button component={Link} to='/admin/texts' color='primary' selected={selectedItem === 0}>
+            <ListItem button component={Link} to='/admin' color='primary' selected={selectedItem === 0}>
               <ListItemText primary={<Typography color={'primary'} variant={'button'}>Texte verwalten</Typography>}/>
             </ListItem>
             <ListItem button component={Link} to='/admin/users' color='primary' selected={selectedItem === 1}>

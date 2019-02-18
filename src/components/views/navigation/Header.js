@@ -16,10 +16,10 @@ class Header extends React.Component {
     const { classes, loggedIn, isAdmin, logout } = this.props;
     return(
       <div className={classes.root}>
-        <AppBar position="fixed">
+        <AppBar position="fixed" className={classes.onTop}>
           <Toolbar className={classes.toolbar}>
             <div className={classes.col4}>
-              <img className={classes.img} src={'logo'} alt={"FU-Berlin"} />
+              <img className={classes.img} src={logo} alt={"FU-Berlin"} />
             </div>
             <div className={classes.col8}>
               <ul className={classes.navElements} >
@@ -60,9 +60,11 @@ Header.propTypes = {
 const styles = theme => ({
   root: {
     flexGrow: 1,
-    zIndex: '999!important',
     width: '100%',
     height: 88,
+  },
+  onTop:{
+    zIndex: theme.zIndex.drawer + 1,
   },
   heightfix: {
     height: 88

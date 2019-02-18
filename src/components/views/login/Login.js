@@ -26,13 +26,14 @@ class Login extends React.Component {
     }
   };
 
-  // check if format is [string]@[string].[string]
+  // check if format is [string]@[string].[string] (email format)
   checkEmail = email => {
     const regex = /\S+@\S+\.\S+/;
     return regex.test(email);
   };
 
-  handleSubmit = () => {
+  // send request to server + change app state or display error
+  requestLogin = () => {
     let message = this.state.emailError? 'Bitte geben Sie eine gültige E-Mail-Adresse ein. ' : '';
     message += (this.state.password.length < 5)? 'Das Passwort muss mindestens 5 Zeichen haben.' : '';
     if(message) {
@@ -66,7 +67,11 @@ class Login extends React.Component {
           response.json().then(data => {
             if(data && data.status === 'success' && data.isadmin) {
               this.props.handleAppStateChange('loggedIn', true);
-              this.props.handleAppStateChange('isAdmin', data.isAdmin);
+              this.props.handleAppStateChange('isAdmin', data.isadmin !== 0);
+              this.props.handleAppStateChange('sessionID', data.id);
+
+              //save session ID in local storage (stays after reload)
+              localStorage.setItem('sessionID', data.id);
               this.context.handleNotificationChange(true, 'Login erfolgreich.', 'login', 'success');
             } else {
               // server error
@@ -94,7 +99,7 @@ class Login extends React.Component {
 
   render() {
     const {classes } = this.props;
-    const { email, password, emailError, loading, statusCode, errorMessage } = this.state;
+    const { email, password, emailError, loading } = this.state;
 
     return (
       <div className={classes.root}>
@@ -136,7 +141,7 @@ class Login extends React.Component {
                 color="primary"
                 variant={"contained"}
                 className={classes.button}
-                onClick={this.handleSubmit}
+                onClick={this.requestLogin}
               >
                 Anmelden
               </Button>

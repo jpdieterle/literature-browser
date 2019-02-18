@@ -29,7 +29,7 @@ class Admin extends React.Component {
           <Switch>
             <Route path='/admin/users' render={() => <UserManagement/>} />
             <Route path='/admin/server' render={() => <ServerManagement/>} />
-            <Route path='/admin/texts' render={() => <TextManagement requestNewAuthors={requestNewAuthors} requestNewLog={requestNewLog}/>} />
+            <Route path='/admin' render={() => <TextManagement requestNewAuthors={requestNewAuthors} requestNewLog={requestNewLog}/>} />
             <Route exact path='/admin/:other' render={() => <MissingPage/>} />
           </Switch>
 

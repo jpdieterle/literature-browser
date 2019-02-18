@@ -38,6 +38,7 @@ const genres = [
 class App extends React.Component {
   state = {
     loggedIn: true,
+    sessionID: localStorage.getItem('sessionID'),
     isAdmin: true,
     timeRange: {
       minYear: localStorage.getItem('minYear') || '1700',
@@ -137,35 +138,45 @@ class App extends React.Component {
 
   // check if user is logged in (valid session id) and if he is an admin
   requestUserStatus = () => {
+    // check if there was a session in the past
+    if(!localStorage.getItem('sessionID')) {
+      return;
+    }
+
     fetch("/backend/lib/functions.php", {
       method: 'POST',
       credentials: 'same-origin', // allow cookies -> session management
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({status: true})
+      body: JSON.stringify({
+        status: true,
+        id: localStorage.getItem('sessionID')
+      })
     }).then(response => {
         if(response.ok) {
           response.json().then(data => {
-            if(data && data.loggedIn && !(data.isadmin === undefined)) {
+            if(data && data.loggedIn && data.isadmin !== undefined) {
               this.handleStateChange('loggedIn', data.loggedIn);
               this.handleStateChange('isAdmin', data.isadmin);
+              this.handleStateChange('sessionID', localStorage.getItem('sessionID'));
             } else {
               this.handleNotificationChange(true, 'Sitzung konnte nicht wiederhergestellt werden.', 'initialLoad', 'error');
+              localStorage.removeItem('sessionID');
             }
           });
         } else {
-          // TODO: uncomment following!
-          //this.handleNotificationChange(true, 'Sitzung konnte nicht wiederhergestellt werden.', 'initialLoad', 'error');
-          //this.handleStateChange('loggedIn', false);
-          //this.handleStateChange('isAdmin', false);
+          this.handleNotificationChange(true, 'Sitzung konnte nicht wiederhergestellt werden.', 'initialLoad', 'error');
+          localStorage.removeItem('sessionID');
+          this.handleStateChange('loggedIn', false);
+          this.handleStateChange('isAdmin', false);
         }
       }
     ).catch(error => {
-      // TODO: uncomment! (just for development)
-        //this.handleNotificationChange(true, 'Sitzung konnte nicht wiederhergestellt werden.', 'initialLoad', 'error', 404);
-        // this.handleStateChange('loggedIn', false);
-        // this.handleStateChange('isAdmin', false);
+        this.handleNotificationChange(true, 'Sitzung konnte nicht wiederhergestellt werden.', 'initialLoad', 'error', 404);
+        localStorage.removeItem('sessionID');
+        this.handleStateChange('loggedIn', false);
+        this.handleStateChange('isAdmin', false);
       }
     );
   };

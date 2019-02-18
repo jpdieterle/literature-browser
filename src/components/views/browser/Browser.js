@@ -36,8 +36,8 @@ class Browser extends React.PureComponent {
     cardList: [JSON.parse(JSON.stringify(this.initialSearchCardObject))],
     selectedFormats: {checkedTXT: false, checkedJSON: false},
     loading: false,
-    responseCode: 0, // 200 = results in
-    responseData: null,
+    responseFiles: [],
+    hits: 0,
     responseIn: false,
     error: false,
     errorMessage: 'no error',
@@ -133,10 +133,9 @@ class Browser extends React.PureComponent {
     // start loading animation, disable forms
     this.setState({
       loading: true,
-      responseCode: 0,
       error: false,
       responseIn: false,
-      responseData: {},
+      responseFiles: [],
     });
 
     // combine data to send
@@ -155,13 +154,13 @@ class Browser extends React.PureComponent {
       body: JSON.stringify({cards: payload, getAll: getAll})
     })
       .then(response => {
-        this.setState({responseCode: response.status});
         if(response.ok) {
           response.json().then(data => {
             if(data && data.status && data.status === 'success') {
               // search succeeded (there are results)
               this.setState({
-                responseData: JSON.stringify(data),
+                responseFiles: data.filenames, // array of filenames separated by comma
+                numberResults: data.hits, // number
                 responseIn: true,
               });
               console.log(response.json);
@@ -171,7 +170,7 @@ class Browser extends React.PureComponent {
                 errorMessage: 'Es ist ein Fehler auf dem Server aufgetreten.',
                 error: true
               });
-              this.context.handleNotificationChange(true, 'Es ist ein Fehler auf dem Server aufgetreten.', 'search', 'error');
+              this.context.handleNotificationChange(true, 'Es ist ein Fehler auf dem Server aufgetreten. Die Anfrage wurde abgebrochen.', 'search', 'error');
             }
           });
         } else {
@@ -205,12 +204,10 @@ class Browser extends React.PureComponent {
 
   render() {
     const { classes, authorsList, minYear, maxYear, genres } = this.props;
-    const { cardList, selectedFormats, responseData, responseIn, responseCode, loading} = this.state;
+    const { cardList, selectedFormats, responseFiles, responseIn, loading, hits} = this.state;
 
-    const renderResponseData = (data, getAll) => {
-      console.log(data);
-
-      return <Results data={data} numberOfResults={data.number || undefined}/>;
+    const renderResponseData = () => {
+      return <Results filenames={responseFiles} number={hits} formats={selectedFormats}/>;
     };
 
     return(
@@ -300,8 +297,7 @@ class Browser extends React.PureComponent {
         </form>
         <div className={classes.flexContainer}>
           {loading && <CircularProgress className={classes.loadingAnimation} />}
-          {responseIn && (Math.floor(responseCode/100) === 2) &&
-            renderResponseData(responseData)}
+          {responseIn && renderResponseData()}
         </div>
       </div>
     );
