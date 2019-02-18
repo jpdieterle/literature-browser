@@ -14,7 +14,7 @@ class Results extends React.Component {
   downloadResults = () => {
     // request data + handle response for each selected format separately
     this.props.formats.forEach(format => {
-      fetch("/backend/lib/ziper.php", {
+      fetch("/backend/lib/functions.php", {
         method: 'POST',
         credentials: 'same-origin', // allow cookies -> session management
         headers: {
