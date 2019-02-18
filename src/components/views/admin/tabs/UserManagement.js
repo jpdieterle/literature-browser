@@ -13,7 +13,6 @@ import {Collapse} from 'react-collapse';
 import NotificationContext from '../../../notifications/NotificationContext';
 import InfoCard from '../../../InfoCard';
 import Typography from "@material-ui/core/Typography/Typography";
-import CircularProgress from "@material-ui/core/CircularProgress/CircularProgress";
 
 const rowss =  JSON.parse('{"user":"efwfw"}');
 
