@@ -9,7 +9,7 @@ import green from '@material-ui/core/colors/green';
 import amber from '@material-ui/core/colors/amber';
 import NotificationContext from './NotificationContext';
 
-
+// show success/warning/error snackbar in right lower corner of viewport
 class NotificationSnackbar extends React.Component {
   state = {
 
@@ -21,6 +21,7 @@ class NotificationSnackbar extends React.Component {
     });
   };
 
+  // do not show Snackbar anymore
   handleClose = (event, reason) => {
     if(reason === 'clickaway') {
       return;
@@ -28,6 +29,7 @@ class NotificationSnackbar extends React.Component {
     this.context.handleNotificationChange(false,'','','');
   };
 
+  // determine which error message to display based on status code of HTTP response
   renderErrorText = (message, statusCode, action) => {
     let msg = '';
     if(statusCode) {
@@ -106,7 +108,6 @@ class NotificationSnackbar extends React.Component {
       </div>
     )
   }
-
 }
 
 NotificationSnackbar.propTypes = {

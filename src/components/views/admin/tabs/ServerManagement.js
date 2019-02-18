@@ -5,6 +5,7 @@ import Button from "@material-ui/core/Button";
 import NotificationContext from '../../../notifications/NotificationContext';
 import InfoCard from '../../../InfoCard';
 
+// "Server verwalten" tab in Admin View
 class ServerManagement extends React.Component {
   state = {
     loading: false,
