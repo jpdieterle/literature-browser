@@ -158,7 +158,7 @@ class Browser extends React.PureComponent {
               // search succeeded (there are results)
               this.setState({
                 responseFiles: data.filenames, // array of filenames separated by comma
-                numberResults: data.hits, // number
+                hits: data.hits, // number
                 responseIn: true,
               });
               console.log(response.json);
@@ -205,6 +205,8 @@ class Browser extends React.PureComponent {
     const { cardList, selectedFormats, responseFiles, responseIn, loading, hits} = this.state;
 
     const renderResponseData = () => {
+      let formats = selectedFormats.checkedJSON? ['json'] : [];
+      if(selectedFormats.checkedTXT) formats.push('txt');
       return <Results filenames={responseFiles} number={hits} formats={selectedFormats}/>;
     };
 
