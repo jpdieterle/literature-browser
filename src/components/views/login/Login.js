@@ -67,7 +67,7 @@ class Login extends React.Component {
             if(data && data.status === 'success' && data.isadmin) {
               this.props.handleAppStateChange('loggedIn', true);
               this.props.handleAppStateChange('isAdmin', data.isAdmin);
-              this.context.handleNotificationChange(true, 'Login erfolgreich.', 'login', 'success', response.statusCode);
+              this.context.handleNotificationChange(true, 'Login erfolgreich.', 'login', 'success');
             } else {
               // server error
               this.context.handleNotificationChange(true, 'Es ist ein Fehler beim Login aufgetreten.', 'login', 'error', data.error);
