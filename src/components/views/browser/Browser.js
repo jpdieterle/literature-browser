@@ -207,7 +207,7 @@ class Browser extends React.PureComponent {
     const renderResponseData = () => {
       let formats = selectedFormats.checkedJSON? ['json'] : [];
       if(selectedFormats.checkedTXT) formats.push('txt');
-      return <Results filenames={responseFiles} number={hits} formats={selectedFormats}/>;
+      return <Results filenames={responseFiles} number={hits} formats={formats}/>;
     };
 
     return(
