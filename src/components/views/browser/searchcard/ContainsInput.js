@@ -8,7 +8,6 @@ import InfoIcon from '@material-ui/icons/Info';
 import Typography from '@material-ui/core/Typography';
 import Dialog from '@material-ui/core/Dialog';
 
-//TODO: regex (oÄ) unterstützen
 class ContainsInput extends React.PureComponent {
   state = {
     keywords: this.props.initialValue,
@@ -39,23 +38,7 @@ class ContainsInput extends React.PureComponent {
     console.log('checking input');
     let error = false;
     let errorMessage = '';
-    let string = this.state.keywords;
-
-    // check if quotes have been closed
-    let quotes = 0;
-    for(let i=0; i<string.length; i++) {
-      if(string.charAt(i) === '"') quotes++;
-    }
-    if(quotes % 2 !== 0) {
-      error = true;
-      errorMessage += 'Bitte schließen Sie die Anführungszeichen. ';
-    }
-
-    // check if semicolons have been used instead of commas
-    if(string.search(';') >= 0) {
-      error = true;
-      errorMessage += 'Bitte verwenden Sie Kommas statt Semikolons. '
-    }
+    //let string = this.state.keywords;
 
     this.setState({
       syntaxError: error,
@@ -67,7 +50,7 @@ class ContainsInput extends React.PureComponent {
 
   render() {
     const { classes, variant, disabled } = this.props;
-    const { keywords } = this.state;
+    const { keywords, syntaxError } = this.state;
 
     return(
       <div className={classes.root}>
@@ -80,7 +63,7 @@ class ContainsInput extends React.PureComponent {
           className={classes.textField}
           variant={variant}
           disabled={disabled}
-          error={this.state.syntaxError}
+          error={syntaxError}
           value={keywords}
           onChange={this.onInputChange}
           onFocus={this.onFocus}
@@ -106,33 +89,38 @@ class ContainsInput extends React.PureComponent {
           <Typography variant={"h6"} color="primary" className={classes.listHeader}>Hinweise zum "Text enthält" Suchfeld</Typography>
           <div className={classes.listWrapper}>
             <ul>
+              <Typography color={"error"}>
+                <b>Achtung: Durch umfangreiche Eingaben wird die Suche auf dem Server sehr speicherintensiv und kann eventuell nicht ausgeführt werden.
+                  Liefert eine Anfrage keine Ergebnisse, so kann dies auch an einer falschen Syntax in diesem Feld liegen.</b>
+              </Typography>
               <li>
-                <Typography>Geben Sie einzelne Wörter oder Phrasen in <b>Anführungszeichen</b> (") an.</Typography>
-                <Typography color={"textSecondary"}>Bsp.: "Frühling"</Typography>
+                <Typography>Geben Sie <b>einzelne Wörter oder Phrasen</b> an.</Typography>
+                <Typography color={"textSecondary"}>Bsp.: Der Frühling ist schön</Typography>
+                <Typography color={"textSecondary"}>Ergebnis: Texte, die die exakte Phrase enthalten. Groß- und Kleinschreibung wird nicht beachtet.</Typography>
               </li>
               <li>
-                <Typography>Wenn Sie Phrasen suchen, die mit einem bestimmten Wort anfangen, kennzeichnen Sie dies mit einem <b>Stern</b> (*).</Typography>
-                <Typography color={"textSecondary"}>Bsp.: "Frühling*" trifft auf Frühling zu, aber auch auf Frühlingsgefühle.</Typography>
+                <Typography>Wenn Sie Phrasen suchen, die mit einem bestimmten Wort anfangen, kennzeichnen Sie dies mit einem <b>Stern</b> (*) am Ende der Phrase.</Typography>
+                <Typography color={"textSecondary"}>Bsp.: Blume*</Typography>
+                <Typography color={"textSecondary"}>Ergebnis: Texte mit dem Wort Blume und auch z.B. Blumenstrauß, aber nicht Ringelblume.</Typography>
               </li>
               <li>
-                <Typography>Verbinde Sie Phrasen durch ein <b>Komma</b>.</Typography>
-                <Typography color={"textSecondary"}>Bsp.: "Frühling", "Sonne"</Typography>
+                <Typography>Verbinden Sie Phrasen durch ein <b>"and"</b>.</Typography>
+                <Typography color={"textSecondary"}>Bsp.: Frühling "and" Sonne</Typography>
                 <Typography color={"textSecondary"}>Ergebnis: Texte, die die Worte "Frühling" und "Sonne" gleichzeitig enthalten.</Typography>
               </li>
               <li>
-                <Typography>Geben Sie alternative Phrasen an oder schließen Sie Phrasen von der Suche aus:</Typography>
-                <ul>
-                  <li>
-                    <Typography><b>OR</b>: Es wird nach Texten gesucht, die mindestens eine der beiden Phrasen enthalten.</Typography>
-                  </li>
-                  <li>
-                    <Typography><b>NOT</b>: Es wird nach Texten gesucht, die die nachfolgende Phrase nicht enthalten</Typography>
-                  </li>
-                  <Typography color={"textSecondary"}>Bsp.: "Frühling" AND "Blume", NOT "Baum", "Liebe", "Sonne*" OR "Regen" OR "Gewitter"</Typography>
-                  <Typography color={"textSecondary"}>Ergebnis: Es wird nach Texten gesucht, die entweder "Frühling" oder "Blume" enthalten,
-                  gleichzeitig nicht das Wort "Baum" enthalten, aber "Liebe" enthalten und gleichzeitig entweder Wörter,
-                    die mit "Sonne" beginnen, oder "Regen" oder "Gewitter".</Typography>
-                </ul>
+                <Typography>Verwenden Sie <b>"or"</b>, um nach alternativen Phrasen zu suchen. Sie können bis zu 3 Mal in einer Teil-Suche "or" verwenden.</Typography>
+                <Typography color={"textSecondary"}>Bsp.: Frühling "or" Sonne</Typography>
+                <Typography color={"textSecondary"}>Ergebnis: Texte, die mindestens eins der Worte "Frühling" und "Sonne" enthalten.</Typography>
+                <Typography color={"textSecondary"}>Bsp.: Frühling "or" Sonne "or" die Welt ist schön "or" die Blumen blühen</Typography>
+                <Typography color={"textSecondary"}>Ergebnis: Texte, die mindestens eine der 4 Wörter/Phrasen enthalten.</Typography>
+                <Typography color={"textSecondary"}>Bsp.: Frühling "or" Sonne "and" Liebe</Typography>
+                <Typography color={"textSecondary"}>Ergebnis: Texte, die mindestens eins der Worte "Frühling" oder "Sonne" und "Liebe" (die letzten beiden gleichzeitig, falls das erste nicht enthalten ist) enthalten.</Typography>
+              </li>
+              <li>
+                <Typography>Schließen Sie Phrasen mit <b>"not"</b> von der Suche aus. Achtung: "not" soll immer am Ende der Eingabe (ggf. nach "or" oder "and") stehen.</Typography>
+                <Typography color={"textSecondary"}>Bsp.: Frühling "or" Sonne "not" Liebe</Typography>
+                <Typography color={"textSecondary"}>Ergebnis: Texte, die mindestens eins der Wörter "Frühling" oder "Sonne" und gleichzeitig nicht das Wort "Liebe" enthält</Typography>
               </li>
             </ul>
           </div>

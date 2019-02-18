@@ -21,7 +21,10 @@ class ErrorMessage extends React.Component {
           errorText = 'Der Server ist im Moment nicht verfügbar. Bitte versuchen Sie es später noch einmal.';
           break;
         case 550:
-          errorText = 'Sie sind nicht berechtigt, diese Suche durchzuführen.';
+          errorText = this.props.component === 'browser'?
+            'Sie sind nicht berechtigt, diese Suche durchzuführen.' :
+            'Es gibt kein Nutzerkonto mit diesen Zugangsdaten.'
+          ;
           break;
         default:
           errorText = `Es ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.`;
@@ -51,10 +54,11 @@ ErrorMessage.propTypes = {
   classes: PropTypes.object.isRequired,
   statusCode: PropTypes.number,
   errorMessage: PropTypes.string,
+  component: PropTypes.oneOf(['login', 'browser']).isRequired,
 };
 
 const styles = theme => ({
-  root: {
+  root:{
     margin: theme.spacing.unit,
   },
   errorContainer:{

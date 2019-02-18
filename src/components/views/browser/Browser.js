@@ -5,6 +5,7 @@ import Paper from "@material-ui/core/Paper/Paper";
 import InfoButton from '@material-ui/icons/Info';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
+import NotificationContext from '../../notifications/NotificationContext';
 import AuthorInput from "./searchcard/AuthorInput";
 import GenreSelection from "./searchcard/GenreSelection";
 import ContainsInput from "./searchcard/ContainsInput";
@@ -13,33 +14,32 @@ import SearchCard from './searchcard/SearchCard';
 import AddSearchCardButton from './buttons/AddSearchCardButton';
 import SelectFormat from './SelectFormat';
 import SearchButton from './buttons/SearchButton';
-import ErrorMessage from './results/ErrorMessage';
 import Results from './results/Results';
 import shortid from 'shortid';
-import fetchTimeout from 'fetch-timeout';
 
-// TODO: Abfrage an Server => Autorenliste + Jahreszahlen aktualisieren
-const minYear = '1700';
-const maxYear = '1950';
-
-const initialSearchCardObject = {
-  id: shortid.generate(),
-  authors: [],
-  genres: [],
-  keywords: '',
-  timeFrom: minYear,
-  timeTo: maxYear,
-};
-
+// MUI variant of input fields inside browser
 const inputVariant = 'standard';
 
+// max. number of search cards that can be added by user
+const maxCards = 4;
+
 class Browser extends React.PureComponent {
+
+  initialSearchCardObject = {
+    id: shortid.generate(),
+    authors: [],
+    genres: [],
+    keywords: '',
+    timeFrom: this.props.minYear,
+    timeTo: this.props.maxYear,
+  };
+
   state = {
-    cardList: [JSON.parse(JSON.stringify(initialSearchCardObject))],
+    cardList: [JSON.parse(JSON.stringify(this.initialSearchCardObject))],
     selectedFormats: {checkedTXT: false, checkedJSON: false},
     loading: false,
-    responseCode: 0, // 200 = results in
-    responseData: null,
+    responseFiles: '',
+    hits: 0,
     responseIn: false,
     error: false,
     errorMessage: 'no error',
@@ -47,10 +47,6 @@ class Browser extends React.PureComponent {
     keywordError: false,
     formatError: true,
   };
-
-  // TODO: set request URL
-  requestUrl = '';
-  testUrl='https://jsonplaceholder.typicode.com/posts';
 
   getCardIndex = id => {
     return this.state.cardList.findIndex(card => card.id === id);
@@ -66,24 +62,30 @@ class Browser extends React.PureComponent {
     });
   };
 
-  // fügt eine neue Teil-Suche hinzu
+  // add new search card
   onAddSearchCard = inputValues => {
 
-    if(this.state && this.state.cardList.length > 3 ) {
+    if(this.state && this.state.cardList.length >= maxCards ) {
+      this.context.handleNotificationChange(true, `Ihre Anfrage enthält bereits ${maxCards} Teilsuchen.`, 'addCard', 'error');
       return;
     }
 
     let paramsPassed = (inputValues instanceof Object && 'authors' in inputValues);
     inputValues = paramsPassed?
-      JSON.parse(JSON.stringify(inputValues)) : JSON.parse(JSON.stringify(initialSearchCardObject));
+      JSON.parse(JSON.stringify(inputValues)) : JSON.parse(JSON.stringify(this.initialSearchCardObject));
 
     inputValues.id = shortid.generate();
 
     this.setState(state => ({
       cardList: [...state.cardList, inputValues]
-    }));
+    }), () => {
+      if(this.state.cardList.length === maxCards) {
+        this.context.handleNotificationChange(true, `Sie können max. ${maxCards} Teilsuchen erstellen.`, 'addCard', 'warning');
+      }
+    });
   };
 
+  // duplicate existing search card with content
   onDuplicateSearchCard = id => {
     this.onAddSearchCard(this.state.cardList.find(card => card.id === id));
   };
@@ -91,7 +93,6 @@ class Browser extends React.PureComponent {
   updateSearchCardContent = (id, prop, value) => {
     if(this.state && this.state.cardList) {
       let newCardList = JSON.parse(JSON.stringify(this.state.cardList));
-      console.log('render browser' , newCardList);
 
       newCardList.find(card => card.id === id)[prop] = JSON.parse(JSON.stringify(value));
       this.setState({cardList: newCardList });
@@ -99,24 +100,25 @@ class Browser extends React.PureComponent {
   };
 
   deleteSearchCard = id => {
+    // last remaining card should not be deleted => warning
     if(this.state.cardList.length === 1) {
-      return; // letzte verbleibende Karte soll nicht gelöscht werden
+      this.context.handleNotificationChange(true, 'Ihre Anfrage muss min. 1 Teil-Suche enthalten.', 'deleteCard', 'warning');
+      return;
     }
     this.setState(state => ({
       cardList: state.cardList.filter( card => (card.id !== id))
     }));
   };
 
+  // update list of selected formats for results (txt, json)
   updateFormat = (formatProp, newValue) => {
     let newSelectedFormats = JSON.parse(JSON.stringify(this.state.selectedFormats));
     newSelectedFormats[formatProp] = JSON.parse(JSON.stringify(newValue));
     this.setState({selectedFormats: newSelectedFormats});
   };
 
+  // submit search with or without criteria
   handleSubmit = (getAll) => {
-    console.log('timeError: ', this.state.timeError);
-    console.log('keywordError: ', this.state.keywordError);
-    console.log('formatError: ', this.state.formatError);
 
     // check for errors before sending request
     if(this.state.timeError || this.state.keywordError || this.state.formatError) {
@@ -124,78 +126,87 @@ class Browser extends React.PureComponent {
         error: true,
         errorMessage: 'Sie können keine Anfrage mit fehlenden/falschen Eingaben abschicken',
       });
+      this.context.handleNotificationChange(true, 'Sie können keine Anfrage mit fehlenden/falschen Eingaben abschicken', 'login', 'error');
       return;
     }
 
     // start loading animation, disable forms
     this.setState({
       loading: true,
-      responseCode: 0,
       error: false,
       responseIn: false,
-      responseData: {},
+      responseFiles: [],
     });
 
-    // combine data to send
-    let payload = {formats:{txt: this.state.selectedFormats.checkedTXT, json: this.state.selectedFormats.checkedJSON}};
-    if (!getAll) {
-      payload.cardList = this.state.cardList;
-    }
-
     // request data + handle response
-    fetchTimeout(this.testUrl, {
+    fetch("/backend/lib/functions.php", {
       method: 'POST',
-      // credentials: 'same-origin', // allow cookies -> session management
+      credentials: 'same-origin', // allow cookies -> session management
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(payload),
-    }, 5000, 'Die Anfrage hat zu lang gedauert.')
+      body: JSON.stringify({
+        cards: this.state.cardList,
+        getAll: getAll,
+        id: this.props.sessionID
+      })
+    })
       .then(response => {
-        this.setState({responseCode: response.status});
         if(response.ok) {
-          if(response.headers.get("content-type").indexOf("application/json") !== -1) {
-            response.json().then(data => {
+          response.json().then(data => {
+            if(data && data.status && data.status === 'success') {
+              // search succeeded (there are results)
               this.setState({
-                responseData: JSON.stringify(data),
+                responseFiles: data.filenames, // array of filenames separated by comma
+                numberResults: data.hits, // number
                 responseIn: true,
               });
-            });
-          }
-          // TODO: parse for zip instead of json! (or txt?)
+              console.log(response.json);
+            } else {
+              // server error / search not possible on server
+              this.setState({
+                errorMessage: 'Es ist ein Fehler auf dem Server aufgetreten.',
+                error: true
+              });
+              this.context.handleNotificationChange(true, 'Es ist ein Fehler auf dem Server aufgetreten. Die Anfrage wurde abgebrochen.', 'search', 'error');
+            }
+          });
         } else {
-          this.setState({errorMessage: response.statusText, error: true});
+          // other problem
+          this.setState({
+            errorMessage: response.statusText,
+            error: true
+          });
+          this.context.handleNotificationChange(true, response.statusText, 'search', 'error', response.statusCode)
         }
       })
       .catch(error => {
-        this.setState({errorMessage: error.message});
-        this.setState({error: true});
+        this.setState({
+          errorMessage: error.message,
+          error: true
+        });
+        this.context.handleNotificationChange(true, error.message, 'search', 'error', 404)
       });
     this.setState({loading: false});
   };
 
+  // do search with criteria entered by user
   handleSearchCriteria = () => {
     this.handleSubmit(false);
   };
 
+  // do search not regarding criteria that might have been entered by user
   handleGetAll = () => {
     this.handleSubmit(true);
   };
 
-  renderResponseData = (data, getAll) => {
-    // TODO: render download link/icon/button after response from server has arrived
-    console.log(data);
-    return <Results data={data} getAll={getAll}/>;
-  };
-
-  renderErrorMessage = (message, statusCode) => {
-    let sCode = statusCode? statusCode : 0;
-    return <ErrorMessage statusCode={sCode} errorMessage={message}/>
-  };
-
   render() {
-    const { classes } = this.props;
-    const { cardList } = this.state;
+    const { classes, authorsList, minYear, maxYear, genres } = this.props;
+    const { cardList, selectedFormats, responseFiles, responseIn, loading, hits} = this.state;
+
+    const renderResponseData = () => {
+      return <Results filenames={responseFiles} number={hits} formats={selectedFormats}/>;
+    };
 
     return(
       <div className={classes.root}>
@@ -222,6 +233,7 @@ class Browser extends React.PureComponent {
                   cardId={card.id}
                   variant={inputVariant}
                   initialValues={card.authors}
+                  authorsList={authorsList}
                   autofocus={(index === cardList.length-1)}
                   disabled={this.getLoading()}
                   onInputChange={this.updateSearchCardContent}
@@ -229,6 +241,7 @@ class Browser extends React.PureComponent {
                 <GenreSelection
                   key={card.id + '-genres'}
                   cardId={card.id}
+                  genres={genres}
                   variant={inputVariant}
                   initialValues={card.genres}
                   disabled={this.getLoading()}
@@ -258,13 +271,10 @@ class Browser extends React.PureComponent {
               </SearchCard>
             ))}
           </div>
-          {this.state.cardList.length === 4
-            &&
-            <Typography color={"error"} className={classes.cardWarning}>Sie können maximal 4 Teil-Suchen kombinieren.</Typography>}
           <AddSearchCardButton action={this.onAddSearchCard} getDisabled={this.getLoading}/>
           <div className={classes.flexContainer}>
             <SelectFormat
-              initialValues={this.state.selectedFormats}
+              initialValues={selectedFormats}
               getDisabled={this.getLoading}
               onChange={this.updateFormat}
               handleBrowserChange={this.handleChange}
@@ -284,11 +294,8 @@ class Browser extends React.PureComponent {
           </div>
         </form>
         <div className={classes.flexContainer}>
-          {this.state.loading && <CircularProgress className={classes.loadingAnimation} />}
-          {this.state.responseIn && (Math.floor(this.state.responseCode/100) === 2) &&
-            this.renderResponseData(this.state.responseData)}
-          {this.state.error && (Math.floor(this.state.responseCode/100) !== 2) &&
-            this.renderErrorMessage(this.state.errorMessage, this.state.responseCode)}
+          {loading && <CircularProgress className={classes.loadingAnimation} />}
+          {responseIn && renderResponseData()}
         </div>
       </div>
     );
@@ -297,18 +304,25 @@ class Browser extends React.PureComponent {
 
 Browser.propTypes = {
   classes: PropTypes.object.isRequired,
+  authorsList: PropTypes.arrayOf(PropTypes.string).isRequired,
+  minYear: PropTypes.string.isRequired,
+  maxYear: PropTypes.string.isRequired,
+  genres: PropTypes.arrayOf(PropTypes.string),
+  sessionID: PropTypes.any,
 };
+
+Browser.contextType = NotificationContext;
 
 const styles = theme => ({
   root:{
-    padding: theme.spacing.unit * 3,
+    paddingLeft: theme.spacing.unit * 3,
   },
   infoBox:{
     minWidth: 400,
     maxWidth: 800 + theme.spacing.unit*7,
     padding: 20,
     display: 'flex',
-    margin: theme.spacing.unit,
+    marginLeft: theme.spacing.unit,
     marginBottom: theme.spacing.unit * 3,
   },
   infoIcon: {
@@ -317,8 +331,6 @@ const styles = theme => ({
   cardContainer:{
     display: 'flex',
     flexFlow: 'row wrap',
-    //flexDirection: 'row-reverse',
-    //justifyContent: 'flex-end',
   },
   flexContainer:{
     display: 'flex',

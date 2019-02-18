@@ -20,12 +20,6 @@ const MenuProps = {
   },
 };
 
-const genres = [
-  'Ballade',
-  'Gedicht',
-  'Sonett',
-];
-
 class GenreSelection extends React.PureComponent {
   state = {
     genre: this.props.initialValues,
@@ -38,7 +32,7 @@ class GenreSelection extends React.PureComponent {
   };
 
   render() {
-    const { classes, variant, disabled } = this.props;
+    const { classes, variant, disabled, genres } = this.props;
     const { genre } = this.state;
     return(
       <div className={classes.root}>
@@ -67,6 +61,7 @@ class GenreSelection extends React.PureComponent {
 
 GenreSelection.propTypes = {
   classes: PropTypes.object.isRequired,
+  genres: PropTypes.arrayOf(PropTypes.string),
   cardId: PropTypes.string.isRequired,
   variant: PropTypes.string.isRequired,
   initialValues: PropTypes.array.isRequired,

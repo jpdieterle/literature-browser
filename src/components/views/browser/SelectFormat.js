@@ -4,7 +4,6 @@ import { withStyles } from '@material-ui/core/styles';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormGroup from '@material-ui/core/FormGroup';
-import FormLabel from '@material-ui/core/FormLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from '@material-ui/core/FormHelperText';
 
@@ -74,7 +73,7 @@ SelectFormat.propTypes = {
 const styles = theme => ({
   root:{
     marginLeft: theme.spacing.unit,
-  }
+  },
 });
 
 export default withStyles(styles)(SelectFormat);
