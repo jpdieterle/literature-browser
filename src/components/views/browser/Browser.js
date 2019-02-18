@@ -308,7 +308,7 @@ Browser.propTypes = {
   minYear: PropTypes.string.isRequired,
   maxYear: PropTypes.string.isRequired,
   genres: PropTypes.arrayOf(PropTypes.string),
-  sessionID: PropTypes.any.isRequired,
+  sessionID: PropTypes.any,
 };
 
 Browser.contextType = NotificationContext;

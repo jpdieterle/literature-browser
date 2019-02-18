@@ -38,7 +38,7 @@ class ContainsInput extends React.PureComponent {
     console.log('checking input');
     let error = false;
     let errorMessage = '';
-    let string = this.state.keywords;
+    //let string = this.state.keywords;
 
     this.setState({
       syntaxError: error,
