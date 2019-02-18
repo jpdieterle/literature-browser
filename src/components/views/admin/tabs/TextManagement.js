@@ -153,7 +153,7 @@ class TextManagement extends Component {
       <div>
         <Typography>
           Bitte geben Sie Texte im folgenden Format ein (\n gibt einen Zeilenumbruch an):
-        </Typography>
+        </Typography><br/>
         <Typography className={classes.newLine} color={'primary'}>
           {`{"metadata": {
             "type": "poem",
@@ -211,8 +211,7 @@ class TextManagement extends Component {
         <Divider variant='middle' className={classes.divider}/><br/>
         <div className={classes.addTextContainer}>
           <Typography variant={'h6'} color={'primary'}>Text hinzufügen</Typography><br/>
-          {FormatExample()}
-          <br/>
+
           <div className={classes.flexContainer}>
             <TextField
               variant='outlined'
@@ -244,6 +243,9 @@ class TextManagement extends Component {
               Eingabe löschen
             </Button>
           </div>
+          <br/>
+          {FormatExample()}
+          <br/>
         </div>
       </div>
     )
