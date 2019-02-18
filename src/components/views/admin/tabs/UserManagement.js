@@ -17,9 +17,10 @@ let rowss =  JSON.parse('{"user":"efwfw"}');
 
 class UserManagement extends React.Component {
 
-  handleChange = name => event => {
+ handleChange = (name) => event => {
     this.setState({
       [name]: event.target.value,
+
     });
   };
 
@@ -74,7 +75,7 @@ class UserManagement extends React.Component {
 
   componentDidMount() {
 
-    fetch("backend/lib/admin.php", {
+    fetch("/backend/lib/admin.php", {
       method: 'GET',
       credentials: 'same-origin', // allow cookies -> session management
       headers: {
@@ -137,14 +138,14 @@ const styles = theme => ({
     display: 'flex',
   },
   deleteButton: {
-    color: 'red'
+    color: 'red',
   },
   formular:{
     marginRight: '20px'
   },
   nutzerbutton: {
     marginTop: '10px',
-    border: '#CCC 1px solid'
+
   },
   tableWrapper: {
     width: '100%',
@@ -162,6 +163,43 @@ const rows =[];
 Object.entries(rowss).forEach(function(key, value) {
 rows.push(createData(value,key));
 });
+
+ function deleteuser (email) {
+    fetch("backend/lib/admin.php", {
+        method: 'GET',
+        credentials: 'same-origin', // allow cookies -> session management
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({delete: email})
+    })
+        .then(response => {
+            this.setState({responseCode: response.status});
+            if(response.ok) {
+                if(response.headers.get("content-type").indexOf("application/json") !== -1) {
+                    response.json().then(data => {
+                        this.setState({
+                            responseData: JSON.stringify(data),
+                            responseIn: true,
+                        });
+                    });
+                }
+            } else {
+                this.setState({
+                    errorMessage: response.statusText,
+                    error: true
+                });
+            }
+        })
+        .catch(error => {
+            this.setState({
+                errorMessage: error.message,
+                error: true
+            });
+        });
+
+};
+
 
 function SimpleTable(props) {
   const { classes } = props;
@@ -188,7 +226,7 @@ function SimpleTable(props) {
                 <TableRow key={row.number}>
                   <TableCell component="th" scope="row">{row.number}</TableCell>
                   <TableCell align="left">{row.email}</TableCell>
-                  <TableCell align="left"> <Button color="inherit" className={classes.deleteButton}>Löschen</Button></TableCell>
+                  <TableCell align="left"> <Button  onClick={deleteuser(row.email)} color="inherit" className={classes.deleteButton}>Löschen</Button></TableCell>
                 </TableRow>
             ))}
           </TableBody>
