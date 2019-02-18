@@ -85,7 +85,7 @@ class App extends React.Component {
           response.json().then(data => {
             console.log('authorData: ', JSON.parse(data.authors));
             if(data && data.status === 'success' && data.authors) {
-              this.handleStateChange('authors', JSON.parse(data.authors);
+              this.handleStateChange('authors', JSON.parse(data.authors));
               localStorage.setItem('authors', JSON.parse(data.authors));
             } else {
               // server error
