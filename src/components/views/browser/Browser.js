@@ -38,7 +38,7 @@ class Browser extends React.PureComponent {
     cardList: [JSON.parse(JSON.stringify(this.initialSearchCardObject))],
     selectedFormats: {checkedTXT: false, checkedJSON: false},
     loading: false,
-    responseFiles: [],
+    responseFiles: '',
     hits: 0,
     responseIn: false,
     error: false,

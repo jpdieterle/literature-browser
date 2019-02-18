@@ -11,46 +11,49 @@ class Results extends React.Component {
   state = {};
 
   downloadResults = () => {
-    // request data + handle response
-    fetch("/backend/lib/ziper.php", {
-      method: 'POST',
-      credentials: 'same-origin', // allow cookies -> session management
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        download: this.props.filenames,
-        format: this.props.formats,
-      }),
-    })
-      .then(response => {
-        if(response.ok) {
-          response.json().then(data => {
-            console.log(data);
-            if(data && data.status === 'success') {
-              // create invisible anchor and click it
-              let a = document.createElement('a');
-              a.href = '/backend/database/_cache/' + data.filename;
-              a.download = true;
-              a.click();
-              // alternative for downloading file:
-              // window.open(responseJson['path'], "_blank")
-            } else {
-              this.context.handleNotificationChange(true, 'Die Ergebnis-Dateinamen konnten nicht vom Server geladen werden.', 'download', 'error');
-            }
-          })
-        } else {
-          this.context.handleNotificationChange(true, 'Die Ergebnis-Dateinamen konnten nicht vom Server geladen werden.', 'download', 'error');
-        }
+    // request data + handle response for each selected format separately
+    this.props.formats.forEach(format => {
+      fetch("/backend/lib/ziper.php", {
+        method: 'POST',
+        credentials: 'same-origin', // allow cookies -> session management
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          download: this.props.filenames,
+          format: format,
+        }),
       })
-      .catch((error) => {
-        console.error(error);
-        this.context.handleNotificationChange(true, 'Die Ergebnis-Dateinamen konnten nicht vom Server geladen werden.', 'download', 'error');
-      });
+        .then(response => {
+          if(response.ok) {
+            response.json().then(data => {
+              console.log(data);
+              if(data && data.status === 'success') {
+                // create invisible anchor and click it
+                let a = document.createElement('a');
+                a.href = '/backend/database/_cache/' + data.filename;
+                a.download = true;
+                a.click();
+                // alternative for downloading file:
+                // window.open(responseJson['path'], "_blank")
+              } else {
+                this.context.handleNotificationChange(true, 'Die Ergebnis-Dateinamen konnten nicht vom Server geladen werden.', 'download', 'error');
+              }
+            })
+          } else {
+            this.context.handleNotificationChange(true, 'Die Ergebnis-Dateinamen konnten nicht vom Server geladen werden.', 'download', 'error');
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+          this.context.handleNotificationChange(true, 'Die Ergebnis-Dateinamen konnten nicht vom Server geladen werden.', 'download', 'error');
+        });
+    })
+
   };
 
   render() {
-    const {classes} = this.props;
+    const {classes, number,} = this.props;
 
     return (
       <div className={classes.root}>
@@ -59,7 +62,7 @@ class Results extends React.Component {
             <Link
               onClick={this.downloadResults}
             >
-              Ergebnis als ZIP-Datei herunterladen {this.props.numberOfResults && '(' + this.props.numberOfResults + 'Treffer)'}
+              Ergebnis als ZIP-Datei herunterladen {'(' + number + 'Treffer)'}
             </Link>
           </Typography>
         </Paper>
@@ -70,7 +73,7 @@ class Results extends React.Component {
 
 Results.propTypes = {
   classes: PropTypes.object.isRequired,
-  filenames: PropTypes.arrayOf(PropTypes.string).isRequired,
+  filenames: PropTypes.string,
   number: PropTypes.number.isRequired,
   formats: PropTypes.arrayOf(PropTypes.string),
 };
