@@ -184,7 +184,7 @@ class TextManagement extends Component {
         <InfoCard message='Hier können Sie weitere Texte zur Datenbank hinzufügen (Freitext-Feld)
         oder die vorhandenen Gedichte aus der Gutenberg-Sammlung aktualisieren indem Sie auf "Import starten" klicken.'/>
         <div className={classes.importContainer}>
-          <Typography variant={'h6'} color={'primary'}>Import</Typography><br/>
+          <Typography variant={'h6'} color={'primary'}>Import Gutenberg</Typography><br/>
           <Typography>Import Status: {importStatus}</Typography>
           <Typography>Letzter Import gestartet: {lastImportTime}</Typography>
           <div className={classes.buttonsContainer}>

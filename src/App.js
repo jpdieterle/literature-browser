@@ -115,7 +115,9 @@ class App extends React.Component {
     }).then(response => {
         if(response.ok) {
           response.json().then(data => {
+            console.log('request log response');
             if(data && data.status === 'success' && data.genre && data.minYear && data.maxYear) {
+              console.log()
               this.handleStateChange('genres', data.genre);
               this.handleStateChange('timeRange', {minYear: data.minYear.toString(), maxYear: data.maxYear.toString()});
               localStorage.setItem('genres', data.genre);
