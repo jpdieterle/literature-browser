@@ -83,10 +83,11 @@ class App extends React.Component {
     }).then(response => {
         if(response.ok) {
           response.json().then(data => {
-            console.log('authorData: ', JSON.parse(data.authors));
             if(data && data.status === 'success' && data.authors) {
               this.handleStateChange('authors', JSON.parse(data.authors));
               localStorage.setItem('authors', JSON.parse(data.authors));
+              console.log('authorData: ', JSON.parse(data.authors));
+              console.log('localStorage authors: ', localStorage.getItem('authors'));
             } else {
               // server error
               this.handleNotificationChange(true, 'Autoren/Genres/Zeitspanne konnten nicht vom Server geladen werden.', 'initialLoad', 'error');
@@ -114,12 +115,16 @@ class App extends React.Component {
     }).then(response => {
         if(response.ok) {
           response.json().then(data => {
-            if(data && data.status === 'success' && data.genres && data.minYear && data.maxYear) {
+            if(data && data.status === 'success' && data.genre && data.minYear && data.maxYear) {
               this.handleStateChange('genres', data.genres);
               this.handleStateChange('timeRange', {minYear: data.minYear, maxYear: data.maxYear});
-              localStorage.setItem('genres', data.genres);
+              localStorage.setItem('genres', data.genre);
               localStorage.setItem('minYear', data.minYear);
               localStorage.setItem('maxYear', data.maxYear);
+              console.log('log data', data);
+              console.log('parsed log data', JSON.parse(data));
+              console.log('parsed genres', JSON.parse(data).genre);
+              console.log('localStorage log data', localStorage.getItem('genres'), localStorage.getItem('minYear'), localStorage('maxYear'));
             } else {
               this.handleNotificationChange(true, 'Autoren/Genres/Zeitspanne konnten nicht vom Server geladen werden.', 'initialLoad', 'error');
             }
