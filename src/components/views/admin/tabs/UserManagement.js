@@ -144,10 +144,6 @@ class UserManagement extends React.Component {
       });
   };
 
-  // TODO: change user password on server
-  requestPasswordChange = () => {
-
-  };
 
   // TODO: delete user from server
   requestDelete = (event) => {
@@ -168,7 +164,7 @@ class UserManagement extends React.Component {
               aria-expanded={isOpen}
               className={classes.nutzerbutton}
           >
-            neuen Benutzer anlegen
+            Benutzer anlegen
           </Button>
           <Collapse isOpened={isOpen}>
             <div>
@@ -198,22 +194,6 @@ class UserManagement extends React.Component {
                     value={newUser.pw1}
                     onChange={this.handleUserChange}
                   />
-                  <TextField
-                    className={classes.textField}
-                    disabled={loading}
-                    label={'Passwort wiederholen'}
-                    type={'password'}
-                    name={'pw2'}
-                    value={newUser.pw2}
-                    error={!loading && this.comparePasswords()}
-                    onChange={this.handleUserChange}
-                  />
-                  {!loading && this.comparePasswords() && <Typography color={'error'} className={classes.errorMessage}>
-                    Die Passwörter stimmen nicht überein.
-                  </Typography>}
-                  {!loading && this.checkPasswordLength() && <Typography color={'error'} className={classes.errorMessage}>
-                    Das Passwort muss mindestens 8 Zeichen lang sein.
-                  </Typography>}
                   <div className={classes.flexContainer}>
                     <Button
                       disabled={loading}
