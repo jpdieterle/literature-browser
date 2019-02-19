@@ -162,6 +162,11 @@ class UserManagement extends React.Component {
               onClick={() => this.setState({ isOpen: !isOpen })}
               aria-controls="example-collapse-text"
               aria-expanded={isOpen}
+              disabled={loading}
+              size="small"
+              color="primary"
+              variant={"contained"}
+              className={classes.button}
               className={classes.nutzerbutton}
           >
             Benutzer anlegen
@@ -182,9 +187,6 @@ class UserManagement extends React.Component {
                     name={'email'}
                     onChange={this.handleUserChange}
                   />
-                  {!loading && !this.checkUsername(newUser.email) && <Typography color={'error'} className={classes.errorMessage}>
-                    Geben Sie eine gültige E-Mail-Adresse ein.
-                  </Typography>}
                   <TextField
                     className={classes.textField}
                     disabled={loading}
@@ -232,9 +234,9 @@ function SimpleTable(props) {
     return { number, id, email};
   }
   const rows =[];
-  /*rowss.forEach(function(key, value) {
+  Object.entries(rowss).forEach(function(key, value) {
     rows.push(createData(value,key));
-  });*/
+  });
 
   return (
       <div className={classes.tableWrapper}>
@@ -254,7 +256,6 @@ function SimpleTable(props) {
                   <TableCell align="left">{row.email}</TableCell>
                   <TableCell align="left">
                     <Button color="inherit" className={classes.deleteButton}>Löschen</Button>
-                    <Button color="inherit" className={classes.changeButton}>Passwort ändern</Button>
                   </TableCell>
                 </TableRow>
             ))}
@@ -306,7 +307,6 @@ const styles = theme => ({
   nutzerbutton: {
     marginTop: theme.spacing.unit * 3,
     marginLeft: theme.spacing.unit,
-    border: '#CCC 1px solid'
   },
   tableWrapper: {
     width: '100%',
