@@ -25,7 +25,8 @@ const users = [
 
 class UserManagement extends React.Component {
   componentDidMount = () => {
-    // TODO: load user list
+    // load user list
+    this.requestUsers();
   };
 
   state = {
