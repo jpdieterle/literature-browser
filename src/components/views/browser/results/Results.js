@@ -61,8 +61,9 @@ class Results extends React.Component {
     return (
       <div className={classes.root}>
         <Paper className={classes.resultContainer} elevation={0} >
-          <Typography className={classes.resultLink}>
+          <Typography>
             <Link
+              className={classes.resultLink}
               onClick={this.downloadResults}
             >
               Ergebnis als ZIP-Datei herunterladen {'(' + number + 'Treffer)'}
