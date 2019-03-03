@@ -6,6 +6,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Button from "@material-ui/core/Button";
 import Typography from '@material-ui/core/Typography';
 import { Link } from "react-router-dom";
+import indigo from '@material-ui/core/colors/indigo';
 
 class Header extends React.Component {
   state = {
@@ -70,7 +71,7 @@ const styles = theme => ({
     flexGrow: 1
   },
   toolbar: {
-    backgroundColor: "#99CC00",
+    backgroundColor: indigo[900],
     height: 88,
     minWidth: 608,
   },
