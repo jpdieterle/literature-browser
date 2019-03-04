@@ -130,6 +130,9 @@ class Browser extends React.PureComponent {
       return;
     }
 
+    let payload = {id: localStorage.getItem('sessionID')};
+    getAll? payload.getAll = true : payload.cards = this.state.cardList;
+
     // start loading animation, disable forms
     this.setState({
       loading: true,
@@ -146,11 +149,7 @@ class Browser extends React.PureComponent {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        cards: this.state.cardList,
-        getAll: getAll,
-        id: localStorage.getItem('sessionID')
-      })
+      body: JSON.stringify(payload)
     })
       .then(response => {
         if(response.ok) {
