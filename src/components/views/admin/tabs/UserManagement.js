@@ -34,7 +34,7 @@ class UserManagement extends React.Component {
     users: [],
     isOpen: false,
     newUser: {
-      email: '',
+      name: '',
       pw1: '',
       pw2: '',
       isAdmin: false,
@@ -53,10 +53,9 @@ class UserManagement extends React.Component {
     this.handleChange('newUser', newUser);
   };
 
-  // check username for email format
-  checkUsername = username => {
-    const regex = /\S+@\S+\.\S+/;
-    return regex.test(username);
+  // check username min length of 2 characters
+  checkUsernameLength = username => {
+    return username.length > 2;
   };
 
   // compare passwords (before sending)
@@ -87,16 +86,16 @@ class UserManagement extends React.Component {
               // received users list from server
               this.handleChange('users', data.users || []);
             } else {
-              this.context.handleNotificationChange(true, 'Die Nutzerliste konnte nicht geladen werden.', 'import', 'error');
+              this.context.handleNotificationChange(true, 'Die Nutzerliste konnte nicht geladen werden.', 'loadUsers', 'error');
             }
           })
         } else {
-          this.context.handleNotificationChange(true, 'Die Nutzerliste konnte nicht geladen werden.', 'import', 'error');
+          this.context.handleNotificationChange(true, 'Die Nutzerliste konnte nicht geladen werden.', 'loadUsers', 'error');
         }
         this.handleChange('loading', false);
       })
       .catch(error => {
-        this.context.handleNotificationChange(true, 'Die Nutzerliste konnte nicht geladen werden.', 'import', 'error');
+        this.context.handleNotificationChange(true, 'Die Nutzerliste konnte nicht geladen werden.', 'loadUsers', 'error');
         this.handleChange('loading', false);
       });
   };
@@ -104,11 +103,11 @@ class UserManagement extends React.Component {
   // create new user on server
   requestNewUser = () => {
     // check inputs before sending request
-    if(!this.checkUsername(this.state.newUser.email)
+    if(!this.checkUsernameLength(this.state.newUser.name)
       || this.checkPasswordLength(this.state.newUser.pw1) || this.checkPasswordLength(this.state.newUser.pw2)
       || this.comparePasswords()
     ) {
-      this.context.handleNotificationChange(true, 'Bitte geben Sie gütige Nutzerdaten ein.', 'newUser', 'error');
+      this.context.handleNotificationChange(true, 'Bitte geben Sie gültige Nutzerdaten ein.', 'newUser', 'error');
       return;
     }
     this.handleChange('loading', true);
@@ -119,7 +118,7 @@ class UserManagement extends React.Component {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        username: this.state.newUser.email,
+        username: this.state.newUser.name,
         password: this.state.newUser.pw1,
         isadmin: this.state.newUser.isAdmin === false? 0 : 1,
       }),
@@ -181,14 +180,14 @@ class UserManagement extends React.Component {
                     autoFocus={true}
                     className={classes.textField}
                     label={'E-Mail/Benutzername'}
-                    type={'email'}
-                    value={newUser.email}
-                    error={!loading && !this.checkUsername(newUser.email)}
-                    name={'email'}
+                    type={'text'}
+                    value={newUser.name}
+                    error={!loading && !this.checkUsernameLength(newUser.name)}
+                    name={'name'}
                     onChange={this.handleUserChange}
                   />
-                  {!loading && !this.checkUsername(newUser.email) && <Typography color={'error'} className={classes.errorMessage}>
-                    Geben Sie eine gültige E-Mail-Adresse ein.
+                  {!loading && !this.checkUsernameLength(newUser.name) && <Typography color={'error'} className={classes.errorMessage}>
+                    Geben Sie mindestens 2 Zeichen ein.
                   </Typography>}
                   <TextField
                     className={classes.textField}
