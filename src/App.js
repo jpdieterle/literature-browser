@@ -132,14 +132,14 @@ class App extends React.Component {
             console.log('request log response');
             if(data && data.status === 'success' && data.log) {
               console.log('log request succeeded');
+              console.log('log data', data.log);
+              console.log('parsed log data', JSON.parse(data));
+              console.log('parsed genres', JSON.parse(data).log.genre);
               this.handleStateChange('genres', data.log.genre);
               this.handleStateChange('timeRange', {minYear: data.log.minYear.toString(), maxYear: data.log.maxYear.toString()});
               localStorage.setItem('genres', data.log.genre);
               localStorage.setItem('minYear', data.log.minYear.toString());
               localStorage.setItem('maxYear', data.log.maxYear.toString());
-              console.log('log data', data);
-              console.log('parsed log data', JSON.parse(data));
-              console.log('parsed genres', JSON.parse(data).log.genre);
               console.log('localStorage log data', localStorage.getItem('genres'), localStorage.getItem('minYear'), localStorage('maxYear'));
             } else {
               this.handleNotificationChange(true, 'Autoren/Genres/Zeitspanne konnten nicht vom Server geladen werden.', 'initialLoad', 'error');
