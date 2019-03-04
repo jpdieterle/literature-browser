@@ -121,7 +121,7 @@ class Browser extends React.PureComponent {
   handleSubmit = (getAll) => {
 
     // check for errors before sending request
-    if(this.state.timeError || this.state.keywordError || this.state.formatError) {
+    if((!getAll && (this.state.timeError || this.state.keywordError)) || this.state.formatError) {
       this.setState({
         error: true,
         errorMessage: 'Sie können keine Anfrage mit fehlenden/falschen Eingaben abschicken',
