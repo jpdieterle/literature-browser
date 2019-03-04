@@ -8,8 +8,8 @@ import Typography from '@material-ui/core/Typography';
 // select time range in which to search
 class TimeInput extends React.PureComponent {
   state = {
-    timeFrom: this.props.initialTimeFrom,
-    timeTo: this.props.initialTimeTo,
+    timeFrom: '',
+    timeTo: '',
     timeFromError: false,
     timeToError: false,
   };
@@ -48,6 +48,7 @@ class TimeInput extends React.PureComponent {
           <TextField
             id="fromYear"
             label="von (Jahr)"
+            placeholder={initialTimeFrom}
             inputProps={{min: initialTimeFrom , max: initialTimeTo}}
             value={timeFrom}
             onChange={this.handleChange('timeFrom')}
@@ -63,6 +64,7 @@ class TimeInput extends React.PureComponent {
           <TextField
             id="toYear"
             label="bis (Jahr)"
+            placeholder={initialTimeTo}
             inputProps={{min: initialTimeFrom , max: initialTimeTo}}
             value={timeTo}
             onChange={this.handleChange('timeTo')}
