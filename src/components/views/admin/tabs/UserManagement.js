@@ -167,7 +167,7 @@ class UserManagement extends React.Component {
               aria-expanded={isOpen}
               className={classes.nutzerbutton}
           >
-            neuen Benutzer anlegen
+            neuen Benutzer*innen anlegen
           </Button>
           <Collapse isOpened={isOpen}>
             <div>
