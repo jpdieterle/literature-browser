@@ -159,8 +159,8 @@ class TextManagement extends Component {
 
     return (
       <div>
-        <InfoCard message='Hier können Sie weitere Texte zur Datenbank hinzufügen (Freitext-Feld)
-        oder die vorhandenen Gedichte aus der Gutenberg-Sammlung aktualisieren indem Sie auf "Import starten" klicken.'/>
+        <InfoCard message='Hier können Sie weitere Texte als .txt und/oder .json Dateien zur Datenbank hinzufügen (Freitext-Feld)
+        oder die vorhandenen Gedichte aus der Gutenberg-Sammlung auf dem Server aktualisieren indem Sie auf "Import starten" klicken.'/>
         <div className={classes.importContainer}>
           <Typography variant={'h6'} color={'primary'}>Import Gutenberg</Typography><br/>
           <Typography>Import Status: {importStatus}</Typography>
@@ -191,8 +191,10 @@ class TextManagement extends Component {
           <Typography variant={'h6'} color={'primary'}>Text(e) hinzufügen</Typography>
           <div className={classes.buttonsContainer}>
             <TextField
-              accept='.txt, .json'
               InputProps={{root: classes.textInput}}
+              inputProps={{
+                accept: '.txt, .json'
+              }}
               id="fileUpload"
               multiple
               type={'file'}
