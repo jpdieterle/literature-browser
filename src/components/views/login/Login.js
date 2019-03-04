@@ -11,40 +11,17 @@ import NotificationContext from "../../notifications/NotificationContext";
 
 class Login extends React.Component {
   state = {
-    email: '',
+    username: '',
     password: '',
-    emailError: true,
     loading: false,
   };
 
   onInputChange = (event) => {
-    this.setState({[event.target.type]: event.target.value});
-    if(event.target.type === 'email') {
-      this.setState({
-        emailError: !this.checkEmail(event.target.value)
-      })
-    }
-  };
-
-  // check if format is [string]@[string].[string] (email format)
-  checkEmail = email => {
-    const regex = /\S+@\S+\.\S+/;
-    return regex.test(email);
+    this.setState({[event.target.name]: event.target.value});
   };
 
   // send request to server + change app state or display error
   requestLogin = () => {
-    let message = this.state.emailError? 'Bitte geben Sie eine gültige E-Mail-Adresse ein. ' : '';
-    message += (this.state.password.length < 5)? 'Das Passwort muss mindestens 5 Zeichen haben.' : '';
-    if(message) {
-      this.setState({
-        loginError: true,
-        errorMessage: message
-      });
-      this.context.handleNotificationChange(true, message, 'login', 'error');
-      return;
-    }
-
     this.setState({
       loading: true,
       error: false,
@@ -57,7 +34,7 @@ class Login extends React.Component {
       },
       body: JSON.stringify({
         login: true,
-        username: this.state.email,
+        username: this.state.username,
         password: this.state.password,
       }),
     })
@@ -93,13 +70,12 @@ class Login extends React.Component {
         });
         this.context.handleNotificationChange(true, error.message, 'login', 'error', 404);
       });
-
     this.setState({loading: false});
   };
 
   render() {
     const {classes } = this.props;
-    const { email, password, emailError, loading } = this.state;
+    const { username, password, loading } = this.state;
 
     return (
       <div className={classes.root}>
@@ -117,20 +93,18 @@ class Login extends React.Component {
               disabled={loading}
               autoFocus={true}
               className={classes.textField}
-              label={'E-Mail'}
-              type={'email'}
-              value={email}
-              error={!loading && emailError}
+              label={'Benutzername'}
+              type={'text'}
+              name={'username'}
+              value={username}
               onChange={this.onInputChange}
             />
-            {!loading && emailError && <Typography color={'error'} className={classes.errorMessage}>
-              Geben Sie eine gültige E-Mail-Adresse ein.
-            </Typography>}
             <TextField
               className={classes.textField}
               disabled={loading}
               label={'Passwort'}
               type={'password'}
+              name={'password'}
               value={password}
               onChange={this.onInputChange}
             />

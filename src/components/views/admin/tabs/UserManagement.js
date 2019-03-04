@@ -53,22 +53,17 @@ class UserManagement extends React.Component {
     this.handleChange('newUser', newUser);
   };
 
-  // check username min length of 2 characters
-  checkUsernameLength = username => {
-    return username.length > 2;
-  };
+  // check username min length of 3 characters and max length of 30 characters
+  checkUsernameLength = username => username.length > 2 && username.length < 31;
 
   // compare passwords (before sending)
-  comparePasswords = () => {
-    return this.state.newUser.pw1 !== this.state.newUser.pw2;
+  comparePasswords = (pw1, pw2) => {
+    return pw1 === pw2;
   };
 
   // Is password long enough?
-  checkPasswordLength = () => {
-    return (this.state.newUser.pw1.length < 8 || this.state.newUser.pw2.length < 8);
-  };
+  checkPasswordLength = password => password.length < 41 && password.length > 3;
 
-  // TODO: get users from server
   requestUsers = () => {
     this.handleChange('loading', true);
     fetch('/backend/lib/admin.php',{
@@ -182,12 +177,12 @@ class UserManagement extends React.Component {
                     label={'E-Mail/Benutzername'}
                     type={'text'}
                     value={newUser.name}
-                    error={!loading && !this.checkUsernameLength(newUser.name)}
+                    error={!loading && newUser.name !== '' && !this.checkUsernameLength(newUser.name)}
                     name={'name'}
                     onChange={this.handleUserChange}
                   />
-                  {!loading && !this.checkUsernameLength(newUser.name) && <Typography color={'error'} className={classes.errorMessage}>
-                    Geben Sie mindestens 2 Zeichen ein.
+                  {!loading && newUser.name !== '' && !this.checkUsernameLength(newUser.name) && <Typography color={'error'} className={classes.errorMessage}>
+                    Geben Sie mindestens 3 und höchstens 30 Zeichen ein.
                   </Typography>}
                   <TextField
                     className={classes.textField}
@@ -196,8 +191,12 @@ class UserManagement extends React.Component {
                     type={'password'}
                     name={'pw1'}
                     value={newUser.pw1}
+                    error={!loading && newUser.pw1 !== '' && !this.checkPasswordLength(newUser.pw1)}
                     onChange={this.handleUserChange}
                   />
+                  {!loading && newUser.pw1 !== '' && !this.checkPasswordLength(newUser.pw1) && <Typography color={'error'} className={classes.errorMessage}>
+                    Das Passwort muss mindestens 4 und höchstens 40 Zeichen lang sein.
+                  </Typography>}
                   <TextField
                     className={classes.textField}
                     disabled={loading}
@@ -205,14 +204,11 @@ class UserManagement extends React.Component {
                     type={'password'}
                     name={'pw2'}
                     value={newUser.pw2}
-                    error={!loading && this.comparePasswords()}
+                    error={!loading && newUser.pw1 !== '' && !this.comparePasswords(newUser.pw1, newUser.pw2)}
                     onChange={this.handleUserChange}
                   />
-                  {!loading && this.comparePasswords() && <Typography color={'error'} className={classes.errorMessage}>
+                  {!loading && !this.comparePasswords(newUser.pw1, newUser.pw2) && <Typography color={'error'} className={classes.errorMessage}>
                     Die Passwörter stimmen nicht überein.
-                  </Typography>}
-                  {!loading && this.checkPasswordLength() && <Typography color={'error'} className={classes.errorMessage}>
-                    Das Passwort muss mindestens 8 Zeichen lang sein.
                   </Typography>}
                   <div className={classes.flexContainer}>
                     <Button
