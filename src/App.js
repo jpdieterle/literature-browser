@@ -131,19 +131,17 @@ class App extends React.Component {
           response.json().then(data => {
             console.log('request log response');
             if(data && data.status === 'success' && data.log) {
+              let parsedLog = JSON.parse(data.log);
               console.log('log request succeeded');
-              console.log('parsed log data', JSON.parse(data.log));
-              console.log('log data', data.log);
-              console.log('log genres', data.log.genre);
-              console.log('log genres parsed', JSON.parse(data.log).genre);
-              console.log('log time', data.log["minYear"], data.log["maxYear"]);
-              console.log('log time parsed', JSON.parse(data.log).minYear, JSON.parse(data.log)["maxYear"]);
-              this.handleStateChange('genres', data.log["genre"]);
-              this.handleStateChange('timeRange', {minYear: data.log["minYear"], maxYear: data.log["maxYear"]});
-              localStorage.setItem('genres', data.log["genre"]);
-              localStorage.setItem('minYear', data.log["minYear"]);
-              localStorage.setItem('maxYear', data.log["maxYear"]);
-              console.log('localStorage log data', localStorage.getItem('genres'), localStorage.getItem('minYear'), localStorage('maxYear'));
+              console.log('parsed log data', parsedLog);
+              console.log('log genres parsed', parsedLog.genre);
+              console.log('log time parsed', parsedLog.minYear, parsedLog.maxYear);
+              this.handleStateChange('genres', parsedLog.genre);
+              this.handleStateChange('timeRange', {minYear: parsedLog.minYear, maxYear: parsedLog.maxYear});
+              localStorage.setItem('genres', parsedLog.genre);
+              localStorage.setItem('minYear', parsedLog.minYear);
+              localStorage.setItem('maxYear', parsedLog.maxYear);
+              console.log('localStorage log data', localStorage.getItem('genres'), localStorage.getItem('minYear'), localStorage.getItem('maxYear'));
             } else {
               this.handleNotificationChange(true, 'Autoren/Genres/Zeitspanne konnten nicht vom Server geladen werden.', 'initialLoad', 'error');
             }
