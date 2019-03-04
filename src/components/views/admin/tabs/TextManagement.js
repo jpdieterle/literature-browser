@@ -134,7 +134,8 @@ class TextManagement extends Component {
             if(data && data.status === 'success') {
               // import was started on server
               this.context.handleNotificationChange(true, 'Der Text wurde zur Datenbank hinzugefügt.', 'import', 'success');
-              // TODO: load new authors, genres, time range
+              this.props.requestNewAuthors();
+              this.props.requestNewLog();
 
             } else {
               this.context.handleNotificationChange(true, 'Der Text konnte nicht hinzugefügt werden.', 'import', 'error');
