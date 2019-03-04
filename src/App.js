@@ -35,7 +35,7 @@ const genres = [
 class App extends React.Component {
   state = {
     loggedIn: true,
-    sessionID: localStorage.getItem('sessionID'),
+    sessionID: localStorage.getItem('sessionID') || null,
     isAdmin: true,
     timeRange: {
       minYear: localStorage.getItem('minYear') || '1700',
@@ -57,6 +57,9 @@ class App extends React.Component {
     this.setState({
       [prop]: value,
     });
+    if(prop === 'loggedIn' && value === true) {
+      this.requestSuggestions();
+    }
   };
 
   // open/close notification snackbar, display message (depending on optional statusCode and variant)
@@ -69,6 +72,12 @@ class App extends React.Component {
       action: action,
       variant: variant? variant : 'error',
     });
+  };
+
+  requestSuggestions = () => {
+    // request initial data (authors, genres, time range, user status
+    this.requestAuthors();
+    this.requestLog();
   };
 
   // request authors list
@@ -188,10 +197,6 @@ class App extends React.Component {
 
   // executed after component is inserted into the tree
   componentDidMount = () => {
-    // request initial data (authors, genres, time range, user status
-    this.requestAuthors();
-    this.requestLog();
-
     // check if user is still logged in
     this.requestUserStatus();
     console.log('initial app state: ', this.state.authorsList, this.state.timeRange, this.state.genres, this.state.loggedIn, this.state.isAdmin);
