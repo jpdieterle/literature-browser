@@ -130,16 +130,16 @@ class App extends React.Component {
         if(response.ok) {
           response.json().then(data => {
             console.log('request log response');
-            if(data && data.status === 'success' && data.genre && data.minYear && data.maxYear) {
+            if(data && data.status === 'success' && data.log) {
               console.log('log request succeeded');
-              this.handleStateChange('genres', data.genre);
-              this.handleStateChange('timeRange', {minYear: data.minYear.toString(), maxYear: data.maxYear.toString()});
-              localStorage.setItem('genres', data.genre);
-              localStorage.setItem('minYear', data.minYear.toString());
-              localStorage.setItem('maxYear', data.maxYear.toString());
+              this.handleStateChange('genres', data.log.genre);
+              this.handleStateChange('timeRange', {minYear: data.log.minYear.toString(), maxYear: data.log.maxYear.toString()});
+              localStorage.setItem('genres', data.log.genre);
+              localStorage.setItem('minYear', data.log.minYear.toString());
+              localStorage.setItem('maxYear', data.log.maxYear.toString());
               console.log('log data', data);
               console.log('parsed log data', JSON.parse(data));
-              console.log('parsed genres', JSON.parse(data).genre);
+              console.log('parsed genres', JSON.parse(data).log.genre);
               console.log('localStorage log data', localStorage.getItem('genres'), localStorage.getItem('minYear'), localStorage('maxYear'));
             } else {
               this.handleNotificationChange(true, 'Autoren/Genres/Zeitspanne konnten nicht vom Server geladen werden.', 'initialLoad', 'error');
