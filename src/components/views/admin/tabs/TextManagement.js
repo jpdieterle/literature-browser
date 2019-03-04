@@ -25,7 +25,10 @@ class TextManagement extends Component {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({importStatus: true})
+      body: JSON.stringify({
+        importStatus: true,
+        id: localStorage.getItem('sessionID')
+      })
     })
       .then(response => {
         if(response.ok) {
@@ -84,7 +87,10 @@ class TextManagement extends Component {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({import: true}),
+      body: JSON.stringify({
+        import: true,
+        id: localStorage.getItem('sessionID')
+      }),
     })
       .then(response => {
         if(response.ok) {
@@ -119,6 +125,7 @@ class TextManagement extends Component {
       body: JSON.stringify({
         addText: true,
         text: this.state.newText,
+        id: localStorage.getItem('sessionID')
       })
     })
       .then(response => {

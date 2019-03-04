@@ -88,7 +88,9 @@ class App extends React.Component {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({authors: true})
+      body: JSON.stringify({
+        authors: true,
+        id: localStorage.getItem('sessionID')})
     }).then(response => {
         if(response.ok) {
           response.json().then(data => {
@@ -120,7 +122,10 @@ class App extends React.Component {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({log: true})
+      body: JSON.stringify({
+        log: true,
+        id: localStorage.getItem('sessionID')
+      })
     }).then(response => {
         if(response.ok) {
           response.json().then(data => {
@@ -210,7 +215,10 @@ class App extends React.Component {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({logout: true})
+      body: JSON.stringify({
+        logout: true,
+        id: localStorage.getItem('sessionID')
+      })
     })
       .then(response => {
         if(response.ok && response.json().status === 'success') {

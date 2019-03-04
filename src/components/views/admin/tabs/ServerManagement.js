@@ -26,7 +26,10 @@ class ServerManagement extends React.Component {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({cache: true})
+      body: JSON.stringify({
+        cache: true,
+        id: localStorage.getItem('sessionID')
+      })
     })
       .then(response => {
         if(response.ok) {

@@ -149,7 +149,7 @@ class Browser extends React.PureComponent {
       body: JSON.stringify({
         cards: this.state.cardList,
         getAll: getAll,
-        id: this.props.sessionID
+        id: localStorage.getItem('sessionID')
       })
     })
       .then(response => {
