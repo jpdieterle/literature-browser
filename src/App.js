@@ -15,7 +15,7 @@ import Browser from './components/views/browser/Browser';
 import About from './components/views/About';
 import Admin from './components/views/admin/Admin';
 import MissingPage from './components/views/MissingPage';
-import ErrorSnackbar from './components/notifications/NotificationSnackbar';
+import Notification from './components/notifications/NotificationSnackbar';
 
 const exampleAuthors = ['Goethe, Johann Wolfgang',
   'Schiller, Friedrich',
@@ -34,9 +34,9 @@ const genres = [
 // App component
 class App extends React.Component {
   state = {
-    loggedIn: false,
+    loggedIn: true,
     sessionID: localStorage.getItem('sessionID'),
-    isAdmin: false,
+    isAdmin: true,
     timeRange: {
       minYear: localStorage.getItem('minYear') || '1700',
       maxYear: localStorage.getItem('maxYear') || '1950',
@@ -266,7 +266,7 @@ class App extends React.Component {
                     <Route component={MissingPage}/>
                   </Switch>
                 </div>
-                <ErrorSnackbar />
+                <Notification />
               </div>
             </Router>
           </div>

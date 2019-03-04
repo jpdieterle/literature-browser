@@ -37,7 +37,7 @@ class Header extends React.Component {
                   <Button component={Link} to='/login' color="inherit" className={classes.buttons}>Login</Button>
                 </li>}
                 {loggedIn && <li className={classes.navElement}>
-                  <Button color="primary" className={classes.buttons} onClick={logout}>Logout</Button>
+                  <Button color="secondary" className={classes.buttons} onClick={logout}>Logout</Button>
                 </li>}
               </ul>
             </div>
