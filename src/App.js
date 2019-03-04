@@ -133,6 +133,9 @@ class App extends React.Component {
             if(data && data.status === 'success' && data.log) {
               console.log('log request succeeded');
               console.log('log data', data.log);
+              console.log('log genres 1', data.log["genre"]);
+              console.log('log genres 2', data.log.genre);
+              console.log('log time 1', data.log["minYear"], data.log["maxYear"]);
               this.handleStateChange('genres', data.log["genre"]);
               this.handleStateChange('timeRange', {minYear: data.log["minYear"], maxYear: data.log["maxYear"]});
               localStorage.setItem('genres', data.log["genre"]);
