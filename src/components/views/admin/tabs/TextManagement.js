@@ -28,7 +28,7 @@ class TextManagement extends Component {
       },
       body: JSON.stringify({
         importStatus: true,
-        id: localStorage.getItem('sessionID')
+        id: this.props.sessionID
       })
     })
       .then(response => {
@@ -85,7 +85,7 @@ class TextManagement extends Component {
       },
       body: JSON.stringify({
         import: true,
-        id: localStorage.getItem('sessionID')
+        id: this.props.sessionID
       }),
     })
       .then(response => {
@@ -121,7 +121,7 @@ class TextManagement extends Component {
 
     let data = new FormData();
     data.append('file', this.state.selectedFiles);
-    data.append('id', localStorage.getItem('sessionID'));
+    data.append('id', this.props.sessionID);
     data.append('addText', 'true');
 
     fetch(' /backend/lib/admin.php',{
@@ -188,7 +188,7 @@ class TextManagement extends Component {
         </div>
         <Divider variant='middle' className={classes.divider}/><br/>
         <div className={classes.addTextContainer}>
-          <Typography variant={'h6'} color={'primary'}>Text(e) hinzufügen</Typography>
+          <Typography variant={'h6'} color={'primary'}>Text(e) hinzufügen (.json oder .txt Format)</Typography>
           <div className={classes.buttonsContainer}>
             <TextField
               InputProps={{root: classes.textInput}}
@@ -225,6 +225,7 @@ TextManagement.propTypes = {
   classes: PropTypes.object.isRequired,
   requestNewAuthors: PropTypes.func.isRequired,
   requestNewLog: PropTypes.func.isRequired,
+  sessionID: PropTypes.any.isRequired,
 };
 
 TextManagement.contextType = NotificationContext;

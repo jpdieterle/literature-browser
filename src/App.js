@@ -21,14 +21,14 @@ import Notification from './components/notifications/NotificationSnackbar';
 class App extends React.Component {
   state = {
     loggedIn: false,
-    sessionID: null,
+    sessionID: 0,
     isAdmin: false,
     timeRange: {
-      minYear: null,
-      maxYear: null,
+      minYear: '',
+      maxYear: '',
     },
-    authors: null,
-    genres: null,
+    authors: [],
+    genres: [],
     notification: {
       show: false,
       statusCode: 0,
@@ -51,7 +51,7 @@ class App extends React.Component {
 
   // open/close notification snackbar, display message (depending on optional statusCode and variant)
   handleNotificationChange = (show, message, action, variant, statusCode, ) => {
-    console.log('error? ', this.state.error);
+    // console.log('error? ', this.state.error);
     this.handleStateChange('notification', {
       show: show,
       statusCode: statusCode? statusCode : 0,
@@ -260,7 +260,7 @@ class App extends React.Component {
                     )}/>
                     <Route path='/about' component={About}/>
                     <Route path='/admin' render={() => (
-                      (loggedIn && isAdmin)? (<Admin requestNewAuthors={this.requestAuthors} requestNewLog={this.requestLog}/>) : (<Redirect to='/' />)
+                      (loggedIn && isAdmin)? (<Admin requestNewAuthors={this.requestAuthors} requestNewLog={this.requestLog} sessionID={sessionID}/>) : (<Redirect to='/' />)
                     )}/>
                     <Route path='/login' render={() => (
                       loggedIn? (<Redirect to='/'/>) : (<Login handleAppStateChange={this.handleStateChange} />)

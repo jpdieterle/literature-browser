@@ -39,13 +39,13 @@ class AdminNav extends React.Component {
         >
           <List className={classes.navElements}>
             <ListItem button component={Link} to='/admin' color='primary' selected={selectedItem === 0}>
-              <ListItemText primary={<Typography color={'primary'} variant={'button'}>Texte verwalten</Typography>}/>
+              <ListItemText primary={<Typography color={'primary'} variant={'h6'}>Texte verwalten</Typography>}/>
             </ListItem>
             <ListItem button component={Link} to='/admin/users' color='primary' selected={selectedItem === 1}>
-              <ListItemText primary={<Typography color={'primary'} variant={'button'}>User verwalten</Typography>} />
+              <ListItemText primary={<Typography color={'primary'} variant={'h6'}>User verwalten</Typography>} />
             </ListItem>
             <ListItem button component={Link} to='/admin/server' color='primary' selected={selectedItem === 2}>
-              <ListItemText primary={<Typography color={'primary'} variant={'button'}>Server verwalten</Typography>}/>
+              <ListItemText primary={<Typography color={'primary'} variant={'h6'}>Server verwalten</Typography>}/>
             </ListItem>
           </List>
         </Drawer>
