@@ -31,7 +31,7 @@ class UserManagement extends React.Component {
 
   state = {
     loading: false,
-    users: [],
+    users: [{user: 'exampleUser', isAdmin: true}],
     isOpen: false,
     newUser: {
       name: '',
