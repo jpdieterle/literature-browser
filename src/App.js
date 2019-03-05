@@ -118,7 +118,7 @@ class App extends React.Component {
             console.log('request log response');
             if(data && data.status === 'success' && data.log) {
               let parsedLog = JSON.parse(data.log);
-              let parsedGenre = parsedLog.genre.replace('[','').replace(']','').split(',');
+              let parsedGenre = parsedLog.genre? parsedLog.genre.replace('[','').replace(']','').split(',') : [];
               let parsedMinYear = parsedLog.minYear.slice(0,4);
               let parsedMaxYear = parsedLog.maxYear.slice(0,4);
               console.log('log request succeeded');
