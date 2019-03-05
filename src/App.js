@@ -110,7 +110,7 @@ class App extends React.Component {
       },
       body: JSON.stringify({
         log: true,
-        id: localStorage.getItem('sessionID')
+        id: this.state.sessionID
       })
     }).then(response => {
         if(response.ok) {
