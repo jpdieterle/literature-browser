@@ -42,7 +42,7 @@ class App extends React.Component {
       maxYear: localStorage.getItem('maxYear') || '1950',
     },
     authors: localStorage.getItem('authors') || exampleAuthors,
-    genres: genres,
+    genres: localStorage.getItem('genres') || genres,
     notification: {
       show: false,
       statusCode: 0,

@@ -50,7 +50,7 @@ class GenreSelection extends React.PureComponent {
             renderValue={selected => selected.join(', ')}
             MenuProps={MenuProps}
           >
-            {genres.map(name => (
+            {genres && genres.map(name => (
               <MenuItem key={name} value={name}>
                 <Checkbox checked={genre.indexOf(name) > -1} disableRipple={true} color={"primary"}/>
                 <ListItemText primary={name} />
