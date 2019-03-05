@@ -102,7 +102,7 @@ class UserManagement extends React.Component {
     // check inputs before sending request
     if(!this.checkUsernameLength(this.state.newUser.name)
       || this.checkPasswordLength(this.state.newUser.pw1) || this.checkPasswordLength(this.state.newUser.pw2)
-      || this.comparePasswords()
+      || this.comparePasswords(this.state.newUser.pw1, this.state.newUser.pw2)
     ) {
       this.context.handleNotificationChange(true, 'Bitte geben Sie gültige Nutzerdaten ein.', 'newUser', 'error');
       return;
