@@ -134,7 +134,7 @@ class App extends React.Component {
               let parsedLog = JSON.parse(data.log);
               let parsedGenre = parsedLog.genre.replace('[','').replace(']','').split(',');
               let parsedMinYear = parsedLog.minYear.slice(0,4);
-              let parsedMaxYear = parsedLog.minYear.slice(0,4);
+              let parsedMaxYear = parsedLog.maxYear.slice(0,4);
               console.log('log request succeeded');
               console.log('parsed log data', parsedLog);
               console.log('log genres parsed', parsedGenre);
