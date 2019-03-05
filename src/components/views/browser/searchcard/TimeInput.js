@@ -14,6 +14,14 @@ class TimeInput extends React.PureComponent {
     timeToError: false,
   };
 
+  componentWillMount = () => {
+    console.log('time input will mount: ', this.state.timeFrom, this.state.timeTo)
+  };
+
+  componentWillUpdate = () => {
+    console.log('time input will update: ', this.state.timeFrom, this.state.timeTo)
+  };
+
   handleChange = name => event => {
     const value = event.target.value;
     const time = parseInt(value);
