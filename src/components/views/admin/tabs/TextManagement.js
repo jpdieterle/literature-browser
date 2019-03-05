@@ -38,6 +38,7 @@ class TextManagement extends Component {
               // import status was loaded from server
               this.handleChange('importStatus', data.importStatus || 'unbekannt');
               this.handleChange('lastImportTime', data.lastImport || 'unbekannt');
+              this.context.handleNotificationChange(true, 'Der Import Status wurde aktualisiert.', 'importStatus', 'success')
             } else {
               this.context.handleNotificationChange(true, 'Der Import Status konnte nicht vom Server geladen werden.', 'importStatus', 'error');
             }
