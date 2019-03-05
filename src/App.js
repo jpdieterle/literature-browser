@@ -20,9 +20,9 @@ import Notification from './components/notifications/NotificationSnackbar';
 // App component
 class App extends React.Component {
   state = {
-    loggedIn: false,
+    loggedIn: true,
     sessionID: 0,
-    isAdmin: false,
+    isAdmin: true,
     timeRange: {
       minYear: '',
       maxYear: '',
