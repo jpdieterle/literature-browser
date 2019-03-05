@@ -130,17 +130,18 @@ class App extends React.Component {
         if(response.ok) {
           response.json().then(data => {
             console.log('request log response');
-            if(data && data.status === 'success' && data.genre && data.minYear && data.maxYear) {
-              console.log();
-              this.handleStateChange('genres', data.genre);
-              this.handleStateChange('timeRange', {minYear: data.minYear.toString(), maxYear: data.maxYear.toString()});
-              localStorage.setItem('genres', data.genre);
-              localStorage.setItem('minYear', data.minYear.toString());
-              localStorage.setItem('maxYear', data.maxYear.toString());
-              console.log('log data', data);
-              console.log('parsed log data', JSON.parse(data));
-              console.log('parsed genres', JSON.parse(data).genre);
-              console.log('localStorage log data', localStorage.getItem('genres'), localStorage.getItem('minYear'), localStorage('maxYear'));
+            if(data && data.status === 'success' && data.log) {
+              let parsedLog = JSON.parse(data.log);
+              console.log('log request succeeded');
+              console.log('parsed log data', parsedLog);
+              console.log('log genres parsed', parsedLog.genre);
+              console.log('log time parsed', parsedLog.minYear, parsedLog.maxYear);
+              this.handleStateChange('genres', parsedLog.genre);
+              this.handleStateChange('timeRange', {minYear: parsedLog.minYear, maxYear: parsedLog.maxYear});
+              localStorage.setItem('genres', parsedLog.genre);
+              localStorage.setItem('minYear', parsedLog.minYear);
+              localStorage.setItem('maxYear', parsedLog.maxYear);
+              console.log('localStorage log data', localStorage.getItem('genres'), localStorage.getItem('minYear'), localStorage.getItem('maxYear'));
             } else {
               this.handleNotificationChange(true, 'Autoren/Genres/Zeitspanne konnten nicht vom Server geladen werden.', 'initialLoad', 'error');
             }
