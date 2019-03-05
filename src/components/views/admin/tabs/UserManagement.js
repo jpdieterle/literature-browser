@@ -86,7 +86,7 @@ class UserManagement extends React.Component {
           response.json().then(data => {
             if(data && data.status === 'success') {
               // received users list from server
-              this.handleChange('users', data.users || []);
+              this.handleChange('users', JSON.parse(data.users));
             } else {
               this.context.handleNotificationChange(true, 'Die Nutzerliste konnte nicht geladen werden.', 'loadUsers', 'error');
             }
