@@ -28,7 +28,7 @@ class App extends React.Component {
       maxYear: '',
     },
     authors: [],
-    genres: [],
+    genres: ['poem', 'ballad', 'sonnet'],
     notification: {
       show: false,
       statusCode: 0,
@@ -122,8 +122,8 @@ class App extends React.Component {
               let parsedLog = JSON.parse(data.log);
               let parsedGenre = parsedLog.genre? parsedLog.genre.replace('[','').replace(']','').split(',') : [];
               console.log('parsedGenre: ', parsedGenre);
-              let parsedMinYear = parsedLog.minYear.slice(0,4);
-              let parsedMaxYear = parsedLog.maxYear.slice(0,4);
+              let parsedMinYear = parsedLog.minYear? parsedLog.minYear.slice(0,4) : '';
+              let parsedMaxYear = parsedLog.maxYear? parsedLog.maxYear.slice(0,4) : '';
               console.log('log request succeeded');
               console.log('parsed log data', parsedLog);
               console.log('log genres parsed', parsedGenre);
