@@ -80,7 +80,7 @@ class AuthorInput extends React.PureComponent {
 
   // extract suggestions from authorsList (max. 8 suggestions are being displayed)
   getSuggestions = value => {
-    if(!value) return;
+    if(!value && value !== '') return ;
     const inputValue = deburr(value.trim()).toLowerCase();
     const inputLength = inputValue.length;
     let count = 0;
