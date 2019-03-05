@@ -132,15 +132,18 @@ class App extends React.Component {
             console.log('request log response');
             if(data && data.status === 'success' && data.log) {
               let parsedLog = JSON.parse(data.log);
+              let parsedGenre = parsedLog.genre.replace('[','').replace(']','').split(',');
+              let parsedMinYear = parsedLog.minYear.slice(0,4);
+              let parsedMaxYear = parsedLog.minYear.slice(0,4);
               console.log('log request succeeded');
               console.log('parsed log data', parsedLog);
-              console.log('log genres parsed', parsedLog.genre);
-              console.log('log time parsed', parsedLog.minYear, parsedLog.maxYear);
-              this.handleStateChange('genres', parsedLog.genre);
-              this.handleStateChange('timeRange', {minYear: parsedLog.minYear, maxYear: parsedLog.maxYear});
-              localStorage.setItem('genres', parsedLog.genre);
-              localStorage.setItem('minYear', parsedLog.minYear);
-              localStorage.setItem('maxYear', parsedLog.maxYear);
+              console.log('log genres parsed', parsedGenre);
+              console.log('log time parsed', parsedMinYear, parsedMaxYear);
+              this.handleStateChange('genres', parsedGenre);
+              this.handleStateChange('timeRange', {minYear: parsedMinYear, maxYear: parsedMaxYear});
+              localStorage.setItem('genres', parsedGenre);
+              localStorage.setItem('minYear', parsedMinYear);
+              localStorage.setItem('maxYear', parsedMaxYear);
               console.log('localStorage log data', localStorage.getItem('genres'), localStorage.getItem('minYear'), localStorage.getItem('maxYear'));
             } else {
               this.handleNotificationChange(true, 'Autoren/Genres/Zeitspanne konnten nicht vom Server geladen werden.', 'initialLoad', 'error');
