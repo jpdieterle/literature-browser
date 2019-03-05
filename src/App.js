@@ -42,10 +42,11 @@ class App extends React.Component {
   handleStateChange = (prop, value) => {
     this.setState({
       [prop]: value,
+    }, () => {
+      if(prop === 'sessionID' && this.state.loggedIn === true) {
+        this.requestSuggestions();
+      }
     });
-    if(prop === 'loggedIn' && value === true) {
-      this.requestSuggestions();
-    }
   };
 
   // open/close notification snackbar, display message (depending on optional statusCode and variant)
