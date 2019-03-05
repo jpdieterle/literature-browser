@@ -25,7 +25,7 @@ class GenreSelection extends React.PureComponent {
     genre: this.props.initialValues,
   };
 
-  componentDidUpdate = () => {
+  componentDidMount = () => {
     console.log('genres in GenreSelection: ', this.props.genres);
   };
 
