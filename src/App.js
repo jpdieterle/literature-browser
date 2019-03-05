@@ -34,9 +34,9 @@ const genres = [
 // App component
 class App extends React.Component {
   state = {
-    loggedIn: false,
+    loggedIn: true,
     sessionID: localStorage.getItem('sessionID') || null,
-    isAdmin: false,
+    isAdmin: true,
     timeRange: {
       minYear: localStorage.getItem('minYear') || '1700',
       maxYear: localStorage.getItem('maxYear') || '1950',
@@ -131,7 +131,7 @@ class App extends React.Component {
           response.json().then(data => {
             console.log('request log response');
             if(data && data.status === 'success' && data.genre && data.minYear && data.maxYear) {
-              console.log()
+              console.log();
               this.handleStateChange('genres', data.genre);
               this.handleStateChange('timeRange', {minYear: data.minYear.toString(), maxYear: data.maxYear.toString()});
               localStorage.setItem('genres', data.genre);
