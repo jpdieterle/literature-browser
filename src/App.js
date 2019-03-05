@@ -118,7 +118,6 @@ class App extends React.Component {
             console.log('request log response');
             if(data && data.status === 'success' && data.log) {
               console.log('parsedLog: ', JSON.parse(data.log));
-              console.log('parsedGenre: ', JSON.parse(data.log));
               let parsedLog = JSON.parse(data.log);
               let parsedGenre = parsedLog.genre? parsedLog.genre.replace('[','').replace(']','').split(',') : [];
               console.log('parsedGenre: ', parsedGenre);

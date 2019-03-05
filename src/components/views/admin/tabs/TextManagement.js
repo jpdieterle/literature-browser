@@ -160,7 +160,7 @@ class TextManagement extends Component {
 
     return (
       <div>
-        <InfoCard message='Hier können Sie weitere Texte als .txt und/oder .json Dateien zur Datenbank hinzufügen (Freitext-Feld)
+        <InfoCard message='Hier können Sie weitere Texte als .txt und/oder .json Dateien zur Datenbank hinzufügen
         oder die vorhandenen Gedichte aus der Gutenberg-Sammlung auf dem Server aktualisieren indem Sie auf "Import starten" klicken.'/>
         <div className={classes.importContainer}>
           <Typography variant={'h6'} color={'primary'}>Import Gutenberg</Typography><br/>
