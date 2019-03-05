@@ -201,7 +201,7 @@ class UserManagement extends React.Component {
 
     return (
         <div>
-          <InfoCard message={'Hier können Sie Nutzer*innen hinzufügen und entfernen oder das Passwort ändern.'}/>
+          <InfoCard message={'Hier können Sie Nutzer*innen hinzufügen und entfernen.'}/>
           <Paper className={classes.tableWrapper}>
             <Table>
               <TableHead>
