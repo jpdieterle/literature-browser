@@ -194,7 +194,7 @@ class App extends React.Component {
   componentDidMount = () => {
     // check if user is still logged in
     this.requestUserStatus();
-    console.log('initial app state: ', this.state.authorsList, this.state.timeRange, this.state.genres, this.state.loggedIn, this.state.isAdmin);
+    //  console.log('initial app state: ', this.state.authorsList, this.state.timeRange, this.state.genres, this.state.loggedIn, this.state.isAdmin);
   };
 
   // logout user, request server to delete sessionID, display error if necessary

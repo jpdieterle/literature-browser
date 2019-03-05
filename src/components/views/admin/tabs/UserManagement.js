@@ -9,19 +9,13 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import {Collapse} from 'react-collapse';
 import NotificationContext from '../../../notifications/NotificationContext';
 import InfoCard from '../../../InfoCard';
 import Typography from "@material-ui/core/Typography/Typography";
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
-
-const users = [
-  {user: 'efwfwsladjasdlsadjsaldjsljadjadhsadösadjas', isAdmin: false},
-  {user: 'ladjsldj', isAdmin: true},
-  {user: 'öaoewewk', isAdmin: false},
-  {user: 'erüer', isAdmin: false},
-];
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
 
 class UserManagement extends React.Component {
   componentDidMount = () => {
@@ -49,7 +43,8 @@ class UserManagement extends React.Component {
 
   handleUserChange = (event) => {
     let newUser = this.state.newUser;
-    newUser[event.target.name] = event.target.value;
+    let name = event.target.name;
+    newUser[name] = name === 'isAdmin'? event.target.checked : event.target.value;
     this.handleChange('newUser', newUser);
   };
 
@@ -197,104 +192,109 @@ class UserManagement extends React.Component {
 
   render() {
     const { classes } = this.props;
-    const {  isOpen, loading, newUser, users } = this.state;
+    const {  loading, newUser, users } = this.state;
 
     return (
         <div>
           <InfoCard message={'Hier können Sie Nutzer*innen hinzufügen und entfernen.'}/>
-          <Paper className={classes.tableWrapper}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell scope={'column'}>Nr.</TableCell>
-                  <TableCell scope={'column'}>Username</TableCell>
-                  <TableCell scope={'column'}>Admin</TableCell>
-                  <TableCell scope={'column'}>Aktion</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {users.map((user, index) => (
-                  <TableRow key={user.user}>
-                    <TableCell scope={'row'}>{index + 1}</TableCell>
-                    <TableCell>{user.user}</TableCell>
-                    <TableCell>{user.isAdmin? 'Ja' : 'Nein'}</TableCell>
-                    <TableCell className={classes.flexContainer}>
-                      <IconButton id={user.user} onClick={this.requestDelete}><DeleteIcon id={user.user} color={'secondary'}/></IconButton>
-                    </TableCell>
+          <div className={classes.marginLeftContainer}>
+            <Typography variant={'h6'} color={'primary'}>Registrierte Nutzer*innen</Typography>
+            <Paper className={classes.tableWrapper}>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell scope={'column'}>Nr.</TableCell>
+                    <TableCell scope={'column'}>Username</TableCell>
+                    <TableCell scope={'column'}>Admin</TableCell>
+                    <TableCell scope={'column'}>Aktion</TableCell>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </Paper>
-          <Button
-              onClick={() => this.setState({ isOpen: !isOpen })}
-              aria-controls="example-collapse-text"
-              aria-expanded={isOpen}
-              className={classes.nutzerbutton}
-          >
-            neuen Benutzer*innen anlegen
-          </Button>
-          <Collapse isOpened={isOpen}>
-            <div>
-              <Paper className={classes.loginContainer}>
-                <div className={classes.formContainer}>
-                  <Typography color={'primary'}>Bitte geben Sie die Nutzerdaten ein:</Typography>
-                  <TextField
-                    disabled={loading}
-                    autoFocus={true}
-                    className={classes.textField}
-                    label={'E-Mail/Benutzername'}
-                    type={'text'}
-                    value={newUser.name}
-                    error={!loading && newUser.name !== '' && !this.checkUsernameLength(newUser.name)}
-                    name={'name'}
+                </TableHead>
+                <TableBody>
+                  {users.map((user, index) => (
+                    <TableRow key={user.user}>
+                      <TableCell scope={'row'}>{index + 1}</TableCell>
+                      <TableCell>{user.user}</TableCell>
+                      <TableCell>{user.isAdmin? 'Ja' : 'Nein'}</TableCell>
+                      <TableCell className={classes.flexContainer}>
+                        <IconButton id={user.user} onClick={this.requestDelete}><DeleteIcon id={user.user} color={'secondary'}/></IconButton>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </Paper>
+          </div>
+          <br/>
+          <div className={classes.marginLeftContainer}>
+            <Typography variant={'h6'} color={'primary'}>Nutzer*in hinzufügen</Typography>
+            <Paper className={classes.loginContainer}>
+              <div className={classes.formContainer}>
+                <Typography color={'primary'}>Bitte geben Sie Nutzerdaten ein:</Typography>
+                <TextField
+                  disabled={loading}
+                  autoFocus={true}
+                  className={classes.textField}
+                  label={'Benutzername'}
+                  type={'text'}
+                  value={newUser.name}
+                  error={!loading && newUser.name !== '' && !this.checkUsernameLength(newUser.name)}
+                  name={'name'}
+                  onChange={this.handleUserChange}
+                />
+                {!loading && newUser.name !== '' && !this.checkUsernameLength(newUser.name) && <Typography color={'error'} className={classes.errorMessage}>
+                  Geben Sie mindestens 3 und höchstens 30 Zeichen ein.
+                </Typography>}
+                <TextField
+                  className={classes.textField}
+                  disabled={loading}
+                  label={'Passwort'}
+                  type={'password'}
+                  name={'pw1'}
+                  value={newUser.pw1}
+                  error={!loading && newUser.pw1 !== '' && !this.checkPasswordLength(newUser.pw1)}
+                  onChange={this.handleUserChange}
+                />
+                {!loading && newUser.pw1 !== '' && !this.checkPasswordLength(newUser.pw1) && <Typography color={'error'} className={classes.errorMessage}>
+                  Das Passwort muss mindestens 4 und höchstens 40 Zeichen lang sein.
+                </Typography>}
+                <TextField
+                  className={classes.textField}
+                  disabled={loading}
+                  label={'Passwort wiederholen'}
+                  type={'password'}
+                  name={'pw2'}
+                  value={newUser.pw2}
+                  error={!loading && newUser.pw1 !== '' && !this.comparePasswords(newUser.pw1, newUser.pw2)}
+                  onChange={this.handleUserChange}
+                />
+                {!loading && !this.comparePasswords(newUser.pw1, newUser.pw2) && <Typography color={'error'} className={classes.errorMessage}>
+                  Die Passwörter stimmen nicht überein.
+                </Typography>}
+                <FormControlLabel
+                  control={
+                  <Checkbox
+                    checked={newUser.isAdmin}
                     onChange={this.handleUserChange}
+                    name={'isAdmin'}
                   />
-                  {!loading && newUser.name !== '' && !this.checkUsernameLength(newUser.name) && <Typography color={'error'} className={classes.errorMessage}>
-                    Geben Sie mindestens 3 und höchstens 30 Zeichen ein.
-                  </Typography>}
-                  <TextField
-                    className={classes.textField}
+                  }
+                  label={'Admin'}/>
+                <div className={classes.flexContainer}>
+                  <Button
                     disabled={loading}
-                    label={'Passwort'}
-                    type={'password'}
-                    name={'pw1'}
-                    value={newUser.pw1}
-                    error={!loading && newUser.pw1 !== '' && !this.checkPasswordLength(newUser.pw1)}
-                    onChange={this.handleUserChange}
-                  />
-                  {!loading && newUser.pw1 !== '' && !this.checkPasswordLength(newUser.pw1) && <Typography color={'error'} className={classes.errorMessage}>
-                    Das Passwort muss mindestens 4 und höchstens 40 Zeichen lang sein.
-                  </Typography>}
-                  <TextField
-                    className={classes.textField}
-                    disabled={loading}
-                    label={'Passwort wiederholen'}
-                    type={'password'}
-                    name={'pw2'}
-                    value={newUser.pw2}
-                    error={!loading && newUser.pw1 !== '' && !this.comparePasswords(newUser.pw1, newUser.pw2)}
-                    onChange={this.handleUserChange}
-                  />
-                  {!loading && !this.comparePasswords(newUser.pw1, newUser.pw2) && <Typography color={'error'} className={classes.errorMessage}>
-                    Die Passwörter stimmen nicht überein.
-                  </Typography>}
-                  <div className={classes.flexContainer}>
-                    <Button
-                      disabled={loading}
-                      size="small"
-                      color="primary"
-                      variant={"contained"}
-                      className={classes.button}
-                      onClick={this.requestNewUser}
-                    >
-                      Hinzufügen
-                    </Button>
-                  </div>
+                    size="small"
+                    color="primary"
+                    variant={"contained"}
+                    className={classes.button}
+                    onClick={this.requestNewUser}
+                  >
+                    Hinzufügen
+                  </Button>
                 </div>
-              </Paper>
-            </div>
-          </Collapse>
+              </div>
+            </Paper>
+          </div>
+          <br/>
         </div>
     );
   }
@@ -315,6 +315,9 @@ const styles = theme => ({
     marginRight: '20px',
     width: 896,
   },
+  marginLeftContainer: {
+    marginLeft: theme.spacing.unit,
+  },
   table: {
     minWidth: 400,
     maxWidth: 800,
@@ -332,23 +335,9 @@ const styles = theme => ({
     padding: 5,
     display: 'flex',
   },
-  deleteButton: {
-    color: 'red'
-  },
-  changeButton:{
-  },
-  formular:{
-    marginRight: '20px'
-  },
-  nutzerbutton: {
-    marginTop: theme.spacing.unit * 3,
-    marginLeft: theme.spacing.unit,
-    border: '#CCC 1px solid'
-  },
   tableWrapper: {
     marginTop: theme.spacing.unit * 3,
     overflowX: 'auto',
-    marginLeft: theme.spacing.unit,
     marginRight: '20px',
     width: 896,
   },
@@ -367,7 +356,8 @@ const styles = theme => ({
   button:{
     marginTop: theme.spacing.unit * 5,
     marginRight: theme.spacing.unit * 2,
-    width: 100,
+    width: 110,
+    padding: theme.spacing.unit,
   },
   flexContainer:{
     display: 'flex',
