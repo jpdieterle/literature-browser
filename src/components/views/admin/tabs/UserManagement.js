@@ -100,9 +100,9 @@ class UserManagement extends React.Component {
   // create new user on server
   requestNewUser = () => {
     // check inputs before sending request
-    if(this.checkUsernameLength(this.state.newUser.name)
-      || this.checkPasswordLength(this.state.newUser.pw1) || this.checkPasswordLength(this.state.newUser.pw2)
-      || this.comparePasswords(this.state.newUser.pw1, this.state.newUser.pw2)
+    if(!this.checkUsernameLength(this.state.newUser.name)
+      || !this.checkPasswordLength(this.state.newUser.pw1) || !this.checkPasswordLength(this.state.newUser.pw2)
+      || !this.comparePasswords(this.state.newUser.pw1, this.state.newUser.pw2)
     ) {
       this.context.handleNotificationChange(true, 'Bitte geben Sie gültige Nutzerdaten ein.', 'newUser', 'error');
       return;
@@ -145,8 +145,7 @@ class UserManagement extends React.Component {
 
   // delete user from server
   requestDelete = event => {
-    let currEvent = event;
-    console.log('event: ', currEvent);
+    console.log('event: ', event);
     // catch error
     if(!event.target.id) {
       console.log('event target id undefined!');
