@@ -34,9 +34,9 @@ const genres = [
 // App component
 class App extends React.Component {
   state = {
-    loggedIn: true,
+    loggedIn: false,
     sessionID: localStorage.getItem('sessionID') || null,
-    isAdmin: true,
+    isAdmin: false,
     timeRange: {
       minYear: localStorage.getItem('minYear') || '1700',
       maxYear: localStorage.getItem('maxYear') || '1950',
