@@ -213,7 +213,7 @@ class UserManagement extends React.Component {
                     <TableRow key={user.user}>
                       <TableCell scope={'row'}>{index + 1}</TableCell>
                       <TableCell>{user.user}</TableCell>
-                      <TableCell>{user.isAdmin? 'Ja' : 'Nein'}</TableCell>
+                      <TableCell>{user.isadmin? 'Ja' : 'Nein'}</TableCell>
                       <TableCell className={classes.flexContainer}>
                         <IconButton id={user.user} onClick={this.requestDelete}><DeleteIcon id={user.user} color={'secondary'}/></IconButton>
                       </TableCell>
