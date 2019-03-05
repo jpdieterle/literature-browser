@@ -17,32 +17,18 @@ import Admin from './components/views/admin/Admin';
 import MissingPage from './components/views/MissingPage';
 import Notification from './components/notifications/NotificationSnackbar';
 
-const exampleAuthors = ['Goethe, Johann Wolfgang',
-  'Schiller, Friedrich',
-  'Rilke, Rainer Maria',
-  'Spitteler, Carl',
-  'Dauthendey, Max',
-  'Grün, Anastasius',
-  'Lessing, Gotthold Ephraim'];
-
-const genres = [
-  'ballad',
-  'poem',
-  'sonnet',
-];
-
 // App component
 class App extends React.Component {
   state = {
     loggedIn: false,
-    sessionID: localStorage.getItem('sessionID') || null,
+    sessionID: null,
     isAdmin: false,
     timeRange: {
-      minYear: localStorage.getItem('minYear') || '1700',
-      maxYear: localStorage.getItem('maxYear') || '1950',
+      minYear: null,
+      maxYear: null,
     },
-    authors: localStorage.getItem('authors') || exampleAuthors,
-    genres: localStorage.getItem('genres') || genres,
+    authors: null,
+    genres: null,
     notification: {
       show: false,
       statusCode: 0,
@@ -90,15 +76,14 @@ class App extends React.Component {
       },
       body: JSON.stringify({
         authors: true,
-        id: localStorage.getItem('sessionID')})
+        id: this.state.sessionID,
+      })
     }).then(response => {
         if(response.ok) {
           response.json().then(data => {
             if(data && data.status === 'success' && data.authors) {
               this.handleStateChange('authors', JSON.parse(data.authors));
-              localStorage.setItem('authors', JSON.parse(data.authors));
               console.log('authorData: ', JSON.parse(data.authors));
-              console.log('localStorage authors: ', localStorage.getItem('authors'));
             } else {
               // server error
               this.handleNotificationChange(true, 'Autoren/Genres/Zeitspanne konnten nicht vom Server geladen werden.', 'initialLoad', 'error');
