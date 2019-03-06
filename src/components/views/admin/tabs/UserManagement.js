@@ -146,6 +146,7 @@ class UserManagement extends React.Component {
   // delete user from server
   requestDelete = event => {
     console.log('event: ', event);
+    console.log('event target: ', event.target);
     // catch error
     if(!event.target.id) {
       console.log('event target id undefined!');
