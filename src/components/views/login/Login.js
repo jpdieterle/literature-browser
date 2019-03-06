@@ -20,8 +20,19 @@ class Login extends React.Component {
     this.setState({[event.target.name]: event.target.value});
   };
 
+  onKeyPress = (event) => {
+    if(event.key === 'Enter') {
+      this.requestLogin();
+      event.preventDefault();
+    }
+  };
+
   // send request to server + change app state or display error
   requestLogin = () => {
+    if(this.state.username.length < 1 || this.state.password.length < 1) {
+      this.context.handleNotificationChange(true, 'Bitte geben Sie einen Username und ein Passwort ein.', 'login', 'error');
+      return;
+    }
     this.setState({
       loading: true,
       error: false,
@@ -96,6 +107,7 @@ class Login extends React.Component {
               name={'username'}
               value={username}
               onChange={this.onInputChange}
+              onKeyPress={this.onKeyPress}
             />
             <TextField
               className={classes.textField}
@@ -105,6 +117,7 @@ class Login extends React.Component {
               name={'password'}
               value={password}
               onChange={this.onInputChange}
+              onKeyPress={this.onKeyPress}
             />
             <div className={classes.flexContainer}>
               <Button
