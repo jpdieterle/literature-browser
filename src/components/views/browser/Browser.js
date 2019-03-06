@@ -317,6 +317,7 @@ Browser.contextType = NotificationContext;
 const styles = theme => ({
   root:{
     paddingLeft: theme.spacing.unit * 3,
+    paddingBottom: theme.spacing.unit * 3,
   },
   infoBox:{
     minWidth: 400,
