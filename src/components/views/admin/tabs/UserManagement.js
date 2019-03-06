@@ -216,7 +216,7 @@ class UserManagement extends React.Component {
                       <TableCell>{user.user}</TableCell>
                       <TableCell>{user.isadmin? 'Ja' : 'Nein'}</TableCell>
                       <TableCell className={classes.flexContainer}>
-                        <IconButton id={user.user} onClick={this.requestDelete}><DeleteIcon id={user.user} color={'secondary'}/></IconButton>
+                        <IconButton id={user.user} onClick={this.requestDelete}><DeleteIcon onClick={this.requestDelete} id={user.user} color={'secondary'}/></IconButton>
                       </TableCell>
                     </TableRow>
                   ))}
