@@ -130,7 +130,7 @@ class Browser extends React.PureComponent {
       return;
     }
 
-    let payload = {id: localStorage.getItem('sessionID')};
+    let payload = {id: this.props.sessionID};
     getAll? payload.getAll = true : payload.cards = this.state.cardList;
 
     // start loading animation, disable forms
@@ -309,7 +309,7 @@ Browser.propTypes = {
   minYear: PropTypes.string.isRequired,
   maxYear: PropTypes.string.isRequired,
   genres: PropTypes.arrayOf(PropTypes.string),
-  sessionID: PropTypes.any,
+  sessionID: PropTypes.any.isRequired,
 };
 
 Browser.contextType = NotificationContext;

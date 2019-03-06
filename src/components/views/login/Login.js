@@ -47,8 +47,6 @@ class Login extends React.Component {
               this.props.handleAppStateChange('isAdmin', data.isadmin !== 0);
               this.props.handleAppStateChange('sessionID', data.id);
 
-              //save session ID in local storage (stays after reload)
-              localStorage.setItem('sessionID', data.id);
               this.context.handleNotificationChange(true, 'Login erfolgreich.', 'login', 'success');
             } else {
               // server error

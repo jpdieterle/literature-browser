@@ -129,10 +129,6 @@ class App extends React.Component {
               console.log('log time parsed', parsedMinYear, parsedMaxYear);
               this.handleStateChange('genres', parsedGenre);
               this.handleStateChange('timeRange', {minYear: parsedMinYear, maxYear: parsedMaxYear});
-              localStorage.setItem('genres', parsedGenre);
-              localStorage.setItem('minYear', parsedMinYear);
-              localStorage.setItem('maxYear', parsedMaxYear);
-              console.log('localStorage log data', localStorage.getItem('genres'), localStorage.getItem('minYear'), localStorage.getItem('maxYear'));
             } else {
               this.handleNotificationChange(true, 'Autoren/Genres/Zeitspanne konnten nicht vom Server geladen werden.', 'initialLoad', 'error');
             }
@@ -147,58 +143,6 @@ class App extends React.Component {
     );
   };
 
-  // check if user is logged in (valid session id) and if he is an admin
-  requestUserStatus = () => {
-    // check if there was a session in the past
-    if(!localStorage.getItem('sessionID')) {
-      return;
-    }
-
-    fetch("/backend/lib/functions.php", {
-      method: 'POST',
-      credentials: 'same-origin', // allow cookies -> session management
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        status: true,
-        id: localStorage.getItem('sessionID')
-      })
-    }).then(response => {
-        if(response.ok) {
-          response.json().then(data => {
-            if(data && data.loggedIn && data.isadmin !== undefined) {
-              this.handleStateChange('loggedIn', data.loggedIn);
-              this.handleStateChange('isAdmin', data.isadmin);
-              this.handleStateChange('sessionID', localStorage.getItem('sessionID'));
-            } else {
-              this.handleNotificationChange(true, 'Sitzung konnte nicht wiederhergestellt werden.', 'initialLoad', 'error');
-              localStorage.removeItem('sessionID');
-            }
-          });
-        } else {
-          this.handleNotificationChange(true, 'Sitzung konnte nicht wiederhergestellt werden.', 'initialLoad', 'error');
-          localStorage.removeItem('sessionID');
-          this.handleStateChange('loggedIn', false);
-          this.handleStateChange('isAdmin', false);
-        }
-      }
-    ).catch(error => {
-        this.handleNotificationChange(true, 'Sitzung konnte nicht wiederhergestellt werden.', 'initialLoad', 'error', 404);
-        localStorage.removeItem('sessionID');
-        this.handleStateChange('loggedIn', false);
-        this.handleStateChange('isAdmin', false);
-      }
-    );
-  };
-
-  // executed after component is inserted into the tree
-  componentDidMount = () => {
-    // check if user is still logged in
-    this.requestUserStatus();
-    //  console.log('initial app state: ', this.state.authorsList, this.state.timeRange, this.state.genres, this.state.loggedIn, this.state.isAdmin);
-  };
-
   // logout user, request server to delete sessionID, display error if necessary
   logout = () => {
     fetch('/backend/lib/functions.php', {
@@ -209,7 +153,7 @@ class App extends React.Component {
       },
       body: JSON.stringify({
         logout: true,
-        id: localStorage.getItem('sessionID')
+        id: this.state.sessionID
       })
     })
       .then(response => {
@@ -222,7 +166,6 @@ class App extends React.Component {
           loggedIn: false,
           isAdmin: false,
         });
-        localStorage.clear();
       })
       .catch(error => {
         this.handleNotificationChange(true, error.message, 'logout', 'error', 404);
@@ -230,7 +173,6 @@ class App extends React.Component {
           loggedIn: false,
           isAdmin: false,
         });
-        localStorage.clear();
       });
   };
 

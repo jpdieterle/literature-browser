@@ -73,7 +73,7 @@ class UserManagement extends React.Component {
       },
       body: JSON.stringify({
         users: true,
-        id: localStorage.getItem('sessionID')
+        id: this.props.sessionID
       }),
     })
       .then(response => {
@@ -118,7 +118,7 @@ class UserManagement extends React.Component {
         username: this.state.newUser.name,
         password: this.state.newUser.pw1,
         isadmin: this.state.newUser.isAdmin === false? 0 : 1,
-        id: localStorage.getItem('sessionID')
+        id: this.props.sessionID
       }),
     })
       .then(response => {
