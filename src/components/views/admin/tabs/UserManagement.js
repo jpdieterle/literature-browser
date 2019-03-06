@@ -166,8 +166,8 @@ class UserManagement extends React.Component {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        delete: event.target.name, // selected user
-        id: localStorage.getItem('sessionID')
+        delete: event.target.id,
+        id: this.props.sessionID,
       })
     })
       .then(response => {
@@ -302,6 +302,7 @@ class UserManagement extends React.Component {
 
 UserManagement.propTypes = {
   classes: PropTypes.object.isRequired,
+  sessionID: PropTypes.any.isRequired,
 };
 
 UserManagement.contextType = NotificationContext;
