@@ -42,7 +42,7 @@ class Login extends React.Component {
         this.setState({statusCode: response.status});
         if (response.ok) {
           response.json().then(data => {
-            if(data && data.status === 'success' && data.isadmin) {
+            if(data && data.status === 'success' && typeof data.isadmin !== 'undefined') {
               this.props.handleAppStateChange('loggedIn', true);
               this.props.handleAppStateChange('isAdmin', data.isadmin !== 0);
               this.props.handleAppStateChange('sessionID', data.id);
