@@ -144,18 +144,19 @@ class UserManagement extends React.Component {
   };
 
   // delete user from server
-  requestDelete = event => {
-    console.log('event: ', event);
-    console.log('event target: ', event.target);
+  requestDelete = username => {
+    //console.log('event: ', event);
+    //console.log('event target: ', event.target);
     // catch error
-    if(!event.target.id) {
-      console.log('event target id undefined!');
+    //if(!event.target.id) {
+      //console.log('event target id undefined!');
       // this.context.handleNotificationChange(true, 'Bitte versuchen Sie es noch einmal.', 'deleteUser', 'warning');
       // return;
-    }
-    let selectedUserName = event.target.id;
+    //}
+    //let selectedUserName = event.target.id;
     // don't delete user if they are the only admin
-    if(this.state.users.filter(user => user.user === selectedUserName)[0].isAdmin && this.getAdminNumber(this.state.users) === 1) {
+    if(!username) return;
+    if(this.state.users.filter(user => user.user === username)[0].isAdmin && this.getAdminNumber(this.state.users) === 1) {
       this.context.handleNotificationChange(true, 'Legen Sie einen neuen Admin-Account an bevor Sie den einzigen löschen.', 'deleteUser', 'error');
       return;
     }
@@ -166,7 +167,7 @@ class UserManagement extends React.Component {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        delete: event.target.id,
+        delete: username,
         id: this.props.sessionID,
       })
     })
@@ -216,7 +217,7 @@ class UserManagement extends React.Component {
                       <TableCell>{user.user}</TableCell>
                       <TableCell>{user.isadmin? 'Ja' : 'Nein'}</TableCell>
                       <TableCell className={classes.flexContainer}>
-                        <IconButton id={user.user} onClick={this.requestDelete}><DeleteIcon onClick={this.requestDelete} id={user.user} color={'secondary'}/></IconButton>
+                        <IconButton onClick={() => this.requestDelete(user.user)}><DeleteIcon color={'secondary'}/></IconButton>
                       </TableCell>
                     </TableRow>
                   ))}
