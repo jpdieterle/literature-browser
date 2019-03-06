@@ -66,7 +66,7 @@ class TextManagement extends Component {
 
   // update state when file selection changes
   handleFileChange = (event) => {
-    this.handleChange('selectedFiles', event.target.value);
+    this.handleChange('selectedFiles', event.target.files[0]);
   };
 
   // update authors, genres, time range
