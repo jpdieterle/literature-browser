@@ -26,18 +26,9 @@ class GenreSelection extends React.PureComponent {
     genres: this.props.genres,
   };
 
-  componentWillMount = () => {
-    console.log('genres in GenreSelection will mount: ', this.props.genres);
-  };
-
-  componentWillUpdate = () => {
-    console.log('genres in GenreSelection will update: ', this.props.genres);
-  };
-
   // update state with new genres if prop changes
   componentWillReceiveProps = nextProps => {
     if(this.props.genres !== nextProps.genres) {
-      console.log('nextProps genre: ', nextProps.genres, Array.isArray(nextProps.genres));
       this.setState({genres: nextProps.genres});
     }
   };
