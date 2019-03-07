@@ -9,6 +9,7 @@ import green from '@material-ui/core/colors/green';
 import amber from '@material-ui/core/colors/amber';
 import NotificationContext from './NotificationContext';
 import Slide from '@material-ui/core/Slide';
+import Fade from '@material-ui/core/Fade';
 import { getErrorMessage } from '../../utils/errorMessageHelper';
 
 // show success/warning/error snackbar in right lower corner of viewport
@@ -44,7 +45,7 @@ class NotificationSnackbar extends React.Component {
           resumeHideDuration={0}
           disableWindowBlurListener={true}
           onClose={this.handleClose}
-          TransitionComponent={Slide}
+          TransitionComponent={Fade}
         >
           <SnackbarContent
             className={classes[variant]}
