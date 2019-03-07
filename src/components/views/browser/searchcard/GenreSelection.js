@@ -43,13 +43,13 @@ class GenreSelection extends React.PureComponent {
   };
 
   handleChange = event => {
-    this.setState({ SelectedGenre: event.target.value }, () => {
+    this.setState({ selectedGenre: event.target.value }, () => {
       this.props.onInputChange(this.props.cardId, 'genres', this.state.selectedGenre); // update SearchCard state
     });
   };
 
   render() {
-    const { classes, variant, disabled, initialValues } = this.props;
+    const { classes, variant, disabled } = this.props;
     const { genres, selectedGenre } = this.state;
     return(
       <div className={classes.root}>
@@ -65,7 +65,11 @@ class GenreSelection extends React.PureComponent {
           >
             {genres && Array.isArray(genres) && genres.map(name => (
               <MenuItem key={name} value={name}>
-                <Checkbox checked={selectedGenre.indexOf(name) > -1} disableRipple={true} color={"primary"}/>
+                <Checkbox
+                  checked={selectedGenre.indexOf(name) > -1}
+                  disableRipple={true}
+                  color={"primary"}
+                />
                 <ListItemText primary={name} />
               </MenuItem>
             ))}
