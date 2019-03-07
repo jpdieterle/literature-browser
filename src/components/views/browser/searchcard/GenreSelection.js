@@ -37,6 +37,7 @@ class GenreSelection extends React.PureComponent {
   // update state with new genres if prop changes
   componentWillReceiveProps = nextProps => {
     if(this.props.genres !== nextProps.genres) {
+      console.log('nextProps genre: ', nextProps.genres, Array.isArray(nextProps.genres));
       this.setState({genres: nextProps.genres});
     }
   };
@@ -62,7 +63,7 @@ class GenreSelection extends React.PureComponent {
             renderValue={selected => selected.join(', ')}
             MenuProps={MenuProps}
           >
-            {genres && genres.isArray && genres.map(name => (
+            {genres && Array.isArray(genres) && genres.map(name => (
               <MenuItem key={name} value={name}>
                 <Checkbox checked={selectedGenre.indexOf(name) > -1} disableRipple={true} color={"primary"}/>
                 <ListItemText primary={name} />
