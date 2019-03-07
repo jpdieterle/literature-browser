@@ -47,7 +47,7 @@ class NotificationSnackbar extends React.Component {
           TransitionComponent={Slide}
         >
           <SnackbarContent
-            classes={{root: classes[variant]}}
+            className={classes[variant]}
             aria-describedby="snackbar"
             message={<span id={'snackbar'}>{getErrorMessage(message, statusCode, action)}</span>}
             action={[
