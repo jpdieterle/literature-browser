@@ -160,7 +160,7 @@ class App extends React.Component {
         if(response.ok && response.json().status === 'success') {
           this.handleNotificationChange(true, 'Logout erfolgreich', 'logout', 'success');
         } else {
-          this.handleNotificationChange(true, 'Logout auf dem Server fehlgeshlagen.', 'logout', 'error', response.statusCode);
+          this.handleNotificationChange(true, 'Logout auf dem Server fehlgeschlagen.', 'logout', 'error', response.statusCode);
         }
         this.setState({
           loggedIn: false,

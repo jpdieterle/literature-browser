@@ -86,9 +86,11 @@ const styles = theme => ({
   },
   success: {
     backgroundColor: green[600],
+    width: 520,
   },
   warning: {
     backgroundColor: amber[700],
+    width: 520,
   },
   icon: {
     fontSize: 20,
