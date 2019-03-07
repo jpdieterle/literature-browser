@@ -35,7 +35,6 @@ class ContainsInput extends React.PureComponent {
   };
 
   checkInput = () => {
-    console.log('checking input');
     let error = false;
     let errorMessage = '';
     //let string = this.state.keywords;

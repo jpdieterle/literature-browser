@@ -28,15 +28,12 @@ class Results extends React.Component {
         .then(response => {
           if(response.ok) {
             response.json().then(data => {
-              console.log(data);
               if(data && data.status === 'success') {
                 // create invisible anchor and click it
                 let a = document.createElement('a');
                 a.href = '/backend/database/_cache/' + data.filename;
-                console.log('download path: ', a.href);
                 a.download = true;
                 a.click();
-                console.log('clicked link');
                 // alternative for downloading file:
                 // window.open(responseJson['path'], "_blank")
               } else {
