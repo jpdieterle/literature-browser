@@ -44,8 +44,7 @@ class NotificationSnackbar extends React.Component {
           resumeHideDuration={0}
           disableWindowBlurListener={true}
           onClose={this.handleClose}
-          TransitionComponent={Fade}
-          classes={{root: {backgroundColor: 'none'}}}
+          transitionDuration={0}
         >
           <SnackbarContent
             classes={{root: classes[variant]}}
@@ -87,7 +86,7 @@ const styles = theme => ({
   },
   success: {
     backgroundColor: green[600],
-    width: 520,
+    //width: 520,
   },
   warning: {
     backgroundColor: amber[700],
