@@ -82,7 +82,7 @@ const styles = theme => ({
   root: {},
   error: {
     backgroundColor: theme.palette.error.dark,
-    width: 520,
+    //width: 520,
   },
   success: {
     backgroundColor: green[600],
@@ -90,7 +90,7 @@ const styles = theme => ({
   },
   warning: {
     backgroundColor: amber[700],
-    width: 520,
+    //width: 520,
   },
   icon: {
     fontSize: 20,
