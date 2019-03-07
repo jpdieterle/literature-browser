@@ -51,7 +51,6 @@ class App extends React.Component {
 
   // open/close notification snackbar, display message (depending on optional statusCode and variant)
   handleNotificationChange = (show, message, action, variant, statusCode, ) => {
-    // console.log('error? ', this.state.error);
     this.handleStateChange('notification', {
       show: show,
       statusCode: statusCode? statusCode : 0,
@@ -84,7 +83,6 @@ class App extends React.Component {
           response.json().then(data => {
             if(data && data.status === 'success' && data.authors) {
               this.handleStateChange('authors', JSON.parse(data.authors));
-              console.log('authorData: ', JSON.parse(data.authors));
             } else {
               // server error
               this.handleNotificationChange(true, 'Autoren/Genres/Zeitspanne konnten nicht vom Server geladen werden.', 'initialLoad', 'error');

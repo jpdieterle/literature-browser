@@ -14,7 +14,6 @@ class SearchCard extends React.PureComponent {
   onDuplicate = () => {this.props.onDuplicate(this.props.id)};
 
   render() {
-    console.log('render sc');
     const { classes, id, getIndex, getDisabled } = this.props;
 
     return(
