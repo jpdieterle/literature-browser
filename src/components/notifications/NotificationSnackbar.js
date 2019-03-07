@@ -8,7 +8,6 @@ import IconButton from '@material-ui/core/IconButton';
 import green from '@material-ui/core/colors/green';
 import amber from '@material-ui/core/colors/amber';
 import NotificationContext from './NotificationContext';
-import Slide from '@material-ui/core/Slide';
 import Fade from '@material-ui/core/Fade';
 import { getErrorMessage } from '../../utils/errorMessageHelper';
 
@@ -48,7 +47,7 @@ class NotificationSnackbar extends React.Component {
           TransitionComponent={Fade}
         >
           <SnackbarContent
-            className={classes[variant]}
+            classes={{root: classes[variant]}}
             aria-describedby="snackbar"
             message={<span id={'snackbar'}>{getErrorMessage(message, statusCode, action)}</span>}
             action={[
@@ -83,15 +82,15 @@ const styles = theme => ({
   root: {},
   error: {
     backgroundColor: theme.palette.error.dark,
-    width: 520,
+    //width: 520,
   },
   success: {
     backgroundColor: green[600],
-    width: 520,
+    //width: 520,
   },
   warning: {
     backgroundColor: amber[700],
-    width: 520,
+    //width: 520,
   },
   icon: {
     fontSize: 20,
