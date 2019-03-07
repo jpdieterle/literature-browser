@@ -64,15 +64,12 @@ const styles = theme => ({
   onTop:{
     zIndex: theme.zIndex.drawer + 1,
   },
-  heightfix: {
-    height: 88
-  },
   grow: {
     flexGrow: 1
   },
   toolbar: {
     backgroundColor: indigo[900],
-    height: 88,
+    height: 70,
     minWidth: 608,
   },
   img: {

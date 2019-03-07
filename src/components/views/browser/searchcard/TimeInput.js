@@ -16,14 +16,6 @@ class TimeInput extends React.PureComponent {
     timeToError: false,
   };
 
-  componentWillMount = () => {
-    console.log('time input will mount: ', this.state.timeFrom, this.state.timeTo)
-  };
-
-  componentWillUpdate = () => {
-    console.log('time input will update: ', this.state.timeFrom, this.state.timeTo)
-  };
-
   // update state with new min/max year if props change
   componentWillReceiveProps = nextProps => {
     if(this.props.minYear !== nextProps.minYear || this.props.maxYear !== nextProps.maxYear) {

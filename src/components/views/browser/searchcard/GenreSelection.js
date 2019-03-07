@@ -22,7 +22,8 @@ const MenuProps = {
 
 class GenreSelection extends React.PureComponent {
   state = {
-    genre: this.props.initialValues,
+    selectedGenre: this.props.initialValues,
+    genres: this.props.genres,
   };
 
   componentWillMount = () => {
@@ -35,27 +36,27 @@ class GenreSelection extends React.PureComponent {
 
   // update state with new genres if prop changes
   componentWillReceiveProps = nextProps => {
-    if(this.props.initialValues !== nextProps.initialValues) {
-      this.setState({genre: nextProps.initialValues});
+    if(this.props.genres !== nextProps.genres) {
+      this.setState({genres: nextProps.genres});
     }
   };
 
   handleChange = event => {
-    this.setState({ genre: event.target.value }, () => {
-      this.props.onInputChange(this.props.cardId, 'genres', this.state.genre); // update SearchCard state
+    this.setState({ SelectedGenre: event.target.value }, () => {
+      this.props.onInputChange(this.props.cardId, 'genres', this.state.selectedGenre); // update SearchCard state
     });
   };
 
   render() {
-    const { classes, variant, disabled, genres } = this.props;
-    const { genre } = this.state;
+    const { classes, variant, disabled, initialValues } = this.props;
+    const { genres, selectedGenre } = this.state;
     return(
       <div className={classes.root}>
         <FormControl variant={variant} fullWidth={true} disabled={disabled}>
           <InputLabel htmlFor="selectGenre">Genre(s)</InputLabel>
           <Select
             multiple
-            value={genre}
+            value={selectedGenre}
             onChange={this.handleChange}
             input={<Input id="selectGenre" />}
             renderValue={selected => selected.join(', ')}
@@ -63,7 +64,7 @@ class GenreSelection extends React.PureComponent {
           >
             {genres && genres.isArray && genres.map(name => (
               <MenuItem key={name} value={name}>
-                <Checkbox checked={genre.indexOf(name) > -1} disableRipple={true} color={"primary"}/>
+                <Checkbox checked={selectedGenre.indexOf(name) > -1} disableRipple={true} color={"primary"}/>
                 <ListItemText primary={name} />
               </MenuItem>
             ))}
