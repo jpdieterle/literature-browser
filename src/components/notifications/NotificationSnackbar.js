@@ -45,6 +45,7 @@ class NotificationSnackbar extends React.Component {
           disableWindowBlurListener={true}
           onClose={this.handleClose}
           TransitionComponent={Fade}
+          classes={{root: {backgroundColor: 'none'}}}
         >
           <SnackbarContent
             classes={{root: classes[variant]}}
