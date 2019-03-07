@@ -8,8 +8,8 @@ import Typography from '@material-ui/core/Typography';
 // select time range in which to search
 class TimeInput extends React.PureComponent {
   state = {
-    timeFrom: '',
-    timeTo: '',
+    timeFrom: this.props.initialTimeFrom,
+    timeTo: this.props.initialTimeTo,
     minYear: this.props.minYear,
     maxYear: this.props.maxYear,
     timeFromError: false,
@@ -28,7 +28,7 @@ class TimeInput extends React.PureComponent {
   componentWillReceiveProps = nextProps => {
     if(this.props.minYear !== nextProps.minYear || this.props.maxYear !== nextProps.maxYear) {
       this.setState({minYear: nextProps.minYear, maxYear: nextProps.maxYear});
-    }
+}
   };
 
   handleChange = name => event => {
@@ -57,7 +57,7 @@ class TimeInput extends React.PureComponent {
 
   render() {
     const { classes, variant, initialTimeTo, initialTimeFrom, disabled } = this.props;
-    const { timeFrom, timeTo } = this.state;
+    const { timeFrom, timeTo, minYear, maxYear, timeToError, timeFromError } = this.state;
 
     return(
       <div className={classes.root}>
@@ -65,7 +65,7 @@ class TimeInput extends React.PureComponent {
           <TextField
             id="fromYear"
             label="von (Jahr)"
-            placeholder={initialTimeFrom}
+            placeholder={minYear}
             inputProps={{min: initialTimeFrom , max: initialTimeTo}}
             value={timeFrom}
             onChange={this.handleChange('timeFrom')}
@@ -73,7 +73,7 @@ class TimeInput extends React.PureComponent {
             className={classes.textField}
             variant={variant}
             disabled={disabled}
-            error={this.state.timeFromError}
+            error={timeFromError}
             InputLabelProps={{
               shrink: true,
             }}
@@ -81,7 +81,7 @@ class TimeInput extends React.PureComponent {
           <TextField
             id="toYear"
             label="bis (Jahr)"
-            placeholder={initialTimeTo}
+            placeholder={maxYear}
             inputProps={{min: initialTimeFrom , max: initialTimeTo}}
             value={timeTo}
             onChange={this.handleChange('timeTo')}
@@ -89,7 +89,7 @@ class TimeInput extends React.PureComponent {
             className={classes.textField}
             variant={variant}
             disabled={disabled}
-            error={this.state.timeToError}
+            error={timeToError}
             InputLabelProps={{
               shrink: true,
             }}
