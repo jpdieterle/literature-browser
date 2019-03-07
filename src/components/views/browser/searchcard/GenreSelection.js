@@ -33,6 +33,13 @@ class GenreSelection extends React.PureComponent {
     console.log('genres in GenreSelection will update: ', this.props.genres);
   };
 
+  // update state with new genres if prop changes
+  componentWillReceiveProps = nextProps => {
+    if(this.props.initialValues !== nextProps.initialValues) {
+      this.setState({genre: nextProps.initialValues});
+    }
+  };
+
   handleChange = event => {
     this.setState({ genre: event.target.value }, () => {
       this.props.onInputChange(this.props.cardId, 'genres', this.state.genre); // update SearchCard state

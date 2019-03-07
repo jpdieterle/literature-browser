@@ -10,6 +10,8 @@ class TimeInput extends React.PureComponent {
   state = {
     timeFrom: '',
     timeTo: '',
+    minYear: this.props.minYear,
+    maxYear: this.props.maxYear,
     timeFromError: false,
     timeToError: false,
   };
@@ -20,6 +22,13 @@ class TimeInput extends React.PureComponent {
 
   componentWillUpdate = () => {
     console.log('time input will update: ', this.state.timeFrom, this.state.timeTo)
+  };
+
+  // update state with new min/max year if props change
+  componentWillReceiveProps = nextProps => {
+    if(this.props.minYear !== nextProps.minYear || this.props.maxYear !== nextProps.maxYear) {
+      this.setState({minYear: nextProps.minYear, maxYear: nextProps.maxYear});
+    }
   };
 
   handleChange = name => event => {

@@ -128,7 +128,7 @@ class App extends React.Component {
               console.log('log genres parsed', parsedGenre);
               console.log('log time parsed', parsedMinYear, parsedMaxYear);
               this.handleStateChange('genres', parsedGenre);
-              this.handleStateChange('timeRange', {minYear: parsedMinYear.toString(), maxYear: parsedMaxYear.toString()});
+              this.handleStateChange('timeRange', {minYear: parsedMinYear, maxYear: parsedMaxYear});
             } else {
               this.handleNotificationChange(true, 'Autoren/Genres/Zeitspanne konnten nicht vom Server geladen werden.', 'initialLoad', 'error');
             }
