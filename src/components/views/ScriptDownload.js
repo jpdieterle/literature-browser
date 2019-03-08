@@ -20,6 +20,7 @@ class ScriptDownload extends React.Component {
 
   componentDidMount = () => {
     this.requestFilenames();
+    console.log('filenames: ', this.state.filenames);
   };
 
   requestFilenames = () => {
@@ -35,6 +36,9 @@ class ScriptDownload extends React.Component {
         if(res.ok) {
           res.json().then(data => {
             if (data && data.status === "success") {
+              console.log('data: ', data);
+              console.log('data files: ', data.files);
+              console.log('parsed data files', JSON.parse(data).files);
               this.context.handleNotificationChange(true, 'Die Dateien wurden erfolgreich abgerufen.', 'getFiles', 'success');
               this.setState({filenames: JSON.parse(data.files)})
             } else {
@@ -62,7 +66,7 @@ class ScriptDownload extends React.Component {
           <Typography variant={'h5'} color={'primary'}>Python-Skripte</Typography>
           <ul>
             {filenames.map(name =>
-              <li><Link onClick={this.downloadFile} key={name} href={'/backend/scripts' + name} download>{name}</Link></li>
+              <li><Link key={name} href={'/backend/scripts' + name} download>{name}</Link></li>
             )}
           </ul>
         </div>
