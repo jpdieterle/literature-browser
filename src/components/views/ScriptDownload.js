@@ -18,15 +18,15 @@ class ScriptDownload extends React.Component {
     });
   };
 
-  async componentDidMount() {
-    await this.requestFilenames();
+  componentDidMount() {
+    this.requestFilenames();
     console.log('filenames: ', this.state.filenames);
   };
 
   async requestFilenames() {
     // check if session is still valid otherwise logout user
     const userStatus = await this.props.requestStatus();
-    console.log('then', userStatus);
+    console.log('then');
     if(userStatus === 'true') {
       console.log('fetch');
       fetch("/backend/lib/functions.php", {
