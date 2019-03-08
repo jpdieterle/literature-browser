@@ -13,7 +13,7 @@ class SearchButton extends React.Component {
 
   // display tip on hover
   searchTip = 'Alle Texte abfragen, die den eingegebenen Kriterien entsprechen';
-  getAllTip = 'Alle verfügbaren Gedichte abfragen';
+  getAllTip = 'Alle verfügbaren Texte abfragen';
   buttonTips = this.props.variant === 'search'? this.searchTip : this.getAllTip;
 
   render() {
