@@ -42,7 +42,7 @@ class ScriptDownload extends React.Component {
               console.log('data: ', data);
               console.log('data files: ', data.files);
               this.context.handleNotificationChange(true, 'Die Dateien wurden erfolgreich abgerufen.', 'getFiles', 'success');
-              this.setState({filenames: JSON.parse(data.files)})
+              this.setState({filenames: data.files})
             } else {
               this.context.handleNotificationChange(true, 'Die Dateien konnten nicht vom Server geladen werden.', 'getFiles', 'error');
             }
