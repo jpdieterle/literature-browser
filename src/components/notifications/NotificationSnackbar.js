@@ -8,7 +8,6 @@ import IconButton from '@material-ui/core/IconButton';
 import green from '@material-ui/core/colors/green';
 import amber from '@material-ui/core/colors/amber';
 import NotificationContext from './NotificationContext';
-import Fade from '@material-ui/core/Fade';
 import { getErrorMessage } from '../../utils/errorMessageHelper';
 
 // show success/warning/error snackbar in right lower corner of viewport
