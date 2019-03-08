@@ -154,8 +154,10 @@ class App extends React.Component {
               this.handleNotificationChange(true, 'Ihre Sitzung ist abgelaufen.', 'sessionCheck', 'error');
               this.handleStateChange('loggedIn', false);
               this.handleStateChange('isAdmin', false);
+              console.log('error1');
               return false;
             } else {
+              console.log('success');
               return true;
             }
           });
@@ -163,6 +165,7 @@ class App extends React.Component {
           this.handleNotificationChange(true, 'Ihre Sitzung ist abgelaufen.', 'sessionCheck', 'error');
           this.handleStateChange('loggedIn', false);
           this.handleStateChange('isAdmin', false);
+          console.log('error2');
           return false;
         }
       }
@@ -170,7 +173,8 @@ class App extends React.Component {
         this.handleNotificationChange(true, 'Ihre Sitzung ist abgelaufen.', 'sessionCheck', 'error', 404);
         this.handleStateChange('loggedIn', false);
         this.handleStateChange('isAdmin', false);
-        return false;
+      console.log('error3');
+      return false;
       }
     );
   };
