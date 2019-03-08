@@ -189,7 +189,7 @@ class TextManagement extends Component {
         </div>
         <Divider variant='middle' className={classes.divider}/><br/>
         <div className={classes.addTextContainer}>
-          <Typography variant={'h6'} color={'primary'}>Text(e) hinzufügen (.json oder .txt Format)</Typography>
+          <Typography variant={'h6'} color={'primary'}>Text(e) hinzufügen (.json Format)</Typography>
           <div className={classes.buttonsContainer}>
             <TextField
               InputProps={{root: classes.textInput}}
