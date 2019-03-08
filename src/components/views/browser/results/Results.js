@@ -116,7 +116,7 @@ class Results extends React.Component {
               className={classes.resultLink}
               onClick={() => this.requestStatus(() => this.downloadResults('json', getAll))}
             >
-               Suchergebnisse im JSON-Format herunterladen {getAll && '(' + number + ' Treffer)'}
+               Suchergebnisse im JSON-Format herunterladen {!getAll && '(' + number + ' Treffer)'}
             </Link>}
             {formats.includes('txt') &&
             <Link
@@ -124,7 +124,7 @@ class Results extends React.Component {
               className={classes.resultLink}
               onClick={() => this.requestStatus(() => this.downloadResults('txt', getAll))}
             >
-              Suchergebnisse im TXT-Format herunterladen {getAll && '(' + number + ' Treffer)'}
+              Suchergebnisse im TXT-Format herunterladen {!getAll && '(' + number + ' Treffer)'}
             </Link>}
           </Typography>
         </Paper>
