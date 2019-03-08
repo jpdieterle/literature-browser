@@ -245,7 +245,7 @@ class App extends React.Component {
                     )}/>
                     <Route path='/about' component={About}/>
                     <Route path='/scripts' render={() => (
-                      loggedIn? (<ScriptDownload requestStatus={this.requestUserStatus.bind(this)}/>) : (<Redirect to='/login'/>)
+                      loggedIn? (<ScriptDownload requestStatus={this.requestUserStatus}/>) : (<Redirect to='/login'/>)
                     )}/>
                     <Route path='/admin' render={() => (
                       (loggedIn && isAdmin)? (<Admin requestNewAuthors={this.requestAuthors} requestNewLog={this.requestLog} requestStatus={this.requestUserStatus}/>) : (<Redirect to='/' />)
