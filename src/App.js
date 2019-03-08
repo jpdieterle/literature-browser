@@ -137,7 +137,7 @@ class App extends React.Component {
 
   // check if user is logged in (valid session id) and if he is an admin
   requestUserStatus = () => {
-    fetch("/backend/lib/sessionManagement.php", {
+    return fetch("/backend/lib/sessionManagement.php", {
       method: 'POST',
       credentials: 'same-origin', // allow cookies -> session management
       headers: {
