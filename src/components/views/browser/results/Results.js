@@ -62,7 +62,7 @@ class Results extends React.Component {
     if(getAll) {
       console.log('getAll request', format);
       let a = document.createElement('a');
-      a.href = '/backend/archive/' + format==='json'? 'corpusJson.zip' : 'corpusTxt.zip';
+      a.href = '/backend/lib/archive/' + format==='json'? 'corpusJson.zip' : 'corpusTxt.zip';
       a.download = true;
       a.click();
     } else {
