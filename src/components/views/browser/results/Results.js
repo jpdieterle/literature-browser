@@ -62,7 +62,7 @@ class Results extends React.Component {
     if(getAll) {
       console.log('getAll request', format);
       let a = document.createElement('a');
-      a.href = '/backend/database/_cache/' + format==='json'? 'corpusJson.zip' : 'corpusTxt.zip';
+      a.href = '/backend/archive/' + format==='json'? 'corpusJson.zip' : 'corpusTxt.zip';
       a.download = true;
       a.click();
     } else {
@@ -116,7 +116,7 @@ class Results extends React.Component {
               className={classes.resultLink}
               onClick={() => this.requestStatus(() => this.downloadResults('json', getAll))}
             >
-               Suchergebnisse im JSON-Format herunterladen {'(' + number + ' Treffer)'}
+               Suchergebnisse im JSON-Format herunterladen {getAll && '(' + number + ' Treffer)'}
             </Link>}
             {formats.includes('txt') &&
             <Link
@@ -124,7 +124,7 @@ class Results extends React.Component {
               className={classes.resultLink}
               onClick={() => this.requestStatus(() => this.downloadResults('txt', getAll))}
             >
-              Suchergebnisse im TXT-Format herunterladen {'(' + number + ' Treffer)'}
+              Suchergebnisse im TXT-Format herunterladen {getAll && '(' + number + ' Treffer)'}
             </Link>}
           </Typography>
         </Paper>
