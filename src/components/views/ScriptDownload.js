@@ -24,6 +24,9 @@ class ScriptDownload extends React.Component {
   };
 
   requestFilenames = () => {
+    // check if session is still valid otherwise logout user
+    this.props.requestStatus();
+
     fetch("/backend/lib/functions.php", {
       method: 'POST',
       credentials: 'same-origin', // allow cookies -> session management
@@ -38,7 +41,6 @@ class ScriptDownload extends React.Component {
             if (data && data.status === "success") {
               console.log('data: ', data);
               console.log('data files: ', data.files);
-              console.log('parsed data files', JSON.parse(data).files);
               this.context.handleNotificationChange(true, 'Die Dateien wurden erfolgreich abgerufen.', 'getFiles', 'success');
               this.setState({filenames: JSON.parse(data.files)})
             } else {
@@ -79,6 +81,7 @@ class ScriptDownload extends React.Component {
 
 ScriptDownload.propTypes = {
   classes: PropTypes.object.isRequired,
+  requestStatus: PropTypes.func.isRequired,
 };
 
 const styles = theme => ({

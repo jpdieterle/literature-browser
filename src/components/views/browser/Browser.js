@@ -119,6 +119,8 @@ class Browser extends React.PureComponent {
 
   // submit search with or without criteria
   handleSubmit = (getAll) => {
+    // check if session is still valid otherwise logout user
+    this.props.requestStatus();
 
     // check for errors before sending request
     if((!getAll && (this.state.timeError || this.state.keywordError)) || this.state.formatError) {
@@ -130,7 +132,7 @@ class Browser extends React.PureComponent {
       return;
     }
 
-    let payload = {id: this.props.sessionID};
+    let payload = {};
     getAll? payload.getAll = true : payload.cards = this.state.cardList;
 
     // start loading animation, disable forms
@@ -308,7 +310,7 @@ Browser.propTypes = {
   minYear: PropTypes.string.isRequired,
   maxYear: PropTypes.string.isRequired,
   genres: PropTypes.arrayOf(PropTypes.string),
-  sessionID: PropTypes.any.isRequired,
+  requestStatus: PropTypes.func.isRequired,
 };
 
 Browser.contextType = NotificationContext;

@@ -20,6 +20,9 @@ class TextManagement extends Component {
 
   // see if server is currently importing or when last import was started
   requestImportStatus = () => {
+    // check if user is still logged in
+    this.props.requestStatus();
+
     fetch(' /backend/lib/admin.php',{
       method: 'POST',
       credentials: 'same-origin', // allow cookies -> session management
@@ -28,7 +31,6 @@ class TextManagement extends Component {
       },
       body: JSON.stringify({
         importStatus: true,
-        id: this.props.sessionID
       })
     })
       .then(response => {
@@ -77,6 +79,9 @@ class TextManagement extends Component {
 
   // request server to start import from Gutenberg Corpus
   requestImport = () => {
+    // check if user is still logged in
+    this.props.requestStatus();
+
     this.handleChange('loading', true);
     fetch('/backend/lib/admin.php',{
       method: 'POST',
@@ -86,7 +91,6 @@ class TextManagement extends Component {
       },
       body: JSON.stringify({
         import: true,
-        id: this.props.sessionID
       }),
     })
       .then(response => {
@@ -118,11 +122,13 @@ class TextManagement extends Component {
       return;
     }
 
+    // check if user is still logged in
+    this.props.requestStatus();
+
     this.handleChange('loading', true);
 
     let data = new FormData();
     data.append('file', this.state.selectedFiles);
-    data.append('id', this.props.sessionID);
     data.append('addText', 'true');
 
     fetch('/backend/lib/admin.php',{
@@ -226,7 +232,7 @@ TextManagement.propTypes = {
   classes: PropTypes.object.isRequired,
   requestNewAuthors: PropTypes.func.isRequired,
   requestNewLog: PropTypes.func.isRequired,
-  sessionID: PropTypes.any.isRequired,
+  requestStatus: PropTypes.func.isRequired,
 };
 
 TextManagement.contextType = NotificationContext;

@@ -73,7 +73,6 @@ class UserManagement extends React.Component {
       },
       body: JSON.stringify({
         users: true,
-        id: this.props.sessionID
       }),
     })
       .then(response => {
@@ -118,7 +117,6 @@ class UserManagement extends React.Component {
         username: this.state.newUser.name,
         password: this.state.newUser.pw1,
         isadmin: this.state.newUser.isAdmin === false? 0 : 1,
-        id: this.props.sessionID
       }),
     })
       .then(response => {
@@ -150,6 +148,10 @@ class UserManagement extends React.Component {
       this.context.handleNotificationChange(true, 'Legen Sie einen neuen Admin-Account an bevor Sie den einzigen löschen.', 'deleteUser', 'error');
       return;
     }
+
+    // check if user is still logged in
+    this.prop.requestStatus();
+
     fetch('/backend/lib/admin.php', {
       method: 'POST',
       credentials: 'same-origin', // allow cookies -> session management
@@ -158,7 +160,6 @@ class UserManagement extends React.Component {
       },
       body: JSON.stringify({
         delete: username,
-        id: this.props.sessionID,
       })
     })
       .then(response => {
@@ -293,7 +294,7 @@ class UserManagement extends React.Component {
 
 UserManagement.propTypes = {
   classes: PropTypes.object.isRequired,
-  sessionID: PropTypes.any.isRequired,
+  requestStatus: PropTypes.func.isRequired,
 };
 
 UserManagement.contextType = NotificationContext;

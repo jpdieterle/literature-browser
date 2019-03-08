@@ -19,7 +19,7 @@ class Admin extends React.Component {
   };
 
   render() {
-    const {classes, requestNewAuthors, requestNewLog, sessionID} = this.props;
+    const {classes, requestNewAuthors, requestNewLog, requestStatus} = this.props;
 
     return (
 
@@ -27,9 +27,9 @@ class Admin extends React.Component {
         <AdminNav/>
         <div className={classes.pageContainer}>
           <Switch>
-            <Route path='/admin/users' render={() => <UserManagement sessionID={sessionID}/>} />
-            <Route path='/admin/server' render={() => <ServerManagement sessionID={sessionID}/>} />
-            <Route path='/admin' render={() => <TextManagement requestNewAuthors={requestNewAuthors} requestNewLog={requestNewLog} sessionID={sessionID}/>} />
+            <Route path='/admin/users' render={() => <UserManagement requestStatus={requestStatus}/>} />
+            <Route path='/admin/server' render={() => <ServerManagement requestStatus={requestStatus}/>} />
+            <Route path='/admin' render={() => <TextManagement requestNewAuthors={requestNewAuthors} requestNewLog={requestNewLog} requestStatus={requestStatus}/>} />
             <Route exact path='/admin/:other' render={() => <MissingPage/>} />
           </Switch>
 
@@ -44,7 +44,7 @@ Admin.propTypes = {
   classes: PropTypes.object.isRequired,
   requestNewAuthors: PropTypes.func.isRequired,
   requestNewLog: PropTypes.func.isRequired,
-  sessionID: PropTypes.any.isRequired,
+  requestStatus: PropTypes.func.isRequired,
 };
 
 const styles = theme => ({

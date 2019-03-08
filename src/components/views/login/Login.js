@@ -148,7 +148,9 @@ Login.propTypes = {
 Login.contextType = NotificationContext;
 
 const styles = theme => ({
-  root: {},
+  root: {
+    marginTop: theme.spacing.unit * 4
+  },
   loginContainer:{
     width: 400,
     padding: theme.spacing.unit * 6,

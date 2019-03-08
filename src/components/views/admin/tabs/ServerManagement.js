@@ -19,6 +19,9 @@ class ServerManagement extends React.Component {
 
   // request server to empty its cache
   requestEmptyCache = () => {
+    // check if user is still logged in
+    this.prop.requestStatus();
+    
     this.handleChange('loading', true);
     fetch(' /backend/lib/admin.php',{
       method: 'POST',
@@ -28,7 +31,6 @@ class ServerManagement extends React.Component {
       },
       body: JSON.stringify({
         cache: true,
-        id: this.props.sessionID
       })
     })
       .then(response => {
@@ -77,7 +79,7 @@ class ServerManagement extends React.Component {
 
 ServerManagement.propTypes = {
   classes: PropTypes.object.isRequired,
-  sessionID: PropTypes.any.isRequired,
+  requestStatus: PropTypes.func.isRequired,
 };
 
 ServerManagement.contextType = NotificationContext;

@@ -135,6 +135,48 @@ class App extends React.Component {
     );
   };
 
+  // check if user is logged in (valid session id) and if he is an admin
+  requestUserStatus = () => {
+    fetch("/backend/lib/functions.php", {
+      method: 'POST',
+      credentials: 'same-origin', // allow cookies -> session management
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        loginStatus: true,
+        loginID: this.state.sessionID
+      })
+    }).then(response => {
+        if(response.ok) {
+          response.json().then(data => {
+            if(!data || data.status === 'error') {
+              this.handleNotificationChange(true, 'Ihre Sitzung ist abgelaufen.', 'sessionCheck', 'error');
+              this.handleStateChange('loggedIn', false);
+              this.handleStateChange('isAdmin', false);
+            }
+          });
+        } else {
+          this.handleNotificationChange(true, 'Ihre Sitzung ist abgelaufen.', 'sessionCheck', 'error');
+          this.handleStateChange('loggedIn', false);
+          this.handleStateChange('isAdmin', false);
+        }
+      }
+    ).catch(error => {
+        this.handleNotificationChange(true, 'Ihre Sitzung ist abgelaufen.', 'sessionCheck', 'error', 404);
+        this.handleStateChange('loggedIn', false);
+        this.handleStateChange('isAdmin', false);
+      }
+    );
+  };
+
+  // executed after component is inserted into the tree
+  componentDidMount = () => {
+    // request initial data (authors, genres, time range, user status
+    this.requestAuthors();
+    this.requestLog();
+  };
+
   // logout user, request server to delete sessionID, display error if necessary
   logout = () => {
     fetch('/backend/lib/functions.php', {
@@ -191,13 +233,15 @@ class App extends React.Component {
                 <div className={classes.contentWrapper}>
                   <Switch>
                     <Route exact path='/' render={() => (
-                      loggedIn? (<Browser sessionID={sessionID} authorsList={authors} minYear={timeRange.minYear} maxYear={timeRange.maxYear} genres={genres}/>) :
+                      loggedIn? (<Browser requestStatus={this.requestUserStatus} authorsList={authors} minYear={timeRange.minYear} maxYear={timeRange.maxYear} genres={genres}/>) :
                         (<Redirect to='/login'/>)
                     )}/>
                     <Route path='/about' component={About}/>
-                    <Route path='/scripts' component={ScriptDownload}/>
+                    <Route path='/scripts' render={() => (
+                      loggedIn? (<ScriptDownload requestStatus={this.requestUserStatus}/>) : (<Redirect to='/login'/>)
+                    )}/>
                     <Route path='/admin' render={() => (
-                      (loggedIn && isAdmin)? (<Admin requestNewAuthors={this.requestAuthors} requestNewLog={this.requestLog} sessionID={sessionID}/>) : (<Redirect to='/' />)
+                      (loggedIn && isAdmin)? (<Admin requestNewAuthors={this.requestAuthors} requestNewLog={this.requestLog} requestStatus={this.requestUserStatus}/>) : (<Redirect to='/' />)
                     )}/>
                     <Route path='/login' render={() => (
                       loggedIn? (<Redirect to='/'/>) : (<Login handleAppStateChange={this.handleStateChange} />)
