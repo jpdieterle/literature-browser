@@ -25,7 +25,7 @@ class ScriptDownload extends React.Component {
 
   requestFilenames = () => {
     // check if session is still valid otherwise logout user
-    this.props.requestStatus().then(loggedIn => {
+    this.props.requestStatus.then(loggedIn => {
       console.log('then', loggedIn);
       if(loggedIn === 'true') {
         console.log('fetch');
@@ -85,7 +85,7 @@ class ScriptDownload extends React.Component {
 
 ScriptDownload.propTypes = {
   classes: PropTypes.object.isRequired,
-  requestStatus: PropTypes.func.isRequired,
+  requestStatus: PropTypes.any.isRequired,
 };
 
 const styles = theme => ({

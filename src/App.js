@@ -136,7 +136,7 @@ class App extends React.Component {
   };
 
   // check if user is logged in (valid session id) and if he is an admin
-  requestUserStatus = () => {
+  requestUserStatus = new Promise(() => {
     return fetch("/backend/lib/sessionManagement.php", {
       method: 'POST',
       credentials: 'same-origin', // allow cookies -> session management
@@ -177,7 +177,7 @@ class App extends React.Component {
       return 'false';
       }
     );
-  };
+  });
 
   // executed after component is inserted into the tree
   componentDidMount = () => {
@@ -245,7 +245,7 @@ class App extends React.Component {
                     )}/>
                     <Route path='/about' component={About}/>
                     <Route path='/scripts' render={() => (
-                      loggedIn? (<ScriptDownload requestStatus={this.requestUserStatus}/>) : (<Redirect to='/login'/>)
+                      loggedIn? (<ScriptDownload requestStatus={this.requestUserStatus.bind(this)}/>) : (<Redirect to='/login'/>)
                     )}/>
                     <Route path='/admin' render={() => (
                       (loggedIn && isAdmin)? (<Admin requestNewAuthors={this.requestAuthors} requestNewLog={this.requestLog} requestStatus={this.requestUserStatus}/>) : (<Redirect to='/' />)
