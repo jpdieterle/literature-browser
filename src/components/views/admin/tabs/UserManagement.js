@@ -64,36 +64,38 @@ class UserManagement extends React.Component {
 
   // request users list from server
   requestUsers = () => {
-    this.handleChange('loading', true);
-    fetch('/backend/lib/admin.php',{
-      method: 'POST',
-      credentials: 'same-origin', // allow cookies -> session management
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        users: true,
-      }),
-    })
-      .then(response => {
-        if(response.ok) {
-          response.json().then(data => {
-            if(data && data.status === 'success') {
-              // received users list from server
-              this.handleChange('users', JSON.parse(data.users));
-            } else {
-              this.context.handleNotificationChange(true, 'Die Nutzerliste konnte nicht geladen werden.', 'loadUsers', 'error');
-            }
-          })
-        } else {
-          this.context.handleNotificationChange(true, 'Die Nutzerliste konnte nicht geladen werden.', 'loadUsers', 'error');
-        }
-        this.handleChange('loading', false);
+    if(this.props.requestStatus() === true) {
+      this.handleChange('loading', true);
+      fetch('/backend/lib/admin.php', {
+        method: 'POST',
+        credentials: 'same-origin', // allow cookies -> session management
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          users: true,
+        }),
       })
-      .catch(error => {
-        this.context.handleNotificationChange(true, 'Die Nutzerliste konnte nicht geladen werden.', 'loadUsers', 'error');
-        this.handleChange('loading', false);
-      });
+        .then(response => {
+          if (response.ok) {
+            response.json().then(data => {
+              if (data && data.status === 'success') {
+                // received users list from server
+                this.handleChange('users', JSON.parse(data.users));
+              } else {
+                this.context.handleNotificationChange(true, 'Die Nutzerliste konnte nicht geladen werden.', 'loadUsers', 'error');
+              }
+            })
+          } else {
+            this.context.handleNotificationChange(true, 'Die Nutzerliste konnte nicht geladen werden.', 'loadUsers', 'error');
+          }
+          this.handleChange('loading', false);
+        })
+        .catch(error => {
+          this.context.handleNotificationChange(true, 'Die Nutzerliste konnte nicht geladen werden.', 'loadUsers', 'error');
+          this.handleChange('loading', false);
+        });
+    }
   };
 
   // create new user on server
@@ -106,39 +108,42 @@ class UserManagement extends React.Component {
       this.context.handleNotificationChange(true, 'Bitte geben Sie gültige Nutzerdaten ein.', 'newUser', 'error');
       return;
     }
-    this.handleChange('loading', true);
-    fetch('/backend/lib/admin.php',{
-      method: 'POST',
-      credentials: 'same-origin', // allow cookies -> session management
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        username: this.state.newUser.name,
-        password: this.state.newUser.pw1,
-        isadmin: this.state.newUser.isAdmin === false? 0 : 1,
-      }),
-    })
-      .then(response => {
-        if(response.ok) {
-          response.json().then(data => {
-            if(data && data.status === 'success') {
-              // created new user
-              this.requestUsers();
-              this.context.handleNotificationChange(true, 'Benutzer*in erfolgreich angelegt.', 'createUser', 'success');
-            } else {
-              this.context.handleNotificationChange(true, 'Benutzer*in konnte nicht angelegt werden.', 'createUser', 'error');
-            }
-          })
-        } else {
-          this.context.handleNotificationChange(true, 'Benutzer*in konnte nicht angelegt werden.', 'createUser', 'error');
-        }
-        this.handleChange('loading', false);
+
+    if(this.props.requestStatus() === true) {
+      this.handleChange('loading', true);
+      fetch('/backend/lib/admin.php', {
+        method: 'POST',
+        credentials: 'same-origin', // allow cookies -> session management
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: this.state.newUser.name,
+          password: this.state.newUser.pw1,
+          isadmin: this.state.newUser.isAdmin === false ? 0 : 1,
+        }),
       })
-      .catch(error => {
-        this.context.handleNotificationChange(true, 'Benutzer*in konnte nicht angelegt werden.', 'createUser', 'error');
-        this.handleChange('loading', false);
-      });
+        .then(response => {
+          if (response.ok) {
+            response.json().then(data => {
+              if (data && data.status === 'success') {
+                // created new user
+                this.requestUsers();
+                this.context.handleNotificationChange(true, 'Benutzer*in erfolgreich angelegt.', 'createUser', 'success');
+              } else {
+                this.context.handleNotificationChange(true, 'Benutzer*in konnte nicht angelegt werden.', 'createUser', 'error');
+              }
+            })
+          } else {
+            this.context.handleNotificationChange(true, 'Benutzer*in konnte nicht angelegt werden.', 'createUser', 'error');
+          }
+          this.handleChange('loading', false);
+        })
+        .catch(error => {
+          this.context.handleNotificationChange(true, 'Benutzer*in konnte nicht angelegt werden.', 'createUser', 'error');
+          this.handleChange('loading', false);
+        });
+    }
   };
 
   // delete user from server
@@ -150,36 +155,37 @@ class UserManagement extends React.Component {
     }
 
     // check if user is still logged in
-    this.prop.requestStatus();
+    if(this.prop.requestStatus() === true) {
 
-    fetch('/backend/lib/admin.php', {
-      method: 'POST',
-      credentials: 'same-origin', // allow cookies -> session management
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        delete: username,
+      fetch('/backend/lib/admin.php', {
+        method: 'POST',
+        credentials: 'same-origin', // allow cookies -> session management
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          delete: username,
+        })
       })
-    })
-      .then(response => {
-        if(response.ok) {
-          response.json().then(data => {
-            if(data.status === 'success') {
-              this.requestUsers();
-              this.context.handleNotificationChange(true, 'Nutzer*in erfolgreich gelöscht.', 'deleteUser', 'success')
-            } else {
-              this.context.handleNotificationChange(true, 'Nutzer*in konnte nicht gelöscht werden.', 'deleteUser', 'error')
-            }
-          })
-        } else {
-          this.context.handleNotificationChange(true, 'Nutzer*in konnte nicht gelöscht werden.', 'deleteUser', 'error')
-        }
-      })
-      .catch(error => {
-          this.context.handleNotificationChange(true, 'Nutzer*in konnte nicht gelöscht werden.', 'deleteUser', 'error')
-        }
-      );
+        .then(response => {
+          if (response.ok) {
+            response.json().then(data => {
+              if (data.status === 'success') {
+                this.requestUsers();
+                this.context.handleNotificationChange(true, 'Nutzer*in erfolgreich gelöscht.', 'deleteUser', 'success')
+              } else {
+                this.context.handleNotificationChange(true, 'Nutzer*in konnte nicht gelöscht werden.', 'deleteUser', 'error')
+              }
+            })
+          } else {
+            this.context.handleNotificationChange(true, 'Nutzer*in konnte nicht gelöscht werden.', 'deleteUser', 'error')
+          }
+        })
+        .catch(error => {
+            this.context.handleNotificationChange(true, 'Nutzer*in konnte nicht gelöscht werden.', 'deleteUser', 'error')
+          }
+        );
+    }
   };
 
   render() {

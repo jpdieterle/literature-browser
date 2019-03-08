@@ -21,37 +21,38 @@ class TextManagement extends Component {
   // see if server is currently importing or when last import was started
   requestImportStatus = () => {
     // check if user is still logged in
-    this.props.requestStatus();
+    if(this.props.requestStatus() === true) {
 
-    fetch(' /backend/lib/admin.php',{
-      method: 'POST',
-      credentials: 'same-origin', // allow cookies -> session management
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        importStatus: true,
+      fetch(' /backend/lib/admin.php', {
+        method: 'POST',
+        credentials: 'same-origin', // allow cookies -> session management
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          importStatus: true,
+        })
       })
-    })
-      .then(response => {
-        if(response.ok) {
-          response.json().then(data => {
-            if(data && data.status === 'success') {
-              // import status was loaded from server
-              this.handleChange('importStatus', data.importStatus || 'unbekannt');
-              this.handleChange('lastImportTime', data.lastImport || 'unbekannt');
-              this.context.handleNotificationChange(true, 'Der Import Status wurde aktualisiert.', 'importStatus', 'success')
-            } else {
-              this.context.handleNotificationChange(true, 'Der Import Status konnte nicht vom Server geladen werden.', 'importStatus', 'error');
-            }
-          })
-        } else {
+        .then(response => {
+          if (response.ok) {
+            response.json().then(data => {
+              if (data && data.status === 'success') {
+                // import status was loaded from server
+                this.handleChange('importStatus', data.importStatus || 'unbekannt');
+                this.handleChange('lastImportTime', data.lastImport || 'unbekannt');
+                this.context.handleNotificationChange(true, 'Der Import Status wurde aktualisiert.', 'importStatus', 'success')
+              } else {
+                this.context.handleNotificationChange(true, 'Der Import Status konnte nicht vom Server geladen werden.', 'importStatus', 'error');
+              }
+            })
+          } else {
+            this.context.handleNotificationChange(true, 'Der Import Status konnte nicht vom Server geladen werden.', 'importStatus', 'error');
+          }
+        })
+        .catch(error => {
           this.context.handleNotificationChange(true, 'Der Import Status konnte nicht vom Server geladen werden.', 'importStatus', 'error');
-        }
-      })
-      .catch(error => {
-        this.context.handleNotificationChange(true, 'Der Import Status konnte nicht vom Server geladen werden.', 'importStatus', 'error');
-      });
+        });
+    }
   };
 
   componentDidMount = () => {
@@ -80,38 +81,39 @@ class TextManagement extends Component {
   // request server to start import from Gutenberg Corpus
   requestImport = () => {
     // check if user is still logged in
-    this.props.requestStatus();
+    if(this.props.requestStatus() === true) {
 
-    this.handleChange('loading', true);
-    fetch('/backend/lib/admin.php',{
-      method: 'POST',
-      credentials: 'same-origin', // allow cookies -> session management
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        import: true,
-      }),
-    })
-      .then(response => {
-        if(response.ok) {
-          response.json().then(data => {
-            if(data && data.status === 'success') {
-              // import was started on server
-              this.context.handleNotificationChange(true, 'Der Import wurde auf dem Server gestartet.', 'import', 'success');
-            } else {
-              this.context.handleNotificationChange(true, 'Der Import konnte auf dem Server nicht gestartet werden.', 'import', 'error');
-            }
-          })
-        } else {
-          this.context.handleNotificationChange(true, 'Der Import konnte auf dem Server nicht gestartet werden.', 'import', 'error');
-        }
-        this.handleChange('loading', false);
+      this.handleChange('loading', true);
+      fetch('/backend/lib/admin.php', {
+        method: 'POST',
+        credentials: 'same-origin', // allow cookies -> session management
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          import: true,
+        }),
       })
-      .catch(error => {
-        this.context.handleNotificationChange(true, 'Der Import konnte auf dem Server nicht gestartet werden.', 'import', 'error');
-        this.handleChange('loading', false);
-      });
+        .then(response => {
+          if (response.ok) {
+            response.json().then(data => {
+              if (data && data.status === 'success') {
+                // import was started on server
+                this.context.handleNotificationChange(true, 'Der Import wurde auf dem Server gestartet.', 'import', 'success');
+              } else {
+                this.context.handleNotificationChange(true, 'Der Import konnte auf dem Server nicht gestartet werden.', 'import', 'error');
+              }
+            })
+          } else {
+            this.context.handleNotificationChange(true, 'Der Import konnte auf dem Server nicht gestartet werden.', 'import', 'error');
+          }
+          this.handleChange('loading', false);
+        })
+        .catch(error => {
+          this.context.handleNotificationChange(true, 'Der Import konnte auf dem Server nicht gestartet werden.', 'import', 'error');
+          this.handleChange('loading', false);
+        });
+    }
   };
 
   // request server to add input from textfield as new text to database
@@ -123,41 +125,42 @@ class TextManagement extends Component {
     }
 
     // check if user is still logged in
-    this.props.requestStatus();
+    if(this.props.requestStatus() === true) {
 
-    this.handleChange('loading', true);
+      this.handleChange('loading', true);
 
-    let data = new FormData();
-    data.append('file', this.state.selectedFiles);
-    data.append('addText', 'true');
+      let data = new FormData();
+      data.append('file', this.state.selectedFiles);
+      data.append('addText', 'true');
 
-    fetch('/backend/lib/admin.php',{
-      method: 'POST',
-      credentials: 'same-origin', // allow cookies -> session management
-      headers: {},
-      body: data,
-    })
-      .then(response => {
-        if(response.ok) {
-          response.json().then(data => {
-            if(data && data.status === 'success') {
-              // import was started on server
-              this.context.handleNotificationChange(true, 'Der/die Text/e wurde/n zur Datenbank hinzugefügt.', 'import', 'success');
-              this.updateLogs();
-
-            } else {
-              this.context.handleNotificationChange(true, 'Der Upload konnte nicht hinzugefügt werden.', 'import', 'error');
-            }
-          })
-        } else {
-          this.context.handleNotificationChange(true, 'Der Upload nicht hinzugefügt werden.', 'import', 'error');
-        }
-        this.handleChange('loading', false);
+      fetch('/backend/lib/admin.php', {
+        method: 'POST',
+        credentials: 'same-origin', // allow cookies -> session management
+        headers: {},
+        body: data,
       })
-      .catch(error => {
-        this.context.handleNotificationChange(true, 'Der Upload konnte nicht hinzugefügt werden.', 'import', 'error');
-        this.handleChange('loading', false);
-      });
+        .then(response => {
+          if (response.ok) {
+            response.json().then(data => {
+              if (data && data.status === 'success') {
+                // import was started on server
+                this.context.handleNotificationChange(true, 'Der/die Text/e wurde/n zur Datenbank hinzugefügt.', 'import', 'success');
+                this.updateLogs();
+
+              } else {
+                this.context.handleNotificationChange(true, 'Der Upload konnte nicht hinzugefügt werden.', 'import', 'error');
+              }
+            })
+          } else {
+            this.context.handleNotificationChange(true, 'Der Upload nicht hinzugefügt werden.', 'import', 'error');
+          }
+          this.handleChange('loading', false);
+        })
+        .catch(error => {
+          this.context.handleNotificationChange(true, 'Der Upload konnte nicht hinzugefügt werden.', 'import', 'error');
+          this.handleChange('loading', false);
+        });
+    }
   };
 
   render() {

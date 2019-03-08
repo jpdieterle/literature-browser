@@ -20,39 +20,40 @@ class ServerManagement extends React.Component {
   // request server to empty its cache
   requestEmptyCache = () => {
     // check if user is still logged in
-    this.prop.requestStatus();
-    
-    this.handleChange('loading', true);
-    fetch(' /backend/lib/admin.php',{
-      method: 'POST',
-      credentials: 'same-origin', // allow cookies -> session management
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        cache: true,
-      })
-    })
-      .then(response => {
-        if(response.ok) {
-          response.json().then(data => {
-            if(data && data.status === 'success') {
-              // cache was emptied
-              this.context.handleNotificationChange(true, 'Der Server-Cache wurde geleert.', 'emptyCache', 'success');
-            } else {
-              this.context.handleNotificationChange(true, 'Der Server-Cache konnte nicht geleert werden.', 'emptyCache', 'error');
-            }
-          })
-        } else {
-          this.context.handleNotificationChange(true, 'Der Server-Cache konnte nicht geleert werden.', 'emptyCache', 'error');
-        }
-        this.handleChange('loading', false);
+    if(this.prop.requestStatus() === true) {
 
+      this.handleChange('loading', true);
+      fetch(' /backend/lib/admin.php', {
+        method: 'POST',
+        credentials: 'same-origin', // allow cookies -> session management
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          cache: true,
+        })
       })
-      .catch(error => {
-        this.context.handleNotificationChange(true, 'Der Server-Cache konnte nicht geleert werden.', 'emptyCache', 'error');
-        this.handleChange('loading', false);
-      });
+        .then(response => {
+          if (response.ok) {
+            response.json().then(data => {
+              if (data && data.status === 'success') {
+                // cache was emptied
+                this.context.handleNotificationChange(true, 'Der Server-Cache wurde geleert.', 'emptyCache', 'success');
+              } else {
+                this.context.handleNotificationChange(true, 'Der Server-Cache konnte nicht geleert werden.', 'emptyCache', 'error');
+              }
+            })
+          } else {
+            this.context.handleNotificationChange(true, 'Der Server-Cache konnte nicht geleert werden.', 'emptyCache', 'error');
+          }
+          this.handleChange('loading', false);
+
+        })
+        .catch(error => {
+          this.context.handleNotificationChange(true, 'Der Server-Cache konnte nicht geleert werden.', 'emptyCache', 'error');
+          this.handleChange('loading', false);
+        });
+    }
   };
 
   render() {

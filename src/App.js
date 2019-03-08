@@ -137,7 +137,7 @@ class App extends React.Component {
 
   // check if user is logged in (valid session id) and if he is an admin
   requestUserStatus = () => {
-    fetch("/backend/lib/functions.php", {
+    fetch("/backend/lib/sessionManagement.php", {
       method: 'POST',
       credentials: 'same-origin', // allow cookies -> session management
       headers: {
@@ -154,18 +154,23 @@ class App extends React.Component {
               this.handleNotificationChange(true, 'Ihre Sitzung ist abgelaufen.', 'sessionCheck', 'error');
               this.handleStateChange('loggedIn', false);
               this.handleStateChange('isAdmin', false);
+              return false;
+            } else {
+              return true;
             }
           });
         } else {
           this.handleNotificationChange(true, 'Ihre Sitzung ist abgelaufen.', 'sessionCheck', 'error');
           this.handleStateChange('loggedIn', false);
           this.handleStateChange('isAdmin', false);
+          return false;
         }
       }
     ).catch(error => {
         this.handleNotificationChange(true, 'Ihre Sitzung ist abgelaufen.', 'sessionCheck', 'error', 404);
         this.handleStateChange('loggedIn', false);
         this.handleStateChange('isAdmin', false);
+        return false;
       }
     );
   };
@@ -187,14 +192,12 @@ class App extends React.Component {
       },
       body: JSON.stringify({
         logout: true,
-        id: this.state.sessionID
+        loginID: this.state.sessionID
       })
     })
       .then(response => {
         if(response.ok && response.json().status === 'success') {
           this.handleNotificationChange(true, 'Logout erfolgreich', 'logout', 'success');
-        } else {
-          this.handleNotificationChange(true, 'Logout auf dem Server fehlgeschlagen.', 'logout', 'error', response.statusCode);
         }
         this.setState({
           loggedIn: false,

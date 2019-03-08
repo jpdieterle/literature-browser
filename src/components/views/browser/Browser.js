@@ -119,11 +119,8 @@ class Browser extends React.PureComponent {
 
   // submit search with or without criteria
   handleSubmit = (getAll) => {
-    // check if session is still valid otherwise logout user
-    this.props.requestStatus();
-
     // check for errors before sending request
-    if((!getAll && (this.state.timeError || this.state.keywordError)) || this.state.formatError) {
+    if ((!getAll && (this.state.timeError || this.state.keywordError)) || this.state.formatError) {
       this.setState({
         error: true,
         errorMessage: 'Sie können keine Anfrage mit fehlenden/falschen Eingaben abschicken',
@@ -132,62 +129,65 @@ class Browser extends React.PureComponent {
       return;
     }
 
-    let payload = {};
-    getAll? payload.getAll = true : payload.cards = this.state.cardList;
+    // check if session is still valid otherwise logout user
+    if(this.props.requestStatus() === true) {
+      let payload = {};
+      getAll ? payload.getAll = true : payload.cards = this.state.cardList;
 
-    // start loading animation, disable forms
-    this.setState({
-      loading: true,
-      error: false,
-      responseIn: false,
-      responseFiles: [],
-    });
+      // start loading animation, disable forms
+      this.setState({
+        loading: true,
+        error: false,
+        responseIn: false,
+        responseFiles: [],
+      });
 
-    // request data + handle response
-    fetch("/backend/lib/functions.php", {
-      method: 'POST',
-      credentials: 'same-origin', // allow cookies -> session management
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload)
-    })
-      .then(response => {
-        if(response.ok) {
-          response.json().then(data => {
-            if(data && data.status && data.status === 'success') {
-              // search succeeded (there are results)
-              this.setState({
-                responseFiles: data.filenames, // array of filenames separated by comma
-                hits: data.hits, // number
-                responseIn: true,
-              });
-            } else {
-              // server error / search not possible on server
-              this.setState({
-                errorMessage: 'Es ist ein Fehler auf dem Server aufgetreten.',
-                error: true
-              });
-              this.context.handleNotificationChange(true, 'Es ist ein Fehler auf dem Server aufgetreten. Die Anfrage wurde abgebrochen.', 'search', 'error');
-            }
-          });
-        } else {
-          // other problem
+      // request data + handle response
+      fetch("/backend/lib/functions.php", {
+        method: 'POST',
+        credentials: 'same-origin', // allow cookies -> session management
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload)
+      })
+        .then(response => {
+          if (response.ok) {
+            response.json().then(data => {
+              if (data && data.status && data.status === 'success') {
+                // search succeeded (there are results)
+                this.setState({
+                  responseFiles: data.filenames, // array of filenames separated by comma
+                  hits: data.hits, // number
+                  responseIn: true,
+                });
+              } else {
+                // server error / search not possible on server
+                this.setState({
+                  errorMessage: 'Es ist ein Fehler auf dem Server aufgetreten.',
+                  error: true
+                });
+                this.context.handleNotificationChange(true, 'Es ist ein Fehler auf dem Server aufgetreten. Die Anfrage wurde abgebrochen.', 'search', 'error');
+              }
+            });
+          } else {
+            // other problem
+            this.setState({
+              errorMessage: response.statusText,
+              error: true
+            });
+            this.context.handleNotificationChange(true, response.statusText, 'search', 'error', response.statusCode)
+          }
+        })
+        .catch(error => {
           this.setState({
-            errorMessage: response.statusText,
+            errorMessage: error.message,
             error: true
           });
-          this.context.handleNotificationChange(true, response.statusText, 'search', 'error', response.statusCode)
-        }
-      })
-      .catch(error => {
-        this.setState({
-          errorMessage: error.message,
-          error: true
+          this.context.handleNotificationChange(true, error.message, 'search', 'error', 404)
         });
-        this.context.handleNotificationChange(true, error.message, 'search', 'error', 404)
-      });
-    this.setState({loading: false});
+      this.setState({loading: false});
+    }
   };
 
   // do search with criteria entered by user
