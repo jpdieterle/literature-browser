@@ -46,6 +46,7 @@ class Browser extends React.PureComponent {
     timeError: false,
     keywordError: false,
     formatError: true,
+    searchID: 0,
   };
 
   getCardIndex = id => {
@@ -193,6 +194,7 @@ class Browser extends React.PureComponent {
                 responseFiles: data.filenames, // array of filenames separated by comma
                 hits: data.hits, // number
                 responseIn: true,
+                searchID: shortid.generate(),
               });
             } else {
               // server error / search not possible on server
@@ -234,12 +236,12 @@ class Browser extends React.PureComponent {
 
   render() {
     const { classes, authorsList, minYear, maxYear, genres } = this.props;
-    const { cardList, selectedFormats, responseFiles, responseIn, loading, hits} = this.state;
+    const { cardList, selectedFormats, responseFiles, responseIn, loading, hits, searchID} = this.state;
 
     const renderResponseData = () => {
       let formats = selectedFormats.checkedJSON? ['json'] : [];
       if(selectedFormats.checkedTXT) formats.push('txt');
-      return <Results filenames={responseFiles} number={hits} formats={formats}/>;
+      return <Results filenames={responseFiles} number={hits} formats={formats} searchID={searchID}/>;
     };
 
     return(

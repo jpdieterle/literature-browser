@@ -11,6 +11,12 @@ import NotificationContext from '../../../notifications/NotificationContext';
 class Results extends React.Component {
   state = {};
 
+  shouldComponentUpdate = (nextProps) => {
+    // prevent links from updating after search is complete
+    return !(nextProps.formats !== this.props.formats
+      && nextProps.searchID === this.props.searchID);
+  };
+
   downloadResults = format => {
     // request data + handle response for each selected format separately
     fetch("/backend/lib/functions.php", {
@@ -80,6 +86,7 @@ Results.propTypes = {
   filenames: PropTypes.string,
   number: PropTypes.number.isRequired,
   formats: PropTypes.arrayOf(PropTypes.string),
+  searchID: PropTypes.any.isRequired,
 };
 
 Results.contextType = NotificationContext;
