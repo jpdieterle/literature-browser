@@ -7,7 +7,7 @@ import TextManagement from './tabs/TextManagement';
 import ServerManagement from './tabs/ServerManagement';
 import UserManagement from './tabs/UserManagement';
 import MissingPage from '../MissingPage';
-import NotificationContext from '../notifications/NotificationContext';
+import NotificationContext from '../../notifications/NotificationContext';
 
 // routing for Admin page
 class Admin extends React.Component {

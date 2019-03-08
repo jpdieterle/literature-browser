@@ -114,7 +114,6 @@ class ScriptDownload extends React.Component {
             )}
           </ul>
         </div>
-
       </div>
     )
   }
@@ -130,7 +129,7 @@ ScriptDownload.propTypes = {
 const styles = theme => ({
   root:{
     margin: theme.spacing.unit * 3,
-    marginTop: theme.spacing.unit * 4
+    marginTop: theme.spacing.unit * 4,
   },
   textContainer: {
     minWidth: 500,
