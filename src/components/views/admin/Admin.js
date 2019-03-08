@@ -74,7 +74,6 @@ class Admin extends React.Component {
             />
             <Route exact path='/admin/:other' render={() => <MissingPage/>} />
           </Switch>
-
         </div>
       </div>
     )

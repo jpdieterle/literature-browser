@@ -11,60 +11,63 @@ import NotificationContext from '../../../notifications/NotificationContext';
 class Results extends React.Component {
   state = {};
 
-  downloadResults = () => {
+  downloadResults = format => {
     // request data + handle response for each selected format separately
-    this.props.formats.forEach(format => {
-      fetch("/backend/lib/functions.php", {
-        method: 'POST',
-        credentials: 'same-origin', // allow cookies -> session management
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          download: this.props.filenames,
-          format: format,
-        }),
-      })
-        .then(response => {
-          if(response.ok) {
-            response.json().then(data => {
-              if(data && data.status === 'success') {
-                // create invisible anchor and click it
-                let a = document.createElement('a');
-                a.href = '/backend/database/_cache/' + data.filename;
-                a.download = true;
-                a.click();
-                // alternative for downloading file:
-                // window.open(responseJson['path'], "_blank")
-              } else {
-                this.context.handleNotificationChange(true, 'Die Ergebnis-Dateien konnten nicht vom Server geladen werden.', 'download', 'error');
-              }
-            })
-          } else {
-            this.context.handleNotificationChange(true, 'Die Ergebnis-Dateien konnten nicht vom Server geladen werden.', 'download', 'error');
-          }
-        })
-        .catch((error) => {
-          console.error(error);
-          this.context.handleNotificationChange(true, 'Die Ergebnis-Dateien konnten nicht vom Server geladen werden.', 'download', 'error');
-        });
+    fetch("/backend/lib/functions.php", {
+      method: 'POST',
+      credentials: 'same-origin', // allow cookies -> session management
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        download: this.props.filenames,
+        format: format,
+      }),
     })
-
+      .then(response => {
+        if(response.ok) {
+          response.json().then(data => {
+            if(data && data.status === 'success') {
+              // create invisible anchor and click it
+              let a = document.createElement('a');
+              a.href = '/backend/database/_cache/' + data.filename;
+              a.download = true;
+              a.click();
+            } else {
+              this.context.handleNotificationChange(true, 'Die Ergebnis-Dateien konnten nicht vom Server geladen werden.', 'download', 'error');
+            }
+          })
+        } else {
+          this.context.handleNotificationChange(true, 'Die Ergebnis-Dateien konnten nicht vom Server geladen werden.', 'download', 'error');
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        this.context.handleNotificationChange(true, 'Die Ergebnis-Dateien konnten nicht vom Server geladen werden.', 'download', 'error');
+      });
   };
 
   render() {
-    const {classes, number,} = this.props;
+    const {classes, number, formats} = this.props;
 
     return (
       <div className={classes.root}>
         <Paper className={classes.resultContainer} elevation={0} >
           <Typography>
+            {formats.includes('json') &&
             <Link
               className={classes.resultLink}
-              onClick={this.downloadResults}
+              onClick={() => this.downloadResults('json')}
             >
-              Ergebnis als ZIP-Datei herunterladen {'(' + number + 'Treffer)'}
-            </Link>
+               Ergebnisse im JSON-Format herunterladen {'(' + number + ' Treffer)'}
+            </Link>}
+            {formats.includes('txt') &&
+            <Link
+              className={classes.resultLink}
+              onClick={() => this.downloadResults('txt')}
+            >
+              Ergebnis im TXT-Format herunterladen {'(' + number + ' Treffer)'}
+            </Link>}
           </Typography>
         </Paper>
       </div>

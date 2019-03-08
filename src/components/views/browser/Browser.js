@@ -165,8 +165,7 @@ class Browser extends React.PureComponent {
       return;
     }
 
-    let payload = {};
-    getAll ? payload.getAll = true : payload.cards = this.state.cardList;
+    const payload = getAll ? {getAll: true} : {cards: this.state.cardList};
 
     // start loading animation, disable forms
     this.setState({
