@@ -70,7 +70,7 @@ class ScriptDownload extends React.Component {
       },
       body: JSON.stringify({
         loginStatus: true,
-        loginID: this.state.sessionID
+        loginID: this.props.sessionID
       })
     }).then(response => {
         if(response.ok) {
