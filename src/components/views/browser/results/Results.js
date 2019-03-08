@@ -62,17 +62,19 @@ class Results extends React.Component {
           <Typography>
             {formats.includes('json') &&
             <Link
+              classes={{root: {cursor: 'pointer'}}}
               className={classes.resultLink}
               onClick={() => this.downloadResults('json')}
             >
-               Ergebnisse im JSON-Format herunterladen {'(' + number + ' Treffer)'}
+               Suchergebnisse im JSON-Format herunterladen {'(' + number + ' Treffer)'}
             </Link>}
             {formats.includes('txt') &&
             <Link
+              classes={{root: {cursor: 'pointer'}}}
               className={classes.resultLink}
               onClick={() => this.downloadResults('txt')}
             >
-              Ergebnis im TXT-Format herunterladen {'(' + number + ' Treffer)'}
+              Suchergebnisse im TXT-Format herunterladen {'(' + number + ' Treffer)'}
             </Link>}
           </Typography>
         </Paper>
@@ -101,6 +103,7 @@ const styles = theme => ({
   },
   resultLink:{
     color: 'white',
+    display: 'block'
   }
 });
 
