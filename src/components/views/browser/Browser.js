@@ -237,7 +237,7 @@ class Browser extends React.PureComponent {
   };
 
   render() {
-    const { classes, authorsList, minYear, maxYear, genres, handleAppChange } = this.props;
+    const { classes, authorsList, minYear, maxYear, genres, handleAppChange, sessionID } = this.props;
     const { cardList, selectedFormats, responseFiles, responseIn, loading, hits, searchID, getAll} = this.state;
 
     const renderResponseData = () => {
@@ -247,6 +247,7 @@ class Browser extends React.PureComponent {
         filenames={responseFiles}
         number={hits}
         formats={formats}
+        sessionID={sessionID}
         searchID={searchID}
         getAll={getAll}
         handleAppChange={handleAppChange}

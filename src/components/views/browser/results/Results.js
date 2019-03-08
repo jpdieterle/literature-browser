@@ -23,6 +23,7 @@ class Results extends React.Component {
 
   // see if user is still logged in
   requestStatus = func => {
+    console.log('requestStatus: ', this.props.sessionID);
     // check if session is still valid otherwise logout user
     fetch("/backend/lib/sessionManagement.php", {
       method: 'POST',
@@ -59,11 +60,13 @@ class Results extends React.Component {
 
   downloadResults = (format,getAll) => {
     if(getAll) {
+      console.log('getAll request', format);
       let a = document.createElement('a');
       a.href = '/backend/database/_cache/' + format==='json'? 'corpusJson.zip' : 'corpusTxt.zip';
       a.download = true;
       a.click();
     } else {
+      console.log('normal request: ', format);
       // request data + handle response for each selected format separately
       fetch("/backend/lib/functions.php", {
         method: 'POST',
