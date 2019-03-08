@@ -18,8 +18,8 @@ class ScriptDownload extends React.Component {
     });
   };
 
-  componentDidMount = () => {
-    this.requestFilenames();
+  async componentDidMount() {
+    await this.requestFilenames();
     console.log('filenames: ', this.state.filenames);
   };
 
