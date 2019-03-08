@@ -25,7 +25,7 @@ class ScriptDownload extends React.Component {
 
   requestFilenames = () => {
     // check if session is still valid otherwise logout user
-    if(this.props.requestStatus() === true) {
+    if(this.props.requestStatus()) {
       fetch("/backend/lib/functions.php", {
         method: 'POST',
         credentials: 'same-origin', // allow cookies -> session management

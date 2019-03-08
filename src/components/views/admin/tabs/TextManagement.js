@@ -21,7 +21,7 @@ class TextManagement extends Component {
   // see if server is currently importing or when last import was started
   requestImportStatus = () => {
     // check if user is still logged in
-    if(this.props.requestStatus() === true) {
+    if(this.props.requestStatus()) {
 
       fetch(' /backend/lib/admin.php', {
         method: 'POST',
@@ -81,7 +81,7 @@ class TextManagement extends Component {
   // request server to start import from Gutenberg Corpus
   requestImport = () => {
     // check if user is still logged in
-    if(this.props.requestStatus() === true) {
+    if(this.props.requestStatus()) {
 
       this.handleChange('loading', true);
       fetch('/backend/lib/admin.php', {
@@ -125,7 +125,7 @@ class TextManagement extends Component {
     }
 
     // check if user is still logged in
-    if(this.props.requestStatus() === true) {
+    if(this.props.requestStatus()) {
 
       this.handleChange('loading', true);
 

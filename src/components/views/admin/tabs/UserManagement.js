@@ -64,7 +64,7 @@ class UserManagement extends React.Component {
 
   // request users list from server
   requestUsers = () => {
-    if(this.props.requestStatus() === true) {
+    if(this.props.requestStatus()) {
       this.handleChange('loading', true);
       fetch('/backend/lib/admin.php', {
         method: 'POST',
@@ -109,7 +109,7 @@ class UserManagement extends React.Component {
       return;
     }
 
-    if(this.props.requestStatus() === true) {
+    if(this.props.requestStatus()) {
       this.handleChange('loading', true);
       fetch('/backend/lib/admin.php', {
         method: 'POST',
@@ -155,7 +155,7 @@ class UserManagement extends React.Component {
     }
 
     // check if user is still logged in
-    if(this.prop.requestStatus() === true) {
+    if(this.prop.requestStatus()) {
 
       fetch('/backend/lib/admin.php', {
         method: 'POST',

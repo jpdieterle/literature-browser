@@ -20,7 +20,7 @@ class ServerManagement extends React.Component {
   // request server to empty its cache
   requestEmptyCache = () => {
     // check if user is still logged in
-    if(this.prop.requestStatus() === true) {
+    if(this.prop.requestStatus()) {
 
       this.handleChange('loading', true);
       fetch(' /backend/lib/admin.php', {
