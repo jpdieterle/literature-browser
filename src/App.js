@@ -136,7 +136,7 @@ class App extends React.Component {
   };
 
   // check if user is logged in (valid session id) and if he is an admin
-  requestUserStatus = new Promise(() => {
+  requestUserStatus = () => {
     fetch("/backend/lib/sessionManagement.php", {
       method: 'POST',
       credentials: 'same-origin', // allow cookies -> session management
@@ -177,7 +177,7 @@ class App extends React.Component {
       return 'false';
       }
     );
-  });
+  };
 
   // executed after component is inserted into the tree
   componentDidMount = () => {
@@ -188,7 +188,7 @@ class App extends React.Component {
 
   // logout user, request server to delete sessionID, display error if necessary
   logout = () => {
-    fetch('/backend/lib/functions.php', {
+    fetch('/backend/lib/sessionManagement.php', {
       method: 'POST',
       credentials: 'same-origin', // allow cookies -> session management
       headers: {
