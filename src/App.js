@@ -16,6 +16,7 @@ import About from './components/views/About';
 import Admin from './components/views/admin/Admin';
 import MissingPage from './components/views/MissingPage';
 import Notification from './components/notifications/NotificationSnackbar';
+import ScriptDownload from './components/views/ScriptDownload';
 
 // App component
 class App extends React.Component {
@@ -201,6 +202,7 @@ class App extends React.Component {
                         (<Redirect to='/login'/>)
                     )}/>
                     <Route path='/about' component={About}/>
+                    <Route path='/scripts' component={ScriptDownload}/>
                     <Route path='/admin' render={() => (
                       (loggedIn && isAdmin)? (<Admin requestNewAuthors={this.requestAuthors} requestNewLog={this.requestLog} sessionID={sessionID}/>) : (<Redirect to='/' />)
                     )}/>
@@ -227,7 +229,7 @@ const styles = {
   },
   contentWrapper: {
     height: '100%',
-    paddingTop: 32,
+    paddingTop: 0,
   },
   routerWrapper: {
     height: '100%',

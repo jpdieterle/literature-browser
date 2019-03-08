@@ -318,6 +318,7 @@ const styles = theme => ({
   root:{
     paddingLeft: theme.spacing.unit * 3,
     paddingBottom: theme.spacing.unit * 3,
+    marginTop: theme.spacing.unit * 4,
   },
   infoBox:{
     minWidth: 400,

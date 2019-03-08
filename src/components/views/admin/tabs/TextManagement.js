@@ -125,7 +125,7 @@ class TextManagement extends Component {
     data.append('id', this.props.sessionID);
     data.append('addText', 'true');
 
-    fetch(' /backend/lib/admin.php',{
+    fetch('/backend/lib/admin.php',{
       method: 'POST',
       credentials: 'same-origin', // allow cookies -> session management
       headers: {},

@@ -30,6 +30,9 @@ class Header extends React.Component {
                 <li className={classes.navElement}>
                   <Button component={Link} to='/about' color="inherit" className={classes.buttons}>About</Button>
                 </li>
+                {loggedIn && <li className={classes.navElement}>
+                  <Button component={Link} to='/scripts' color="inherit" className={classes.buttons}>Skripte</Button>
+                </li>}
                 {loggedIn && isAdmin && <li className={classes.navElement}>
                   <Button component={Link} to='/admin' color="inherit" className={classes.buttons}>Admin</Button>
                 </li>}
@@ -69,7 +72,7 @@ const styles = theme => ({
   },
   toolbar: {
     backgroundColor: indigo[900],
-    height: 70,
+    height: 88,
     minWidth: 608,
   },
   img: {
