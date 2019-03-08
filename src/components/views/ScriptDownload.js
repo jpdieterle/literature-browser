@@ -23,43 +23,41 @@ class ScriptDownload extends React.Component {
     console.log('filenames: ', this.state.filenames);
   };
 
-  requestFilenames = () => {
+  async requestFilenames() {
     // check if session is still valid otherwise logout user
-    let userStatus = new Promise(this.props.requestStatus);
-    userStatus.then(loggedIn => {
-      console.log('then', loggedIn);
-      if(loggedIn === 'true') {
-        console.log('fetch');
-        fetch("/backend/lib/functions.php", {
-          method: 'POST',
-          credentials: 'same-origin', // allow cookies -> session management
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({getFiles: true})
+    const userStatus = await this.props.requestStatus();
+    console.log('then', userStatus);
+    if(userStatus === 'true') {
+      console.log('fetch');
+      fetch("/backend/lib/functions.php", {
+        method: 'POST',
+        credentials: 'same-origin', // allow cookies -> session management
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({getFiles: true})
+      })
+        .then(res => {
+          if(res.ok) {
+            res.json().then(data => {
+              if (data && data.status === "success") {
+                console.log('data: ', data);
+                console.log('data files: ', data.files);
+                this.context.handleNotificationChange(true, 'Die Dateien wurden erfolgreich abgerufen.', 'getFiles', 'success');
+                this.setState({filenames: data.files})
+              } else {
+                this.context.handleNotificationChange(true, 'Die Dateien konnten nicht vom Server geladen werden.', 'getFiles', 'error');
+              }
+            })
+          } else {
+            this.context.handleNotificationChange(true, 'Die Dateien konnten nicht vom Server geladen werden.', 'getFiles', 'error');
+          }
         })
-          .then(res => {
-            if(res.ok) {
-              res.json().then(data => {
-                if (data && data.status === "success") {
-                  console.log('data: ', data);
-                  console.log('data files: ', data.files);
-                  this.context.handleNotificationChange(true, 'Die Dateien wurden erfolgreich abgerufen.', 'getFiles', 'success');
-                  this.setState({filenames: data.files})
-                } else {
-                  this.context.handleNotificationChange(true, 'Die Dateien konnten nicht vom Server geladen werden.', 'getFiles', 'error');
-                }
-              })
-            } else {
-              this.context.handleNotificationChange(true, 'Die Dateien konnten nicht vom Server geladen werden.', 'getFiles', 'error');
-            }
-          })
-          .catch(error => {
-              this.context.handleNotificationChange(true, 'Die Dateien konnten nicht vom Server geladen werden.', 'getFiles', 'error');
-            }
-          )
-      }
-    })
+        .catch(error => {
+            this.context.handleNotificationChange(true, 'Die Dateien konnten nicht vom Server geladen werden.', 'getFiles', 'error');
+          }
+        )
+    }
   };
 
   render() {
