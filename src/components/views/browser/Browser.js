@@ -130,7 +130,7 @@ class Browser extends React.PureComponent {
     }
 
     // check if session is still valid otherwise logout user
-    if(this.props.requestStatus()) {
+    if(true) {
       let payload = {};
       getAll ? payload.getAll = true : payload.cards = this.state.cardList;
 
