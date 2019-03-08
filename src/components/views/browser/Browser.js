@@ -160,7 +160,6 @@ class Browser extends React.PureComponent {
                 hits: data.hits, // number
                 responseIn: true,
               });
-              console.log(response.json);
             } else {
               // server error / search not possible on server
               this.setState({
@@ -215,7 +214,7 @@ class Browser extends React.PureComponent {
           <InfoButton color={"primary"} className={classes.infoIcon}/>
           <Typography color={"primary"}>
             Schränken Sie die Suche ein, indem Sie eines oder mehrere Kriterien innerhalb einer Teil-Suche (=Kasten) eingeben.
-            Teil-Suchen werden zu einer Such-Anfrage kombiniert, sodass Sie mehr Texte mit einer Such-Abfrage erhalten können.
+            Teil-Suchen werden zu einer Such-Anfrage kombiniert, sodass Sie mehr Texte mit einer Suche erhalten können.
           </Typography>
         </Paper>
         <form onSubmit={this.handleSubmit.bind(this)}>

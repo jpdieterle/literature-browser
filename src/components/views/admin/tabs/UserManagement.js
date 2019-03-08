@@ -145,16 +145,6 @@ class UserManagement extends React.Component {
 
   // delete user from server
   requestDelete = username => {
-    //console.log('event: ', event);
-    //console.log('event target: ', event.target);
-    // catch error
-    //if(!event.target.id) {
-      //console.log('event target id undefined!');
-      // this.context.handleNotificationChange(true, 'Bitte versuchen Sie es noch einmal.', 'deleteUser', 'warning');
-      // return;
-    //}
-    //let selectedUserName = event.target.id;
-    // don't delete user if they are the only admin
     if(!username) return;
     if(this.state.users.filter(user => user.user === username)[0].isAdmin && this.getAdminNumber(this.state.users) === 1) {
       this.context.handleNotificationChange(true, 'Legen Sie einen neuen Admin-Account an bevor Sie den einzigen löschen.', 'deleteUser', 'error');
