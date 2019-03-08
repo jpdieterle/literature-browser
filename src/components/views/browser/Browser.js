@@ -237,13 +237,20 @@ class Browser extends React.PureComponent {
   };
 
   render() {
-    const { classes, authorsList, minYear, maxYear, genres } = this.props;
+    const { classes, authorsList, minYear, maxYear, genres, handleAppChange } = this.props;
     const { cardList, selectedFormats, responseFiles, responseIn, loading, hits, searchID, getAll} = this.state;
 
     const renderResponseData = () => {
       let formats = selectedFormats.checkedJSON? ['json'] : [];
       if(selectedFormats.checkedTXT) formats.push('txt');
-      return <Results filenames={responseFiles} number={hits} formats={formats} searchID={searchID} getAll={getAll}/>;
+      return <Results
+        filenames={responseFiles}
+        number={hits}
+        formats={formats}
+        searchID={searchID}
+        getAll={getAll}
+        handleAppChange={handleAppChange}
+      />;
     };
 
     return(

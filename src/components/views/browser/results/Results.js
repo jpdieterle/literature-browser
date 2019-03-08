@@ -17,6 +17,10 @@ class Results extends React.Component {
       && nextProps.searchID === this.props.searchID);
   };
 
+  componentWillUpdate = nextProps => {
+    console.log('results will update: ', this.props, nextProps);
+  };
+
   // see if user is still logged in
   requestStatus = func => {
     // check if session is still valid otherwise logout user
