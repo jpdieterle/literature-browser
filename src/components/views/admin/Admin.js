@@ -44,7 +44,8 @@ Admin.propTypes = {
   classes: PropTypes.object.isRequired,
   requestNewAuthors: PropTypes.func.isRequired,
   requestNewLog: PropTypes.func.isRequired,
-  requestStatus: PropTypes.func.isRequired,
+  handleAppChange: PropTypes.func.isRequired,
+  sessionID: PropTypes.any.isRequired,
 };
 
 const styles = theme => ({

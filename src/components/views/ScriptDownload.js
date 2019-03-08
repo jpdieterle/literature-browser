@@ -23,41 +23,76 @@ class ScriptDownload extends React.Component {
     console.log('filenames: ', this.state.filenames);
   };
 
-  async requestFilenames() {
+  logout = () => {
+    this.handleStateChange('loggedIn', false);
+    this.handleStateChange('isAdmin', false);
+  };
+
+  requestFilenames() {
     // check if session is still valid otherwise logout user
-    const userStatus = await this.props.requestStatus();
-    console.log('then');
-    if(userStatus === 'true') {
-      console.log('fetch');
-      fetch("/backend/lib/functions.php", {
-        method: 'POST',
-        credentials: 'same-origin', // allow cookies -> session management
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({getFiles: true})
+    fetch("/backend/lib/sessionManagement.php", {
+      method: 'POST',
+      credentials: 'same-origin', // allow cookies -> session management
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        loginStatus: true,
+        loginID: this.state.sessionID
       })
-        .then(res => {
-          if(res.ok) {
-            res.json().then(data => {
-              if (data && data.status === "success") {
-                console.log('data: ', data);
-                console.log('data files: ', data.files);
-                this.context.handleNotificationChange(true, 'Die Dateien wurden erfolgreich abgerufen.', 'getFiles', 'success');
-                this.setState({filenames: data.files})
-              } else {
-                this.context.handleNotificationChange(true, 'Die Dateien konnten nicht vom Server geladen werden.', 'getFiles', 'error');
-              }
-            })
-          } else {
-            this.context.handleNotificationChange(true, 'Die Dateien konnten nicht vom Server geladen werden.', 'getFiles', 'error');
-          }
-        })
-        .catch(error => {
-            this.context.handleNotificationChange(true, 'Die Dateien konnten nicht vom Server geladen werden.', 'getFiles', 'error');
-          }
-        )
-    }
+    }).then(response => {
+        if(response.ok) {
+          response.json().then(data => {
+            if(!data || data.status === 'error') {
+              this.handleNotificationChange(true, 'Ihre Sitzung ist abgelaufen.', 'sessionCheck', 'error');
+              this.props.handleAppChange('loggedIn', false);
+              this.props.handleAppChange('isAdmin', false);
+              console.log('error1');
+            } else {
+              console.log('fetch scripts');
+              fetch("/backend/lib/functions.php", {
+                method: 'POST',
+                credentials: 'same-origin', // allow cookies -> session management
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({getFiles: true})
+              })
+                .then(res => {
+                  if(res.ok) {
+                    res.json().then(data => {
+                      if (data && data.status === "success") {
+                        console.log('data: ', data);
+                        console.log('data files: ', data.files);
+                        this.context.handleNotificationChange(true, 'Die Dateien wurden erfolgreich abgerufen.', 'getFiles', 'success');
+                        this.setState({filenames: data.files})
+                      } else {
+                        this.context.handleNotificationChange(true, 'Die Dateien konnten nicht vom Server geladen werden.', 'getFiles', 'error');
+                      }
+                    })
+                  } else {
+                    this.context.handleNotificationChange(true, 'Die Dateien konnten nicht vom Server geladen werden.', 'getFiles', 'error');
+                  }
+                })
+                .catch(error => {
+                    this.context.handleNotificationChange(true, 'Die Dateien konnten nicht vom Server geladen werden.', 'getFiles', 'error');
+                  }
+                );
+              console.log('success');
+            }
+          });
+        } else {
+          this.handleNotificationChange(true, 'Ihre Sitzung ist abgelaufen.', 'sessionCheck', 'error');
+          this.logout();
+          console.log('error2');
+        }
+      }
+    ).catch(error => {
+        this.handleNotificationChange(true, 'Ihre Sitzung ist abgelaufen.', 'sessionCheck', 'error', 404);
+        this.logout();
+        console.log('error3');
+      }
+    );
   };
 
   render() {
@@ -84,7 +119,8 @@ class ScriptDownload extends React.Component {
 
 ScriptDownload.propTypes = {
   classes: PropTypes.object.isRequired,
-  requestStatus: PropTypes.any.isRequired,
+  handleAppChange: PropTypes.func.isRequired,
+  sessionID: PropTypes.any.isRequired,
 };
 
 const styles = theme => ({
