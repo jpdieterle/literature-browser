@@ -17,13 +17,8 @@ class Results extends React.Component {
       && nextProps.searchID === this.props.searchID);
   };
 
-  componentWillUpdate = nextProps => {
-    console.log('results will update: ', this.props, nextProps);
-  };
-
   // see if user is still logged in
   requestStatus = func => {
-    console.log('requestStatus: ', this.props.sessionID);
     // check if session is still valid otherwise logout user
     fetch("/backend/lib/sessionManagement.php", {
       method: 'POST',
@@ -60,13 +55,11 @@ class Results extends React.Component {
 
   downloadResults = (format,getAll) => {
     if(getAll) {
-      console.log('getAll request', format);
       let a = document.createElement('a');
-      a.href = '/backend/lib/archive/' + format==='json'? 'corpusJson.zip' : 'corpusTxt.zip';
+      a.href = '/backend/archive/' + format==='json'? 'corpusJson.zip' : 'corpusTxt.zip';
       a.download = true;
       a.click();
     } else {
-      console.log('normal request: ', format);
       // request data + handle response for each selected format separately
       fetch("/backend/lib/functions.php", {
         method: 'POST',
@@ -97,7 +90,6 @@ class Results extends React.Component {
           }
         })
         .catch((error) => {
-          console.error(error);
           this.context.handleNotificationChange(true, 'Die Ergebnis-Dateien konnten nicht vom Server geladen werden.', 'download', 'error');
         });
     }
