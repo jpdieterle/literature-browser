@@ -20,7 +20,6 @@ class ScriptDownload extends React.Component {
 
   componentDidMount() {
     this.requestStatus();
-    console.log('filenames: ', this.state.filenames);
   };
 
   logout = () => {
@@ -29,7 +28,6 @@ class ScriptDownload extends React.Component {
   };
 
   requestFilenames = () => {
-    console.log('fetch scripts');
     fetch("/backend/lib/functions.php", {
       method: 'POST',
       credentials: 'same-origin', // allow cookies -> session management
@@ -42,8 +40,6 @@ class ScriptDownload extends React.Component {
         if(res.ok) {
           res.json().then(data => {
             if (data && data.status === "success") {
-              console.log('data: ', data);
-              console.log('data files: ', data.files);
               this.context.handleNotificationChange(true, 'Die Dateien wurden erfolgreich abgerufen.', 'getFiles', 'success');
               this.setState({filenames: data.files})
             } else {
@@ -79,22 +75,18 @@ class ScriptDownload extends React.Component {
               this.context.handleNotificationChange(true, 'Ihre Sitzung ist abgelaufen.', 'sessionCheck', 'error');
               this.props.handleAppChange('loggedIn', false);
               this.props.handleAppChange('isAdmin', false);
-              console.log('error1');
             } else {
               this.requestFilenames();
-              console.log('success');
             }
           });
         } else {
           this.context.handleNotificationChange(true, 'Ihre Sitzung ist abgelaufen.', 'sessionCheck', 'error');
           this.logout();
-          console.log('error2');
         }
       }
     ).catch(error => {
         this.context.handleNotificationChange(true, 'Ihre Sitzung ist abgelaufen.', 'sessionCheck', 'error', 404);
         this.logout();
-        console.log('error3');
       }
     );
   };

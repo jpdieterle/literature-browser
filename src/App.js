@@ -135,50 +135,6 @@ class App extends React.Component {
     );
   };
 
-  // check if user is logged in (valid session id) and if he is an admin
-  requestUserStatus() {
-    fetch("/backend/lib/sessionManagement.php", {
-      method: 'POST',
-      credentials: 'same-origin', // allow cookies -> session management
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        loginStatus: true,
-        loginID: this.state.sessionID
-      })
-    }).then(response => {
-        if(response.ok) {
-          response.json().then(data => {
-            if(!data || data.status === 'error') {
-              this.handleNotificationChange(true, 'Ihre Sitzung ist abgelaufen.', 'sessionCheck', 'error');
-              this.handleStateChange('loggedIn', false);
-              this.handleStateChange('isAdmin', false);
-              console.log('error1');
-              return 'false';
-            } else {
-              console.log('success');
-              return 'true';
-            }
-          });
-        } else {
-          this.handleNotificationChange(true, 'Ihre Sitzung ist abgelaufen.', 'sessionCheck', 'error');
-          this.handleStateChange('loggedIn', false);
-          this.handleStateChange('isAdmin', false);
-          console.log('error2');
-          return 'false';
-        }
-      }
-    ).catch(error => {
-        this.handleNotificationChange(true, 'Ihre Sitzung ist abgelaufen.', 'sessionCheck', 'error', 404);
-        this.handleStateChange('loggedIn', false);
-        this.handleStateChange('isAdmin', false);
-      console.log('error3');
-      return 'false';
-      }
-    );
-  };
-
   // executed after component is inserted into the tree
   componentDidMount = () => {
     // request initial data (authors, genres, time range, user status
