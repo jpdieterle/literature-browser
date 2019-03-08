@@ -20,7 +20,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 class UserManagement extends React.Component {
   componentDidMount = () => {
     // load user list
-    this.requestUsers();
+    this.props.requestStatus(this.requestUsers);
   };
 
   state = {
@@ -64,38 +64,36 @@ class UserManagement extends React.Component {
 
   // request users list from server
   requestUsers = () => {
-    if(this.props.requestStatus()) {
-      this.handleChange('loading', true);
-      fetch('/backend/lib/admin.php', {
-        method: 'POST',
-        credentials: 'same-origin', // allow cookies -> session management
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          users: true,
-        }),
-      })
-        .then(response => {
-          if (response.ok) {
-            response.json().then(data => {
-              if (data && data.status === 'success') {
-                // received users list from server
-                this.handleChange('users', JSON.parse(data.users));
-              } else {
-                this.context.handleNotificationChange(true, 'Die Nutzerliste konnte nicht geladen werden.', 'loadUsers', 'error');
-              }
-            })
-          } else {
-            this.context.handleNotificationChange(true, 'Die Nutzerliste konnte nicht geladen werden.', 'loadUsers', 'error');
-          }
-          this.handleChange('loading', false);
-        })
-        .catch(error => {
+    this.handleChange('loading', true);
+    fetch('/backend/lib/admin.php', {
+      method: 'POST',
+      credentials: 'same-origin', // allow cookies -> session management
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        users: true,
+      }),
+    })
+      .then(response => {
+        if (response.ok) {
+          response.json().then(data => {
+            if (data && data.status === 'success') {
+              // received users list from server
+              this.handleChange('users', JSON.parse(data.users));
+            } else {
+              this.context.handleNotificationChange(true, 'Die Nutzerliste konnte nicht geladen werden.', 'loadUsers', 'error');
+            }
+          })
+        } else {
           this.context.handleNotificationChange(true, 'Die Nutzerliste konnte nicht geladen werden.', 'loadUsers', 'error');
-          this.handleChange('loading', false);
-        });
-    }
+        }
+        this.handleChange('loading', false);
+      })
+      .catch(error => {
+        this.context.handleNotificationChange(true, 'Die Nutzerliste konnte nicht geladen werden.', 'loadUsers', 'error');
+        this.handleChange('loading', false);
+      });
   };
 
   // create new user on server
@@ -109,41 +107,39 @@ class UserManagement extends React.Component {
       return;
     }
 
-    if(this.props.requestStatus()) {
-      this.handleChange('loading', true);
-      fetch('/backend/lib/admin.php', {
-        method: 'POST',
-        credentials: 'same-origin', // allow cookies -> session management
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username: this.state.newUser.name,
-          password: this.state.newUser.pw1,
-          isadmin: this.state.newUser.isAdmin === false ? 0 : 1,
-        }),
-      })
-        .then(response => {
-          if (response.ok) {
-            response.json().then(data => {
-              if (data && data.status === 'success') {
-                // created new user
-                this.requestUsers();
-                this.context.handleNotificationChange(true, 'Benutzer*in erfolgreich angelegt.', 'createUser', 'success');
-              } else {
-                this.context.handleNotificationChange(true, 'Benutzer*in konnte nicht angelegt werden.', 'createUser', 'error');
-              }
-            })
-          } else {
-            this.context.handleNotificationChange(true, 'Benutzer*in konnte nicht angelegt werden.', 'createUser', 'error');
-          }
-          this.handleChange('loading', false);
-        })
-        .catch(error => {
+    this.handleChange('loading', true);
+    fetch('/backend/lib/admin.php', {
+      method: 'POST',
+      credentials: 'same-origin', // allow cookies -> session management
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username: this.state.newUser.name,
+        password: this.state.newUser.pw1,
+        isadmin: this.state.newUser.isAdmin === false ? 0 : 1,
+      }),
+    })
+      .then(response => {
+        if (response.ok) {
+          response.json().then(data => {
+            if (data && data.status === 'success') {
+              // created new user
+              this.props.requestStatus(this.requestUsers);
+              this.context.handleNotificationChange(true, 'Benutzer*in erfolgreich angelegt.', 'createUser', 'success');
+            } else {
+              this.context.handleNotificationChange(true, 'Benutzer*in konnte nicht angelegt werden.', 'createUser', 'error');
+            }
+          })
+        } else {
           this.context.handleNotificationChange(true, 'Benutzer*in konnte nicht angelegt werden.', 'createUser', 'error');
-          this.handleChange('loading', false);
-        });
-    }
+        }
+        this.handleChange('loading', false);
+      })
+      .catch(error => {
+        this.context.handleNotificationChange(true, 'Benutzer*in konnte nicht angelegt werden.', 'createUser', 'error');
+        this.handleChange('loading', false);
+      });
   };
 
   // delete user from server
@@ -154,42 +150,38 @@ class UserManagement extends React.Component {
       return;
     }
 
-    // check if user is still logged in
-    if(this.prop.requestStatus()) {
-
-      fetch('/backend/lib/admin.php', {
-        method: 'POST',
-        credentials: 'same-origin', // allow cookies -> session management
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          delete: username,
-        })
+    fetch('/backend/lib/admin.php', {
+      method: 'POST',
+      credentials: 'same-origin', // allow cookies -> session management
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        delete: username,
       })
-        .then(response => {
-          if (response.ok) {
-            response.json().then(data => {
-              if (data.status === 'success') {
-                this.requestUsers();
-                this.context.handleNotificationChange(true, 'Nutzer*in erfolgreich gelöscht.', 'deleteUser', 'success')
-              } else {
-                this.context.handleNotificationChange(true, 'Nutzer*in konnte nicht gelöscht werden.', 'deleteUser', 'error')
-              }
-            })
-          } else {
-            this.context.handleNotificationChange(true, 'Nutzer*in konnte nicht gelöscht werden.', 'deleteUser', 'error')
-          }
-        })
-        .catch(error => {
-            this.context.handleNotificationChange(true, 'Nutzer*in konnte nicht gelöscht werden.', 'deleteUser', 'error')
-          }
-        );
-    }
+    })
+      .then(response => {
+        if (response.ok) {
+          response.json().then(data => {
+            if (data.status === 'success') {
+              this.props.requestStatus(this.requestUsers);
+              this.context.handleNotificationChange(true, 'Nutzer*in erfolgreich gelöscht.', 'deleteUser', 'success')
+            } else {
+              this.context.handleNotificationChange(true, 'Nutzer*in konnte nicht gelöscht werden.', 'deleteUser', 'error')
+            }
+          })
+        } else {
+          this.context.handleNotificationChange(true, 'Nutzer*in konnte nicht gelöscht werden.', 'deleteUser', 'error')
+        }
+      })
+      .catch(error => {
+          this.context.handleNotificationChange(true, 'Nutzer*in konnte nicht gelöscht werden.', 'deleteUser', 'error')
+        }
+      );
   };
 
   render() {
-    const { classes } = this.props;
+    const { classes, requestStatus } = this.props;
     const {  loading, newUser, users } = this.state;
 
     return (
@@ -214,7 +206,9 @@ class UserManagement extends React.Component {
                       <TableCell>{user.user}</TableCell>
                       <TableCell>{user.isadmin? 'Ja' : 'Nein'}</TableCell>
                       <TableCell className={classes.flexContainer}>
-                        <IconButton onClick={() => this.requestDelete(user.user)}><DeleteIcon color={'secondary'}/></IconButton>
+                        <IconButton onClick={() => requestStatus(() => this.requestDelete(user.user))}>
+                          <DeleteIcon color={'secondary'}/>
+                        </IconButton>
                       </TableCell>
                     </TableRow>
                   ))}
@@ -284,7 +278,7 @@ class UserManagement extends React.Component {
                     color="primary"
                     variant={"contained"}
                     className={classes.button}
-                    onClick={this.requestNewUser}
+                    onClick={() => requestStatus(this.requestNewUser)}
                   >
                     Hinzufügen
                   </Button>

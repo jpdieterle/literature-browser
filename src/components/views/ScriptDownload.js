@@ -110,7 +110,7 @@ class ScriptDownload extends React.Component {
           <Typography variant={'h5'} color={'primary'}>Python-Skripte</Typography>
           <ul>
             {filenames.map(name =>
-              <li><Link key={name} href={'/backend/scripts' + name} download>{name}</Link></li>
+              <li><Link key={name} href={'/backend/scripts/' + name} download>{name}</Link></li>
             )}
           </ul>
         </div>

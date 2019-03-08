@@ -248,7 +248,13 @@ class App extends React.Component {
                       loggedIn? (<ScriptDownload sessionID={sessionID} handleAppChange={this.handleStateChange}/>) : (<Redirect to='/login'/>)
                     )}/>
                     <Route path='/admin' render={() => (
-                      (loggedIn && isAdmin)? (<Admin requestNewAuthors={this.requestAuthors} requestNewLog={this.requestLog} sessionID={sessionID} handleAppChange={this.handleStateChange}/>) : (<Redirect to='/' />)
+                      (loggedIn && isAdmin)?
+                        (<Admin
+                          requestNewAuthors={this.requestAuthors}
+                          requestNewLog={this.requestLog}
+                          sessionID={sessionID}
+                          handleAppChange={this.handleStateChange}/>) :
+                        (<Redirect to='/' />)
                     )}/>
                     <Route path='/login' render={() => (
                       loggedIn? (<Redirect to='/'/>) : (<Login handleAppStateChange={this.handleStateChange} />)

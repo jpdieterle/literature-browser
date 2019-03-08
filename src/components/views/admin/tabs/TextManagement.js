@@ -20,44 +20,40 @@ class TextManagement extends Component {
 
   // see if server is currently importing or when last import was started
   requestImportStatus = () => {
-    // check if user is still logged in
-    if(this.props.requestStatus()) {
-
-      fetch(' /backend/lib/admin.php', {
-        method: 'POST',
-        credentials: 'same-origin', // allow cookies -> session management
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          importStatus: true,
-        })
+    fetch(' /backend/lib/admin.php', {
+      method: 'POST',
+      credentials: 'same-origin', // allow cookies -> session management
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        importStatus: true,
       })
-        .then(response => {
-          if (response.ok) {
-            response.json().then(data => {
-              if (data && data.status === 'success') {
-                // import status was loaded from server
-                this.handleChange('importStatus', data.importStatus || 'unbekannt');
-                this.handleChange('lastImportTime', data.lastImport || 'unbekannt');
-                this.context.handleNotificationChange(true, 'Der Import Status wurde aktualisiert.', 'importStatus', 'success')
-              } else {
-                this.context.handleNotificationChange(true, 'Der Import Status konnte nicht vom Server geladen werden.', 'importStatus', 'error');
-              }
-            })
-          } else {
-            this.context.handleNotificationChange(true, 'Der Import Status konnte nicht vom Server geladen werden.', 'importStatus', 'error');
-          }
-        })
-        .catch(error => {
+    })
+      .then(response => {
+        if (response.ok) {
+          response.json().then(data => {
+            if (data && data.status === 'success') {
+              // import status was loaded from server
+              this.handleChange('importStatus', data.importStatus || 'unbekannt');
+              this.handleChange('lastImportTime', data.lastImport || 'unbekannt');
+              this.context.handleNotificationChange(true, 'Der Import Status wurde aktualisiert.', 'importStatus', 'success')
+            } else {
+              this.context.handleNotificationChange(true, 'Der Import Status konnte nicht vom Server geladen werden.', 'importStatus', 'error');
+            }
+          })
+        } else {
           this.context.handleNotificationChange(true, 'Der Import Status konnte nicht vom Server geladen werden.', 'importStatus', 'error');
-        });
-    }
+        }
+      })
+      .catch(error => {
+        this.context.handleNotificationChange(true, 'Der Import Status konnte nicht vom Server geladen werden.', 'importStatus', 'error');
+      });
   };
 
   componentDidMount = () => {
     // request import state
-    this.requestImportStatus();
+    this.props.requestStatus(this.requestImportStatus);
   };
 
   // update state
@@ -74,46 +70,42 @@ class TextManagement extends Component {
 
   // update authors, genres, time range
   updateLogs = () => {
-    this.props.requestNewAuthors();
-    this.props.requestNewLog();
+    this.props.requestStatus(this.props.requestNewAuthors);
+    this.props.requestStatus(this.props.requestNewLog);
   };
 
   // request server to start import from Gutenberg Corpus
   requestImport = () => {
-    // check if user is still logged in
-    if(this.props.requestStatus()) {
-
-      this.handleChange('loading', true);
-      fetch('/backend/lib/admin.php', {
-        method: 'POST',
-        credentials: 'same-origin', // allow cookies -> session management
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          import: true,
-        }),
-      })
-        .then(response => {
-          if (response.ok) {
-            response.json().then(data => {
-              if (data && data.status === 'success') {
-                // import was started on server
-                this.context.handleNotificationChange(true, 'Der Import wurde auf dem Server gestartet.', 'import', 'success');
-              } else {
-                this.context.handleNotificationChange(true, 'Der Import konnte auf dem Server nicht gestartet werden.', 'import', 'error');
-              }
-            })
-          } else {
-            this.context.handleNotificationChange(true, 'Der Import konnte auf dem Server nicht gestartet werden.', 'import', 'error');
-          }
-          this.handleChange('loading', false);
-        })
-        .catch(error => {
+    this.handleChange('loading', true);
+    fetch('/backend/lib/admin.php', {
+      method: 'POST',
+      credentials: 'same-origin', // allow cookies -> session management
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        import: true,
+      }),
+    })
+      .then(response => {
+        if (response.ok) {
+          response.json().then(data => {
+            if (data && data.status === 'success') {
+              // import was started on server
+              this.context.handleNotificationChange(true, 'Der Import wurde auf dem Server gestartet.', 'import', 'success');
+            } else {
+              this.context.handleNotificationChange(true, 'Der Import konnte auf dem Server nicht gestartet werden.', 'import', 'error');
+            }
+          })
+        } else {
           this.context.handleNotificationChange(true, 'Der Import konnte auf dem Server nicht gestartet werden.', 'import', 'error');
-          this.handleChange('loading', false);
-        });
-    }
+        }
+        this.handleChange('loading', false);
+      })
+      .catch(error => {
+        this.context.handleNotificationChange(true, 'Der Import konnte auf dem Server nicht gestartet werden.', 'import', 'error');
+        this.handleChange('loading', false);
+      });
   };
 
   // request server to add input from textfield as new text to database
@@ -123,48 +115,43 @@ class TextManagement extends Component {
       this.context.handleNotificationChange(true, 'Bitte wählen Sie zuerst eine Datei aus.', 'addText', 'error');
       return;
     }
+    this.handleChange('loading', true);
 
-    // check if user is still logged in
-    if(this.props.requestStatus()) {
+    let data = new FormData();
+    data.append('file', this.state.selectedFiles);
+    data.append('addText', 'true');
 
-      this.handleChange('loading', true);
+    fetch('/backend/lib/admin.php', {
+      method: 'POST',
+      credentials: 'same-origin', // allow cookies -> session management
+      headers: {},
+      body: data,
+    })
+      .then(response => {
+        if (response.ok) {
+          response.json().then(data => {
+            if (data && data.status === 'success') {
+              // import was started on server
+              this.context.handleNotificationChange(true, 'Der/die Text/e wurde/n zur Datenbank hinzugefügt.', 'import', 'success');
+              this.updateLogs();
 
-      let data = new FormData();
-      data.append('file', this.state.selectedFiles);
-      data.append('addText', 'true');
-
-      fetch('/backend/lib/admin.php', {
-        method: 'POST',
-        credentials: 'same-origin', // allow cookies -> session management
-        headers: {},
-        body: data,
+            } else {
+              this.context.handleNotificationChange(true, 'Der Upload konnte nicht hinzugefügt werden.', 'import', 'error');
+            }
+          })
+        } else {
+          this.context.handleNotificationChange(true, 'Der Upload nicht hinzugefügt werden.', 'import', 'error');
+        }
+        this.handleChange('loading', false);
       })
-        .then(response => {
-          if (response.ok) {
-            response.json().then(data => {
-              if (data && data.status === 'success') {
-                // import was started on server
-                this.context.handleNotificationChange(true, 'Der/die Text/e wurde/n zur Datenbank hinzugefügt.', 'import', 'success');
-                this.updateLogs();
-
-              } else {
-                this.context.handleNotificationChange(true, 'Der Upload konnte nicht hinzugefügt werden.', 'import', 'error');
-              }
-            })
-          } else {
-            this.context.handleNotificationChange(true, 'Der Upload nicht hinzugefügt werden.', 'import', 'error');
-          }
-          this.handleChange('loading', false);
-        })
-        .catch(error => {
-          this.context.handleNotificationChange(true, 'Der Upload konnte nicht hinzugefügt werden.', 'import', 'error');
-          this.handleChange('loading', false);
-        });
-    }
+      .catch(error => {
+        this.context.handleNotificationChange(true, 'Der Upload konnte nicht hinzugefügt werden.', 'import', 'error');
+        this.handleChange('loading', false);
+      });
   };
 
   render() {
-    const {classes} = this.props;
+    const {classes, requestStatus} = this.props;
     const {loading, lastImportTime, importStatus} = this.state;
 
     return (
@@ -181,7 +168,7 @@ class TextManagement extends Component {
               color={'primary'}
               variant={'contained'}
               disabled={loading}
-              onClick={this.requestImport}
+              onClick={() => requestStatus(this.requestImport)}
             >
               Import starten
             </Button>
@@ -190,7 +177,7 @@ class TextManagement extends Component {
               color={'primary'}
               variant={'text'}
               disabled={loading}
-              onClick={this.requestImportStatus}
+              onClick={() => requestStatus(this.requestImportStatus)}
             >
               Import-Status aktualisieren
             </Button>
@@ -218,7 +205,7 @@ class TextManagement extends Component {
                 component={'span'}
                 color={'primary'}
                 disabled={loading}
-                onClick={this.requestAddText}
+                onClick={() => requestStatus(this.requestAddText)}
               >
                 Datei hochladen
               </Button>

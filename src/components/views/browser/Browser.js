@@ -117,6 +117,42 @@ class Browser extends React.PureComponent {
     this.setState({selectedFormats: newSelectedFormats});
   };
 
+  // see if user is still logged in
+  requestStatus = func => {
+    // check if session is still valid otherwise logout user
+    fetch("/backend/lib/sessionManagement.php", {
+      method: 'POST',
+      credentials: 'same-origin', // allow cookies -> session management
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        loginStatus: true,
+        loginID: this.props.sessionID
+      })
+    }).then(response => {
+        if(response.ok) {
+          response.json().then(data => {
+            if(!data || data.status === 'error') {
+              this.context.handleNotificationChange(true, 'Ihre Sitzung ist abgelaufen.', 'sessionCheck', 'error');
+              this.props.handleAppChange('loggedIn', false);
+              this.props.handleAppChange('isAdmin', false);
+            } else {
+              func();
+            }
+          });
+        } else {
+          this.context.handleNotificationChange(true, 'Ihre Sitzung ist abgelaufen.', 'sessionCheck', 'error');
+          this.logout();
+        }
+      }
+    ).catch(error => {
+        this.context.handleNotificationChange(true, 'Ihre Sitzung ist abgelaufen.', 'sessionCheck', 'error', 404);
+        this.logout();
+      }
+    );
+  };
+
   // submit search with or without criteria
   handleSubmit = (getAll) => {
     // check for errors before sending request
@@ -129,75 +165,72 @@ class Browser extends React.PureComponent {
       return;
     }
 
-    // check if session is still valid otherwise logout user
-    if(true) {
-      let payload = {};
-      getAll ? payload.getAll = true : payload.cards = this.state.cardList;
+    let payload = {};
+    getAll ? payload.getAll = true : payload.cards = this.state.cardList;
 
-      // start loading animation, disable forms
-      this.setState({
-        loading: true,
-        error: false,
-        responseIn: false,
-        responseFiles: [],
-      });
+    // start loading animation, disable forms
+    this.setState({
+      loading: true,
+      error: false,
+      responseIn: false,
+      responseFiles: [],
+    });
 
-      // request data + handle response
-      fetch("/backend/lib/functions.php", {
-        method: 'POST',
-        credentials: 'same-origin', // allow cookies -> session management
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload)
-      })
-        .then(response => {
-          if (response.ok) {
-            response.json().then(data => {
-              if (data && data.status && data.status === 'success') {
-                // search succeeded (there are results)
-                this.setState({
-                  responseFiles: data.filenames, // array of filenames separated by comma
-                  hits: data.hits, // number
-                  responseIn: true,
-                });
-              } else {
-                // server error / search not possible on server
-                this.setState({
-                  errorMessage: 'Es ist ein Fehler auf dem Server aufgetreten.',
-                  error: true
-                });
-                this.context.handleNotificationChange(true, 'Es ist ein Fehler auf dem Server aufgetreten. Die Anfrage wurde abgebrochen.', 'search', 'error');
-              }
-            });
-          } else {
-            // other problem
-            this.setState({
-              errorMessage: response.statusText,
-              error: true
-            });
-            this.context.handleNotificationChange(true, response.statusText, 'search', 'error', response.statusCode)
-          }
-        })
-        .catch(error => {
+    // request data + handle response
+    fetch("/backend/lib/functions.php", {
+      method: 'POST',
+      credentials: 'same-origin', // allow cookies -> session management
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload)
+    })
+      .then(response => {
+        if (response.ok) {
+          response.json().then(data => {
+            if (data && data.status && data.status === 'success') {
+              // search succeeded (there are results)
+              this.setState({
+                responseFiles: data.filenames, // array of filenames separated by comma
+                hits: data.hits, // number
+                responseIn: true,
+              });
+            } else {
+              // server error / search not possible on server
+              this.setState({
+                errorMessage: 'Es ist ein Fehler auf dem Server aufgetreten.',
+                error: true
+              });
+              this.context.handleNotificationChange(true, 'Es ist ein Fehler auf dem Server aufgetreten. Die Anfrage wurde abgebrochen.', 'search', 'error');
+            }
+          });
+        } else {
+          // other problem
           this.setState({
-            errorMessage: error.message,
+            errorMessage: response.statusText,
             error: true
           });
-          this.context.handleNotificationChange(true, error.message, 'search', 'error', 404)
+          this.context.handleNotificationChange(true, response.statusText, 'search', 'error', response.statusCode)
+        }
+      })
+      .catch(error => {
+        this.setState({
+          errorMessage: error.message,
+          error: true
         });
-      this.setState({loading: false});
-    }
+        this.context.handleNotificationChange(true, error.message, 'search', 'error', 404)
+      });
+    this.setState({loading: false});
   };
 
   // do search with criteria entered by user
   handleSearchCriteria = () => {
-    this.handleSubmit(false);
+    this.requestStatus(() => this.handleSubmit(false));
   };
 
   // do search not regarding criteria that might have been entered by user
   handleGetAll = () => {
-    this.handleSubmit(true);
+    this.requestStatus(() => this.handleSubmit(true));
   };
 
   render() {

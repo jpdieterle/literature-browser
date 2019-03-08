@@ -7,6 +7,7 @@ import TextManagement from './tabs/TextManagement';
 import ServerManagement from './tabs/ServerManagement';
 import UserManagement from './tabs/UserManagement';
 import MissingPage from '../MissingPage';
+import NotificationContext from '../notifications/NotificationContext';
 
 // routing for Admin page
 class Admin extends React.Component {
@@ -18,8 +19,43 @@ class Admin extends React.Component {
     });
   };
 
+  requestStatus = func => {
+    // check if session is still valid otherwise logout user
+    fetch("/backend/lib/sessionManagement.php", {
+      method: 'POST',
+      credentials: 'same-origin', // allow cookies -> session management
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        loginStatus: true,
+        loginID: this.props.sessionID
+      })
+    }).then(response => {
+        if(response.ok) {
+          response.json().then(data => {
+            if(!data || data.status === 'error') {
+              this.context.handleNotificationChange(true, 'Ihre Sitzung ist abgelaufen.', 'sessionCheck', 'error');
+              this.props.handleAppChange('loggedIn', false);
+              this.props.handleAppChange('isAdmin', false);
+            } else {
+              func();
+            }
+          });
+        } else {
+          this.context.handleNotificationChange(true, 'Ihre Sitzung ist abgelaufen.', 'sessionCheck', 'error');
+          this.logout();
+        }
+      }
+    ).catch(error => {
+        this.context.handleNotificationChange(true, 'Ihre Sitzung ist abgelaufen.', 'sessionCheck', 'error', 404);
+        this.logout();
+      }
+    );
+  };
+
   render() {
-    const {classes, requestNewAuthors, requestNewLog, requestStatus} = this.props;
+    const {classes, requestNewAuthors, requestNewLog} = this.props;
 
     return (
 
@@ -27,9 +63,15 @@ class Admin extends React.Component {
         <AdminNav/>
         <div className={classes.pageContainer}>
           <Switch>
-            <Route path='/admin/users' render={() => <UserManagement requestStatus={requestStatus}/>} />
-            <Route path='/admin/server' render={() => <ServerManagement requestStatus={requestStatus}/>} />
-            <Route path='/admin' render={() => <TextManagement requestNewAuthors={requestNewAuthors} requestNewLog={requestNewLog} requestStatus={requestStatus}/>} />
+            <Route path='/admin/users' render={() => <UserManagement requestStatus={this.requestStatus} userStatus={this.requestStatus}/>} />
+            <Route path='/admin/server' render={() => <ServerManagement requestStatus={this.requestStatus} userStatus={this.requestStatus}/>} />
+            <Route path='/admin' render={() =>
+              <TextManagement
+                requestNewAuthors={requestNewAuthors}
+                requestNewLog={requestNewLog}
+                requestStatus={this.requestStatus}
+              />}
+            />
             <Route exact path='/admin/:other' render={() => <MissingPage/>} />
           </Switch>
 
@@ -47,6 +89,8 @@ Admin.propTypes = {
   handleAppChange: PropTypes.func.isRequired,
   sessionID: PropTypes.any.isRequired,
 };
+
+Admin.contextType = NotificationContext;
 
 const styles = theme => ({
   root: {
