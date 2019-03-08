@@ -27,7 +27,7 @@ class ScriptDownload extends React.Component {
     // check if session is still valid otherwise logout user
     this.props.requestStatus().then(loggedIn => {
       console.log('then', loggedIn);
-      if(loggedIn === true) {
+      if(loggedIn === 'true') {
         console.log('fetch');
         fetch("/backend/lib/functions.php", {
           method: 'POST',

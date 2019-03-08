@@ -155,10 +155,10 @@ class App extends React.Component {
               this.handleStateChange('loggedIn', false);
               this.handleStateChange('isAdmin', false);
               console.log('error1');
-              return false;
+              return 'false';
             } else {
               console.log('success');
-              return true;
+              return 'true';
             }
           });
         } else {
@@ -166,7 +166,7 @@ class App extends React.Component {
           this.handleStateChange('loggedIn', false);
           this.handleStateChange('isAdmin', false);
           console.log('error2');
-          return false;
+          return 'false';
         }
       }
     ).catch(error => {
@@ -174,7 +174,7 @@ class App extends React.Component {
         this.handleStateChange('loggedIn', false);
         this.handleStateChange('isAdmin', false);
       console.log('error3');
-      return false;
+      return 'false';
       }
     );
   };
