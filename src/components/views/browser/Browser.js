@@ -47,6 +47,7 @@ class Browser extends React.PureComponent {
     keywordError: false,
     formatError: true,
     searchID: 0,
+    getAll: false,
   };
 
   getCardIndex = id => {
@@ -174,6 +175,7 @@ class Browser extends React.PureComponent {
       error: false,
       responseIn: false,
       responseFiles: [],
+      getAll: false,
     });
 
     // request data + handle response
@@ -231,17 +233,17 @@ class Browser extends React.PureComponent {
 
   // do search not regarding criteria that might have been entered by user
   handleGetAll = () => {
-    this.requestStatus(() => this.handleSubmit(true));
+    this.setState({resultsIn: true, getAll: true});
   };
 
   render() {
     const { classes, authorsList, minYear, maxYear, genres } = this.props;
-    const { cardList, selectedFormats, responseFiles, responseIn, loading, hits, searchID} = this.state;
+    const { cardList, selectedFormats, responseFiles, responseIn, loading, hits, searchID, getAll} = this.state;
 
     const renderResponseData = () => {
       let formats = selectedFormats.checkedJSON? ['json'] : [];
       if(selectedFormats.checkedTXT) formats.push('txt');
-      return <Results filenames={responseFiles} number={hits} formats={formats} searchID={searchID}/>;
+      return <Results filenames={responseFiles} number={hits} formats={formats} searchID={searchID} getAll={getAll}/>;
     };
 
     return(
