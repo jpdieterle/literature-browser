@@ -30,8 +30,8 @@ class Browser extends React.PureComponent {
     authors: [],
     genres: [],
     keywords: '',
-    timeFrom: this.props.minYear,
-    timeTo: this.props.maxYear,
+    timeFrom: '',
+    timeTo: '',
   };
 
   state = {
