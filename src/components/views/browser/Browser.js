@@ -233,7 +233,7 @@ class Browser extends React.PureComponent {
 
   // do search not regarding criteria that might have been entered by user
   handleGetAll = () => {
-    this.setState({responseIn: true, getAll: true});
+    this.setState({responseIn: true, getAll: true, searchID: shortid.generate()});
   };
 
   render() {

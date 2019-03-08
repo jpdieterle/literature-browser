@@ -153,7 +153,8 @@ const styles = theme => ({
   },
   resultLink:{
     color: 'white',
-    display: 'block'
+    display: 'block',
+    cursor: 'pointer',
   }
 });
 
