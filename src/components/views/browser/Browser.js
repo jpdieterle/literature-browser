@@ -197,12 +197,16 @@ class Browser extends React.PureComponent {
                 hits: data.hits, // number
                 responseIn: true,
                 searchID: shortid.generate(),
+              }, () => {
+                this.setState({loading: false});
               });
             } else {
               // server error / search not possible on server
               this.setState({
                 errorMessage: 'Es ist ein Fehler auf dem Server aufgetreten.',
                 error: true
+              },() => {
+                this.setState({loading: false});
               });
               this.context.handleNotificationChange(true, 'Es ist ein Fehler auf dem Server aufgetreten. Die Anfrage wurde abgebrochen.', 'search', 'error');
             }
@@ -212,6 +216,8 @@ class Browser extends React.PureComponent {
           this.setState({
             errorMessage: response.statusText,
             error: true
+          },() => {
+            this.setState({loading: false});
           });
           this.context.handleNotificationChange(true, response.statusText, 'search', 'error', response.statusCode)
         }
@@ -220,10 +226,12 @@ class Browser extends React.PureComponent {
         this.setState({
           errorMessage: error.message,
           error: true
+        },() => {
+          this.setState({loading: false});
         });
         this.context.handleNotificationChange(true, error.message, 'search', 'error', 404)
       });
-    this.setState({loading: false});
+    //this.setState({loading: false});
   };
 
   // do search with criteria entered by user
