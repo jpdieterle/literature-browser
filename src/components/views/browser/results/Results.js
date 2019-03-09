@@ -79,8 +79,6 @@ class Results extends React.Component {
                 // create invisible anchor and click it
                 let a = document.createElement('a');
                 const filename = data.filename.substr(0, data.filename.length-4) + (format === 'json'? 'Json' : 'Txt');
-                console.log('filename: ', filename);
-                console.log('filename + zip: ', filename + '.zip');
                 a.href = '/backend/database/_cache/' + data.filename;
                 a.download = filename;
                 a.click();
