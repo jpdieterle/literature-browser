@@ -57,7 +57,7 @@ class Results extends React.Component {
     if(getAll) {
       let a = document.createElement('a');
       a.href = '/backend/archive/' + format==='json'? 'corpusJson.zip' : 'corpusTxt.zip';
-      a.download = true;
+      a.download = format==='json'? 'corpusJson' : 'corpusTxt';
       a.click();
     } else {
       // request data + handle response for each selected format separately
@@ -79,7 +79,7 @@ class Results extends React.Component {
                 // create invisible anchor and click it
                 let a = document.createElement('a');
                 a.href = '/backend/database/_cache/' + data.filename;
-                a.download = true;
+                a.download = data.filename += (format === 'json'? 'Json' : 'Txt');
                 a.click();
               } else {
                 this.context.handleNotificationChange(true, 'Die Ergebnis-Dateien konnten nicht vom Server geladen werden.', 'download', 'error');
