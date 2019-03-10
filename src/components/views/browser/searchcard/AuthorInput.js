@@ -85,7 +85,6 @@ class AuthorInput extends React.PureComponent {
     const inputLength = inputValue.length;
     let count = 0;
     return inputLength === 0 ? [] : this.props.authorsList.filter(author => {
-    if(author.toLowerCase().includes('goethe')) console.log('goethe: ', author.toLowerCase().includes(inputValue), this.state.selectedItems.indexOf(author) === -1);
       const keep = (count < 15 && author.toLowerCase().includes(inputValue)
         && this.state.selectedItems.indexOf(author) === -1);
       if (keep) {
