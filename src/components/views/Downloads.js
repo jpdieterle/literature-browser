@@ -7,7 +7,7 @@ import NotificationContext from '../notifications/NotificationContext';
 import Link from '@material-ui/core/Link';
 
 
-class ScriptDownload extends React.Component {
+class Downloads extends React.Component {
   state = {
     filenames: [],
   };
@@ -97,12 +97,24 @@ class ScriptDownload extends React.Component {
 
     return (
       <div className={classes.root}>
-        <InfoCard message='Auf dieser Seite können Sie Skripte zur weiteren Verarbeitung der Texte herunterladen.'/>
+        <InfoCard
+          message='Auf dieser Seite können Sie die Nutzerdokumentation mit Hinweisen zur Seite und
+                    Skripte zur weiteren Verarbeitung der Texte herunterladen.'
+        />
         <div className={classes.textContainer}>
-          <Typography variant={'h5'} color={'primary'}>Python-Skripte</Typography>
+          <Typography variant={'h5'}>Hinweise für Nutzer*innen</Typography>
           <ul>
-            {filenames.map(name =>
-              <li><Link key={name} href={'/backend/scripts/' + name} download>{name}</Link></li>
+            {filenames
+              .filter(name => name.includes('.pdf'))
+              .map(name => <li><Link key={name} href={'/backend/scripts/' + name} download>{name}</Link></li>)}
+          </ul>
+          <Typography variant={'h5'} color={'primary'}>Skripte</Typography>
+          <ul>
+            {filenames.map(name => {
+                if(!name.includes('.pdf')) {
+                  return <li><Link key={name} href={'/backend/scripts/' + name} download>{name}</Link></li>
+                }
+            }
             )}
           </ul>
         </div>
@@ -112,7 +124,7 @@ class ScriptDownload extends React.Component {
 
 }
 
-ScriptDownload.propTypes = {
+Downloads.propTypes = {
   classes: PropTypes.object.isRequired,
   handleAppChange: PropTypes.func.isRequired,
   sessionID: PropTypes.any.isRequired,
@@ -129,6 +141,6 @@ const styles = theme => ({
     marginLeft: theme.spacing.unit,
   }
 });
-ScriptDownload.contextType = NotificationContext;
+Downloads.contextType = NotificationContext;
 
-export default withStyles(styles)(ScriptDownload);
+export default withStyles(styles)(Downloads);

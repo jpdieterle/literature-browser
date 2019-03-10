@@ -16,7 +16,7 @@ import About from './components/views/About';
 import Admin from './components/views/admin/Admin';
 import MissingPage from './components/views/MissingPage';
 import Notification from './components/notifications/NotificationSnackbar';
-import ScriptDownload from './components/views/ScriptDownload';
+import Downloads from './components/views/Downloads';
 
 // App component
 class App extends React.Component {
@@ -200,8 +200,8 @@ class App extends React.Component {
                         (<Redirect to='/login'/>)
                     )}/>
                     <Route path='/about' component={About}/>
-                    <Route path='/scripts' render={() => (
-                      loggedIn? (<ScriptDownload sessionID={sessionID} handleAppChange={this.handleStateChange}/>) : (<Redirect to='/login'/>)
+                    <Route path='/downloads' render={() => (
+                      loggedIn? (<Downloads sessionID={sessionID} handleAppChange={this.handleStateChange}/>) : (<Redirect to='/login'/>)
                     )}/>
                     <Route path='/admin' render={() => (
                       (loggedIn && isAdmin)?
