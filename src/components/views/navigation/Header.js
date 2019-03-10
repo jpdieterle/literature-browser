@@ -20,7 +20,7 @@ class Header extends React.Component {
         <AppBar position="fixed" className={classes.onTop}>
           <Toolbar className={classes.toolbar}>
             <div className={classes.col4}>
-              <Typography variant={'h6'} color={'inherit'}>Literarischer Textkorpus</Typography>
+              <Typography variant={'h5'} color={'inherit'}>Literarischer Textkorpus</Typography>
             </div>
             <div className={classes.col8}>
               <ul className={classes.navElements} >
