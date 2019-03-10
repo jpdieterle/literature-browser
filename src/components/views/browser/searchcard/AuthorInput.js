@@ -78,14 +78,14 @@ class AuthorInput extends React.PureComponent {
     }
   };
 
-  // extract suggestions from authorsList (max. 8 suggestions are being displayed)
+  // extract suggestions from authorsList (max. 15 suggestions are being displayed)
   getSuggestions = value => {
     if(!value && value !== '') return ;
     const inputValue = deburr(value.trim()).toLowerCase();
     const inputLength = inputValue.length;
     let count = 0;
     return inputLength === 0 ? [] : this.props.authorsList.filter(author => {
-      const keep = (count < 8 && author.slice(0, inputLength).toLowerCase() === inputValue
+      const keep = (count < 15 && author.includes(inputValue)
         && this.state.selectedItems.indexOf(author) === -1);
       if (keep) {
         count += 1;
