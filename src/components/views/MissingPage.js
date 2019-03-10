@@ -33,7 +33,8 @@ MissingPage.propTypes = {
 
 const styles = theme => ({
   root: {
-    marginLeft: theme.spacing.unit * 4
+    marginLeft: theme.spacing.unit * 4,
+    marginTop: theme.spacing.unit * 4
   },
 });
 

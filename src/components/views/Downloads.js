@@ -102,7 +102,7 @@ class Downloads extends React.Component {
                     Skripte zur weiteren Verarbeitung der Texte herunterladen.'
         />
         <div className={classes.textContainer}>
-          <Typography variant={'h5'}>Hinweise für Nutzer*innen</Typography>
+          <Typography variant={'h5'} color={'primary'}>Hinweise für Nutzer*innen</Typography>
           <ul>
             {filenames
               .filter(name => name.includes('.pdf'))
