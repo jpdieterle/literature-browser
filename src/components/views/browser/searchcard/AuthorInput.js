@@ -124,6 +124,8 @@ class AuthorInput extends React.PureComponent {
       const selectedItem = [...state.selectedItems];
       selectedItem.splice(selectedItem.indexOf(item), 1);
       return { selectedItems: selectedItem };
+    }, () => {
+      this.props.onInputChange(this.props.cardId, 'authors', this.state.selectedItems); // update SearchCard state
     });
   };
 
