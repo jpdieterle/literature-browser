@@ -20,6 +20,9 @@ class About extends React.Component {
           Das Ergebnis ist diese Webanwendung, die es ermöglicht auf die Gedichte des  “Gutenberg-Korpus” (des größten deutschsprachigen Gedichts-Korpus) zuzugreifen, diese nach bestimmten Kriterien zu filtern und weitere Texte hinzuzufügen.
         </Typography>
         <Typography className={classes.aboutText} paragraph={true}>
+          An dieser Stelle sollte Datenschutzerklärung und Impressum ersscheinen.
+        </Typography>
+        <Typography className={classes.aboutText} paragraph={true}>
           Projektleiterin war Frau Dr. Jana Lüdtke, wissenschaftliche Mitarbeiterin im Fachgebiet Allgemeine und neurokognitive Psychologie an der Freien Universität Berlin. Assistiert hat Clarissa Elisabeth Staudt, Studentin der Medieninformatik an der TU und FU Berlin.
           Am Projekt mitgewirkt haben Anna-Liza Beriwan Tepe, Arne Kuhle, Flora Muscinelli, Fatih Tekin und Ioanna Vasiliou.
         </Typography>
