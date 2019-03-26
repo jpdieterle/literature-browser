@@ -22,7 +22,7 @@ class About extends React.Component {
         <Typography className={classes.aboutText} paragraph={true}>
           Projektleiterin war Frau Dr. Jana Lüdtke, wissenschaftliche Mitarbeiterin im Fachgebiet Allgemeine und neurokognitive Psychologie an der Freien Universität Berlin. Assistiert hat Clarissa Elisabeth Staudt, Studentin der Medieninformatik an der TU und FU Berlin.
           Am Projekt mitgewirkt haben Anna-Liza Beriwan Tepe, Arne Kuhle, Flora Muscinelli, Fatih Tekin und Ioanna Vasiliou.
-        </Typography> <br/> <br/>
+        </Typography> <br/>
         <Typography variant={'h5'} color={'primary'} className={classes.aboutText}>Datenschutzerklärung</Typography>    
         <Typography className={classes.aboutText} paragraph={true}>
 		<h3>1. Datenschutz auf einen Blick</h3>
@@ -190,7 +190,7 @@ class About extends React.Component {
 				etwa zu Zwecken der Werbung, erfolgt nicht.<br><br>Grundlage für die 
 				Datenverarbeitung ist Art. 6 Abs. 1 lit. b DSGVO, der die Verarbeitung von 
 				Daten zur Erfüllung eines Vertrags oder vorvertraglicher Maßnahmen gestattet.
-	</Typography>
+	</Typography><br/>
         <Typography variant={'h5'} color={'primary'} className={classes.aboutText}>Impressum</Typography>
 	  
 	  <Typography className={classes.aboutText} paragraph={true}>
