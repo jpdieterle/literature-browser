@@ -25,7 +25,9 @@ class About extends React.Component {
         </Typography>
         <Typography variant={'h5'} color={'primary'} className={classes.aboutText}>Datenschutzerklärung</Typography><br/>    
         <Typography className={classes.aboutText} paragraph={true}>
-		document.write("<h1>Datenschutzerklärung</h1>")
+
+		"<h1>Datenschutzerklärung</h1>"+"<h2>1. Datenschutz auf einen Blick</h2>"	
+	
 	</Typography>
         <Typography className={classes.aboutText}>
           Favicon made by {' '}<a href="https://www.freepik.com/" title="Freepik">Freepik</a>{' '}
