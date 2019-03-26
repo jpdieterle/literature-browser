@@ -23,7 +23,7 @@ class About extends React.Component {
           Projektleiterin war Frau Dr. Jana Lüdtke, wissenschaftliche Mitarbeiterin im Fachgebiet Allgemeine und neurokognitive Psychologie an der Freien Universität Berlin. Assistiert hat Clarissa Elisabeth Staudt, Studentin der Medieninformatik an der TU und FU Berlin.
           Am Projekt mitgewirkt haben Anna-Liza Beriwan Tepe, Arne Kuhle, Flora Muscinelli, Fatih Tekin und Ioanna Vasiliou.
         </Typography>
-        <Typography variant={'h5'} color={'primary'} className={classes.aboutText}>Datenschutzerklärung</Typography><br/>    
+        <Typography variant={'h5'} color={'primary'} className={classes.aboutText}>Datenschutzerklärung</Typography>    
         <Typography className={classes.aboutText} paragraph={true}>
 		<h3>1. Datenschutz auf einen Blick</h3>
 			<h4>Allgemeine Hinweise</h4>
@@ -32,7 +32,11 @@ class About extends React.Component {
 				Personenbezogene Daten sind alle Daten, mit denen Sie persönlich identifiziert 
 				werden können. Ausführliche Informationen zum Thema Datenschutz entnehmen Sie 
 				unserer unter diesem Text aufgeführten Datenschutzerklärung.
-					
+			<h4>Datenerfassung auf unserer Website</h4>
+				<h5>Wer ist verantwortlich für die Datenerfassung auf dieser Website?</h5>
+					Die Datenverarbeitung auf dieser Website erfolgt durch den 
+					Websitebetreiber. Dessen Kontaktdaten können Sie dem Impressum dieser 
+					Website entnehmen.			
 	</Typography>
         <Typography className={classes.aboutText}>
           Favicon made by {' '}<a href="https://www.freepik.com/" title="Freepik">Freepik</a>{' '}
