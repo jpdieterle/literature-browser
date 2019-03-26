@@ -191,59 +191,6 @@ class About extends React.Component {
 				Datenverarbeitung ist Art. 6 Abs. 1 lit. b DSGVO, der die Verarbeitung von 
 				Daten zur Erfüllung eines Vertrags oder vorvertraglicher Maßnahmen gestattet.
 	</Typography>
-	  <br/>
-        <Typography variant={'h5'} color={'primary'} className={classes.aboutText}>Impressum</Typography>
-	  
-	  <Typography className={classes.aboutText} paragraph={true}>
-	<h3>Angaben gemäß § 5 TMG</h3>
-		Freie Universität Berlin<br>Habelschwerdter Allee 45<br>14195 Berlin
-		<h4>Vertreten durch:</h4>
-			<a href='https://www.fu-berlin.de/einrichtungen/organe/praesidium/praesident/'>
-				Der Präsident</a>
-	<h3>Kontakt</h3>
-		Telefon: ++49 (0) 30 838 55193<br>Telefax: (030) 838 -4- 556 21<br>E-Mail: jana.
-			luedtke@fu-berlin.de
-	<h3>Umsatzsteuer-ID</h3>
-		Umsatzsteuer-Identifikationsnummer gemäß §27 a Umsatzsteuergesetz: DE 811304768
-	<h3>Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV</h3>
-		Dr. Jana Lüdtke<br><br>Wir sind nicht bereit oder verpflichtet, an Streitbeilegungs
-			verfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.
-			<h4>Haftung für Inhalte</h4>
-				Als Diensteanbieter sind wir gemäß § 7 Abs.1 TMG für eigene Inhalte auf diesen 
-				Seiten nach den allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 TMG sind 
-				wir als Diensteanbieter jedoch nicht verpflichtet, übermittelte oder 
-				gespeicherte fremde Informationen zu überwachen oder nach Umständen zu forschen
-				, die auf eine rechtswidrige Tätigkeit hinweisen.<br><br>Verpflichtungen zur 
-				Entfernung oder Sperrung der Nutzung von Informationen nach den allgemeinen 
-				Gesetzen bleiben hiervon unberührt. Eine diesbezügliche Haftung ist jedoch erst 
-				ab dem Zeitpunkt der Kenntnis einer konkreten Rechtsverletzung möglich. Bei 
-				Bekanntwerden von entsprechenden Rechtsverletzungen werden wir diese Inhalte 
-				umgehend entfernen.
-			<h4>Haftung für Links</h4>
-				Unser Angebot enthält Links zu externen Websites Dritter, auf deren Inhalte wir 
-				keinen Einfluss haben. Deshalb können wir für diese fremden Inhalte auch keine 
-				Gewähr übernehmen. Für die Inhalte der verlinkten Seiten ist stets der 
-				jeweilige Anbieter oder Betreiber der Seiten verantwortlich. Die verlinkten 
-				Seiten wurden zum Zeitpunkt der Verlinkung auf mögliche Rechtsverstöße überprüft
-				. Rechtswidrige Inhalte waren zum Zeitpunkt der Verlinkung nicht erkennbar.<br>
-				<br>Eine permanente inhaltliche Kontrolle der verlinkten Seiten ist jedoch ohne 
-				konkrete Anhaltspunkte einer Rechtsverletzung nicht zumutbar. Bei Bekanntwerden 
-				von Rechtsverletzungen werden wir derartige Links umgehend entfernen.
-			<h4>Urheberrecht</h4>
-				Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten 
-				unterliegen dem deutschen Urheberrecht. Die Vervielfältigung, Bearbeitung, 
-				Verbreitung und jede Art der Verwertung außerhalb der Grenzen des Urheberrechtes
-				 bedürfen der schriftlichen Zustimmung des jeweiligen Autors bzw. Erstellers. 
-				Downloads und Kopien dieser Seite sind nur für den privaten, nicht kommerziellen
-				 Gebrauch gestattet.<br><br>Soweit die Inhalte auf dieser Seite nicht vom 
-				Betreiber erstellt wurden, werden die Urheberrechte Dritter beachtet. 
-				Insbesondere werden Inhalte Dritter als solche gekennzeichnet. Sollten Sie 
-				trotzdem auf eine Urheberrechtsverletzung aufmerksam werden, bitten wir um einen
-				 entsprechenden Hinweis. Bei Bekanntwerden von Rechtsverletzungen werden wir 
-				derartige Inhalte umgehend entfernen.<br><br>Quelle: <a href='https://www.e-
-				recht24.de'>https://www.e-recht24.de</a>
-	</Typography>
-	  <br/>
 	  <Typography className={classes.aboutText}>
           Favicon made by {' '}<a href="https://www.freepik.com/" title="Freepik">Freepik</a>{' '}
           from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by{' '}
