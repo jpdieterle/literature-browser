@@ -190,7 +190,8 @@ class About extends React.Component {
 				etwa zu Zwecken der Werbung, erfolgt nicht.<br><br>Grundlage für die 
 				Datenverarbeitung ist Art. 6 Abs. 1 lit. b DSGVO, der die Verarbeitung von 
 				Daten zur Erfüllung eines Vertrags oder vorvertraglicher Maßnahmen gestattet.
-	</Typography><br/>
+	</Typography>
+	  <br/>
         <Typography variant={'h5'} color={'primary'} className={classes.aboutText}>Impressum</Typography>
 	  
 	  <Typography className={classes.aboutText} paragraph={true}>
@@ -242,6 +243,7 @@ class About extends React.Component {
 				derartige Inhalte umgehend entfernen.<br><br>Quelle: <a href='https://www.e-
 				recht24.de'>https://www.e-recht24.de</a>
 	</Typography>
+	  <br/>
 	  <Typography className={classes.aboutText}>
           Favicon made by {' '}<a href="https://www.freepik.com/" title="Freepik">Freepik</a>{' '}
           from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by{' '}
