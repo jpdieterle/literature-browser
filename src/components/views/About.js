@@ -45,6 +45,23 @@ class About extends React.Component {
 	</Typography>
 	<Typography className={classes.aboutText} paragraph={true}>
 	  Sie können dieser Analyse widersprechen. Über die Widerspruchsmöglichkeiten werden wir Sie in dieser Datenschutzerklärung informieren.
+	  <h3>2. Allgemeine Hinweise und Pflichtinformationen</h3>
+	  <h4>Datenschutz</h4>
+	  Die Betreiber dieser Seiten nehmen den Schutz Ihrer persönlichen Daten sehr ernst. Wir behandeln Ihre personenbezogenen Daten vertraulich und entsprechend der gesetzlichen Datenschutzvorschriften sowie dieser Datenschutzerklärung.
+	</Typography>
+	<Typography className={classes.aboutText} paragraph={true}>
+	  Wenn Sie diese Website benutzen, werden verschiedene personenbezogene Daten erhoben. Personenbezogene Daten sind Daten, mit denen Sie persönlich identifiziert werden können. Die vorliegende Datenschutzerklärung erläutert, welche Daten wir erheben und wofür wir sie nutzen. Sie erläutert auch, wie und zu welchem Zweck das geschieht.
+	</Typography>
+	<Typography className={classes.aboutText} paragraph={true}>
+	  Wir weisen darauf hin, dass die Datenübertragung im Internet (z.B. bei der Kommunikation per E-Mail) Sicherheitslücken aufweisen kann. Ein lückenloser Schutz der Daten vor dem Zugriff durch Dritte ist nicht möglich.
+	  <h4>Hinweis zur verantwortlichen Stelle</h4>
+	  Die verantwortliche Stelle für die Datenverarbeitung auf dieser Website ist:
+	</Typography>
+	<Typography className={classes.aboutText} paragraph={true}>
+	  <p>Dr. Jana Lüdtke</p>
+	  <p>Habelschwerdter Allee 45</p>
+	  <p>14195 Berlin</p>
+	  <p>eMail: jana.luedtke@fu-berlin.de</p>
         </Typography>
 	<Typography className={classes.aboutText}>
           Favicon made by {' '}<a href="https://www.freepik.com/" title="Freepik">Freepik</a>{' '}
