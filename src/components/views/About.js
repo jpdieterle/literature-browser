@@ -32,8 +32,8 @@ class About extends React.Component {
 	  <h5>Wer ist verantwortlich für die Datenerfassung auf dieser Website?</h5>
 	  Die Datenverarbeitung auf dieser Website erfolgt durch den Websitebetreiber. Dessen Kontaktdaten können Sie dem Impressum dieser Website entnehmen.
 	  <h5>Wie erfassen wir Ihre Daten?</h5>
-	  Ihre Daten werden zum einen dadurch erhoben, dass Sie uns diese mitteilen. Hierbei kann es sich z.B.um Daten handeln, die Sie in ein Kontaktformular eingeben.<br><br>
-		  Andere Daten werden automatisch beim Besuch der Website durch unsere IT-Systeme erfasst. Das sind vor allem technische Daten (z.B. Internetbrowser, Betriebssystem oder Uhrzeit des Seitenaufrufs). Die Erfassung dieser Daten erfolgt automatisch, sobald Sie unsere Website betreten.
+	  Ihre Daten werden zum einen dadurch erhoben, dass Sie uns diese mitteilen. Hierbei kann es sich z.B.um Daten handeln, die Sie in ein Kontaktformular eingeben.\n
+	  Andere Daten werden automatisch beim Besuch der Website durch unsere IT-Systeme erfasst. Das sind vor allem technische Daten (z.B. Internetbrowser, Betriebssystem oder Uhrzeit des Seitenaufrufs). Die Erfassung dieser Daten erfolgt automatisch, sobald Sie unsere Website betreten.
         </Typography>
 	<Typography className={classes.aboutText}>
           Favicon made by {' '}<a href="https://www.freepik.com/" title="Freepik">Freepik</a>{' '}
