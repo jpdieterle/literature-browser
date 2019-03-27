@@ -23,7 +23,7 @@ class About extends React.Component {
           Projektleiterin war Frau Dr. Jana Lüdtke, wissenschaftliche Mitarbeiterin im Fachgebiet Allgemeine und neurokognitive Psychologie an der Freien Universität Berlin. Assistiert hat Clarissa Elisabeth Staudt, Studentin der Medieninformatik an der TU und FU Berlin.
           Am Projekt mitgewirkt haben Anna-Liza Beriwan Tepe, Arne Kuhle, Flora Muscinelli, Fatih Tekin und Ioanna Vasiliou.
         </Typography>
-	<Typography variant={'h5'} color={'primary'} className={classes.aboutText}>Datenschutzerklärung</Typography><br/>
+	<Typography variant={'h5'} color={'primary'} className={classes.aboutText}>Datenschutzerklärung</Typography>
         <Typography className={classes.aboutText} paragraph={true}>
           <h3>1. Datenschutz auf einen Blick</h3>
 	  <h4>Allgemeine Hinweise</h4>
@@ -32,8 +32,19 @@ class About extends React.Component {
 	  <h5>Wer ist verantwortlich für die Datenerfassung auf dieser Website?</h5>
 	  Die Datenverarbeitung auf dieser Website erfolgt durch den Websitebetreiber. Dessen Kontaktdaten können Sie dem Impressum dieser Website entnehmen.
 	  <h5>Wie erfassen wir Ihre Daten?</h5>
-	  Ihre Daten werden zum einen dadurch erhoben, dass Sie uns diese mitteilen. Hierbei kann es sich z.B.um Daten handeln, die Sie in ein Kontaktformular eingeben.\n
+	  Ihre Daten werden zum einen dadurch erhoben, dass Sie uns diese mitteilen. Hierbei kann es sich z.B.um Daten handeln, die Sie in ein Kontaktformular eingeben.
+	</Typography>
+	<Typography className={classes.aboutText} paragraph={true}>
 	  Andere Daten werden automatisch beim Besuch der Website durch unsere IT-Systeme erfasst. Das sind vor allem technische Daten (z.B. Internetbrowser, Betriebssystem oder Uhrzeit des Seitenaufrufs). Die Erfassung dieser Daten erfolgt automatisch, sobald Sie unsere Website betreten.
+	  <h5>Wofür nutzen wir Ihre Daten?</h5>
+	  Ein Teil der Daten wird erhoben, um eine fehlerfreie Bereitstellung der Website zu gewährleisten. Andere Daten können zur Analyse Ihres Nutzerverhaltens verwendet werden.
+	  <h5>Welche Rechte haben Sie bezüglich Ihrer Daten?</h5>
+	  Sie haben jederzeit das Recht unentgeltlich Auskunft über Herkunft, Empfänger und Zweck Ihrer gespeicherten personenbezogenen Daten zu erhalten. Sie haben außerdem ein Recht, die Berichtigung, Sperrung oder Löschung dieser Daten zu verlangen. Hierzu sowie zu weiteren Fragen zum Thema Datenschutz können Sie sich jederzeit unter der im Impressum angegebenen Adresse an uns wenden. Des Weiteren steht Ihnen ein Beschwerderecht bei der zuständigen Aufsichtsbehörde zu.
+	  <h5>Analyse-Tools und Tools von Drittanbietern</h5>
+	  Beim Besuch unserer Website kann Ihr Surf-Verhalten statistisch ausgewertet werden. Das geschieht vor allem mit Cookies und mit sogenannten Analyseprogrammen. Die Analyse Ihres Surf-Verhaltens erfolgt in der Regel anonym; das Surf-Verhalten kann nicht zu Ihnen zurückverfolgt werden. Sie können dieser Analyse widersprechen oder sie durch die Nichtbenutzung bestimmter Tools verhindern. Detaillierte Informationen dazu finden Sie in der folgenden Datenschutzerklärung.
+	</Typography>
+	<Typography className={classes.aboutText} paragraph={true}>
+	  Sie können dieser Analyse widersprechen. Über die Widerspruchsmöglichkeiten werden wir Sie in dieser Datenschutzerklärung informieren.
         </Typography>
 	<Typography className={classes.aboutText}>
           Favicon made by {' '}<a href="https://www.freepik.com/" title="Freepik">Freepik</a>{' '}
