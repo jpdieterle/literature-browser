@@ -25,7 +25,7 @@ class About extends React.Component {
         </Typography>
 	<Typography variant={'h5'} color={'primary'} className={classes.aboutText}>Datenschutzerklärung</Typography>
         <Typography className={classes.aboutText} paragraph={true}>
-          <h3>1. Datenschutz auf einen Blick</h3>
+          <h3>1. Datenschutz auf einen Blick</h3> 
 	  <h4>Allgemeine Hinweise</h4>
 	  Die folgenden Hinweise geben einen einfachen Überblick darüber, was mit Ihren personenbezogenen Daten passiert, wenn Sie unsere Website besuchen. Personenbezogene Daten sind alle Daten, mit denen Sie persönlich identifiziert werden können. Ausführliche Informationen zum Thema Datenschutz entnehmen Sie unserer unter diesem Text aufgeführten Datenschutzerklärung.
 	  <h4>Datenerfassung auf unserer Website</h4>
