@@ -10,6 +10,7 @@ import AuthorInput from "./searchcard/AuthorInput";
 import GenreSelection from "./searchcard/GenreSelection";
 import ContainsInput from "./searchcard/ContainsInput";
 import TimeInput from "./searchcard/TimeInput";
+import FirstPubInput from "./searchcard/FirstPubInput";
 import SearchCard from './searchcard/SearchCard';
 import AddSearchCardButton from './buttons/AddSearchCardButton';
 import SelectFormat from './SelectFormat';
