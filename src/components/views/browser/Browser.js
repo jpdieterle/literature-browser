@@ -47,6 +47,7 @@ class Browser extends React.PureComponent {
     error: false,
     errorMessage: 'no error',
     timeError: false,
+    firstpubError: false,
     keywordError: false,
     formatError: true,
     searchID: 0,
@@ -248,7 +249,7 @@ class Browser extends React.PureComponent {
   };
 
   render() {
-    const { classes, authorsList, minYear, maxYear, genres, handleAppChange, sessionID } = this.props;
+    const { classes, authorsList, minYear, maxYear, minFirstpub, maxFirstpub, genres, handleAppChange, sessionID } = this.props;
     const { cardList, selectedFormats, responseFiles, responseIn, loading, hits, searchID, getAll} = this.state;
 
     const renderResponseData = () => {
@@ -326,15 +327,15 @@ class Browser extends React.PureComponent {
                   handleBrowserChange={this.handleChange}
                 />
                 <FirstPubInput
-                  key={card.id + '-time'}
+                  key={card.id + '-firstpub'}
                   cardId={card.id}
                   variant={inputVariant}
-                  initialTimeFrom={card.timeFrom}
-                  initialTimeTo={card.timeTo}
+                  initialFirstpubFrom={card.firstpubFrom}
+                  initialFirstpubTo={card.firstpubTo}
                   disabled={this.getLoading()}
                   onInputChange={this.updateSearchCardContent}
-                  minYear={minYear}
-                  maxYear={maxYear}
+                  minFirstpub={minFirstpub}
+                  maxFirstpub={maxFirstpub}
                   handleBrowserChange={this.handleChange}
                 />
               </SearchCard>
@@ -376,6 +377,8 @@ Browser.propTypes = {
   authorsList: PropTypes.arrayOf(PropTypes.string).isRequired,
   minYear: PropTypes.string.isRequired,
   maxYear: PropTypes.string.isRequired,
+  minFirstpub: PropTypes.string.isRequired,
+  maxFirstpub: PropTypes.string.isRequired,
   genres: PropTypes.arrayOf(PropTypes.string),
   handleAppChange: PropTypes.func.isRequired,
   sessionID: PropTypes.any.isRequired,
