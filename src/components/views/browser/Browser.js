@@ -162,7 +162,7 @@ class Browser extends React.PureComponent {
   // submit search with or without criteria
   handleSubmit = (getAll) => {
     // check for errors before sending request
-    if ((!getAll && (this.state.timeError || this.state.keywordError)) || this.state.formatError) {
+    if ((!getAll && (this.state.timeError || this.state.firstpubError)) || this.state.keywordError)) || this.state.formatError) {
       this.setState({
         error: true,
         errorMessage: 'Sie können keine Anfrage mit fehlenden/falschen Eingaben abschicken',
