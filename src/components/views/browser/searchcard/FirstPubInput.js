@@ -5,42 +5,42 @@ import TextField from '@material-ui/core/TextField';
 import FormGroup from '@material-ui/core/FormGroup';
 import Typography from '@material-ui/core/Typography';
 
-// select time range in which to search
+// select firstpub time range in which to search
 class FirstPubInput extends React.PureComponent {
   state = {
-    timeFrom: this.props.initialTimeFrom,
-    timeTo: this.props.initialTimeTo,
-    minYear: this.props.minYear,
-    maxYear: this.props.maxYear,
-    timeFromError: false,
-    timeToError: false,
+    firstpubFrom: this.props.initialFirstpubFrom,
+    firstpubTo: this.props.initialFirstpubTo,
+    minFirstpub: this.props.minFirstpub,
+    maxFirstpub: this.props.maxFirstpub,
+    firstpubFromError: false,
+    firstpubToError: false,
   };
 
-  // update state with new min/max year if props change
+  // update state with new min/max firstpub year if props change
   componentWillReceiveProps = nextProps => {
-    if(this.props.minYear !== nextProps.minYear || this.props.maxYear !== nextProps.maxYear) {
-      this.setState({minYear: nextProps.minYear, maxYear: nextProps.maxYear});
+    if(this.props.minFirstpub !== nextProps.minFirstpub || this.props.maxFirstpub !== nextProps.maxFirstpub) {
+      this.setState({minFirstpub: nextProps.minFirstpub, maxFirstpub: nextProps.maxFirstpub});
 }
   };
 
   handleChange = name => event => {
     const value = event.target.value;
-    const time = parseInt(value);
+    const firstpub = parseInt(value);
     let newState = {};
 
     // check input for right time frame
-    if(name === 'timeFrom') {
-      newState.timeFromError = (time < this.props.minYear || time > this.props.maxYear);
-    } else if(name === 'timeTo') {
-      newState.timeToError = (time < this.props.minYear || time > this.props.maxYear);
+    if(name === 'firstpubFrom') {
+      newState.firstpubFromError = (firstpub < this.props.minFirstpub || firstpub > this.props.maxFirstpub);
+    } else if(name === 'firstpubTo') {
+      newState.firstpubToError = (firstpub < this.props.minFirstpub || firstpub > this.props.maxFirstpub);
     }
 
     this.setState(newState, () => {
-      this.props.handleBrowserChange('timeError', (this.state.timeFromError || this.state.timeToError));
+      this.props.handleBrowserChange('firstpubError', (this.state.firstpubFromError || this.state.firstpubToError));
       this.setState({
         [name]: value,
       }, () => {
-        if(!this.state.timeFromError && !this.state.timeToError) {
+        if(!this.state.firstpubFromError && !this.state.firstpubToError) {
           this.props.onInputChange(this.props.cardId, name, this.state[name]);
         }
       });
@@ -48,47 +48,47 @@ class FirstPubInput extends React.PureComponent {
   };
 
   render() {
-    const { classes, variant, initialTimeTo, initialTimeFrom, disabled } = this.props;
-    const { timeFrom, timeTo, minYear, maxYear, timeToError, timeFromError } = this.state;
+    const { classes, variant, initialFirstpubTo, initialFirstpubFrom, disabled } = this.props;
+    const { firstpubFrom, firstpubTo, minFirstpub, maxFirstpub, firstpubToError, firstpubFromError } = this.state;
 
     return(
       <div className={classes.root}>
         <FormGroup row={true}>
           <TextField
-            id="fromYear"
-            label="von (Jahr)"
-            placeholder={minYear}
-            inputProps={{min: initialTimeFrom , max: initialTimeTo}}
-            value={timeFrom}
-            onChange={this.handleChange('timeFrom')}
+            id="fromFirstpub"
+            label="von (Ertveröffentlichung)"
+            placeholder={minFirstpub}
+            inputProps={{min: initialFirstpubFrom , max: initialFirstpubTo}}
+            value={firstpubFrom}
+            onChange={this.handleChange('firstpubFrom')}
             type="number"
             className={classes.textField}
             variant={variant}
             disabled={disabled}
-            error={timeFromError}
+            error={firstpubFromError}
             InputLabelProps={{
               shrink: true,
             }}
           />
           <TextField
-            id="toYear"
-            label="bis (Jahr)"
-            placeholder={maxYear}
-            inputProps={{min: initialTimeFrom , max: initialTimeTo}}
-            value={timeTo}
-            onChange={this.handleChange('timeTo')}
+            id="toFirstpub"
+            label="bis (Erstveröffentlichung)"
+            placeholder={maxFirstpub}
+            inputProps={{min: initialFirstpubFrom , max: initialFirstpubTo}}
+            value={firstpubTo}
+            onChange={this.handleChange('firstpubTo')}
             type="number"
             className={classes.textField}
             variant={variant}
             disabled={disabled}
-            error={timeToError}
+            error={firstpubToError}
             InputLabelProps={{
               shrink: true,
             }}
           />
-          {(this.state.timeToError || this.state.timeFromError) &&
+          {(this.state.firstpubToError || this.state.firstpubFromError) &&
           <Typography color={'error'} className={classes.errorMessage}>
-            Bitte geben Sie eine Zahl zwischen {this.props.minYear} und {this.props.maxYear} ein.
+            Bitte geben Sie eine Zahl zwischen {this.props.minFirstpub} und {this.props.maxFirstpub} ein.
           </Typography>}
         </FormGroup>
       </div>
@@ -100,12 +100,12 @@ FirstPubInput.propTypes = {
   classes: PropTypes.object.isRequired,
   cardId: PropTypes.string.isRequired,
   variant: PropTypes.string.isRequired,
-  initialTimeFrom: PropTypes.string.isRequired,
-  initialTimeTo: PropTypes.string.isRequired,
+  initialFirstpubFrom: PropTypes.string.isRequired,
+  initialFirstpubTo: PropTypes.string.isRequired,
   disabled: PropTypes.bool.isRequired,
   onInputChange: PropTypes.func.isRequired,
-  minYear: PropTypes.string.isRequired,
-  maxYear: PropTypes.string.isRequired,
+  minFirstpub: PropTypes.string.isRequired,
+  maxFirstpub: PropTypes.string.isRequired,
   handleBrowserChange: PropTypes.func.isRequired,
 };
 
