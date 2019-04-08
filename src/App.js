@@ -28,6 +28,10 @@ class App extends React.Component {
       minYear: '',
       maxYear: '',
     },
+    firstpubRange: {
+      minFirstpub: '',
+      maxFirstpub: '',
+    },
     authors: [],
     genres: ['poem', 'ballad', 'sonnet'],
     notification: {
@@ -119,8 +123,11 @@ class App extends React.Component {
               let parsedGenre = parsedLog.genre? parsedLog.genre.replace('[','').replace(']','').split(',') : [];
               let parsedMinYear = parsedLog.minYear? parsedLog.minYear.slice(0,4) : '';
               let parsedMaxYear = parsedLog.maxYear? parsedLog.maxYear.slice(0,4) : '';
+              let parsedMinFirstpub = parsedLog.minFirstpub? parsedLog.minFirstpub.slice(0,4) : '';
+              let parsedMaxFirstpub = parsedLog.maxFirstpub? parsedLog.maxFirstpub.slice(0,4) : '';
               this.handleStateChange('genres', parsedGenre);
               this.handleStateChange('timeRange', {minYear: parsedMinYear, maxYear: parsedMaxYear});
+              this.handleStateChange('firstpubRange', {minFirstpub: parsedMinFirstpub, maxFirstpub: parsedMaxFirstpub});
             } else {
               this.handleNotificationChange(true, 'Autoren/Genres/Zeitspanne konnten nicht vom Server geladen werden.', 'initialLoad', 'error');
             }
@@ -175,7 +182,7 @@ class App extends React.Component {
 
   render() {
     const { classes } = this.props;
-    const { loggedIn, isAdmin, authors, timeRange, notification, genres, sessionID } = this.state;
+    const { loggedIn, isAdmin, authors, timeRange, firstpubRange, notification, genres, sessionID } = this.state;
 
     return (
       <MuiThemeProvider theme={theme}>
