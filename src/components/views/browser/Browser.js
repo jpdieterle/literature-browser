@@ -33,6 +33,8 @@ class Browser extends React.PureComponent {
     keywords: '',
     timeFrom: '',
     timeTo: '',
+    firstpubFrom: '',
+    firstpubTo: '',
   };
 
   state = {
@@ -312,6 +314,18 @@ class Browser extends React.PureComponent {
                   handleBrowserChange={this.handleChange}
                 />
                 <TimeInput
+                  key={card.id + '-time'}
+                  cardId={card.id}
+                  variant={inputVariant}
+                  initialTimeFrom={card.timeFrom}
+                  initialTimeTo={card.timeTo}
+                  disabled={this.getLoading()}
+                  onInputChange={this.updateSearchCardContent}
+                  minYear={minYear}
+                  maxYear={maxYear}
+                  handleBrowserChange={this.handleChange}
+                />
+                <FirstPubInput
                   key={card.id + '-time'}
                   cardId={card.id}
                   variant={inputVariant}
